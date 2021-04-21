@@ -1,0 +1,94 @@
+/*---CSS RESET---*/
+
+*{margin: 0;padding: 0;font-family: inherit;font-size: inherit;font-weight: inherit;font-style: inherit;color: inherit;text-decoration: inherit;box-sizing: border-box;}
+
+html, body{text-size-adjust: none;
+    -webkit-text-size-adjust: none; 
+    -moz-text-size-adjust: none; 
+    -ms-text-size-adjust: none;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}/*텍스트 사이즈 고정*/
+
+body{font-family: 'Noto Sans KR', sans-serif;font-size:16px;font-weight:300;font-style: normal;text-decoration: none;color: #222;}
+li{list-style: none;}
+table{border-spacing: 0;border-collapse: collapse;}
+input, select, textarea, button{box-sizing: border-box;}
+button{background: none;border: none;cursor: pointer;outline: none;}
+
+/*공통클래스*/
+.h_eng{font-family: 'Roboto', sans-serif;}/*영문 폰트 변경*/
+.clearfix::before, .clearfix::after{content: "";clear: both;display: block;}
+
+.h_w100{display: block;width: 100%;height: 100%;}
+.center_pos{position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);}/*포지션 객체 중양정렬*/
+.bg{background-repeat: no-repeat;background-size: cover;background-position: center center;}/*background-image - 반응형*/
+/*공통클래스*/
+
+/*텍스트사이즈*/
+
+@media screen and (min-width:1281px){
+    html, body{font-size: 16px;}/*body와 확인 할 것*/
+}
+
+@media screen and (min-width:761px) and (max-width:1280px){
+    html, body{font-size: 14px;}/*body와 확인 할 것*/
+}
+
+@media screen and (max-width:760px){
+    html, body{font-size: 12px;}/*body와 확인 할 것*/
+}
+/*텍스트사이즈*/
+
+
+@media screen and (min-width:1281px){
+    
+    br.br_d{display: none;}/*br 데스크탑에서만 줄내림*/
+}
+
+@media screen and (min-width:761px) and (max-width:1280px){
+    
+    br.br_t{display: none;}/*br 태블릿에서만 줄내림*/
+}
+
+@media screen and (min-width:761px){
+
+    br.br_m{display: none;}/*br 모바일에서만 줄내림*/
+}
+
+
+
+
+/* font-size */
+.h_fs_12 { font-size: 0.75rem; }
+.h_fs_14 { font-size: 0.875rem; }
+.h_fs_15 { font-size: 0.9375rem; }
+.h_fs_17 { font-size: 1.0625rem; }
+.h_fs_18 { font-size: 1.125rem; }
+.h_fs_19 { font-size: 1.1875rem; }
+.h_fs_20 { font-size: 1.25rem; }
+.h_fs_21 { font-size: 1.3125rem; }
+.h_fs_22 { font-size: 1.375rem; }
+.h_fs_23 { font-size: 1.4375rem; }
+.h_fs_24 { font-size: 1.5rem; }
+.h_fs_25 { font-size: 1.5625rem; }
+.h_fs_26 { font-size: 1.625rem; }
+.h_fs_27 { font-size: 1.6875rem; }
+.h_fs_28 { font-size: 1.75rem; }
+.h_fs_29 { font-size: 1.8125rem; }
+.h_fs_30 { font-size: 1.875rem; }
+.h_fs_32 { font-size: 2rem; }
+.h_fs_36 { font-size: 2.25rem; }
+.h_fs_38 { font-size: 2.375rem; }
+.h_fs_40 { font-size: 2.5rem; }
+.h_fs_45 { font-size: 2.8125rem; }
+.h_fs_54 { font-size: 3.375rem; }
+.h_fs_60 { font-size: 3.75rem; }
+.h_fs_72 { font-size: 4.5rem; }
+
+/* font-weight: bold */
+.h_fw_b { font-weight: bold; }
+.h_fw_5 { font-weight: 500; }
+
+
