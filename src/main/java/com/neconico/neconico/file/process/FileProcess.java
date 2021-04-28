@@ -9,6 +9,6 @@ public interface FileProcess {
 
     FileResultInfo uploadFile(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException;
 
-    boolean deleteFiles(String fileNames) throws IllegalArgumentException;
+    boolean canDeleteFiles(String fileNames) throws IllegalArgumentException;
 
 }

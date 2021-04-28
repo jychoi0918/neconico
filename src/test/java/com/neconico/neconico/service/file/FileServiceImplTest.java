@@ -6,7 +6,6 @@ import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.immutable.FileResultInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -157,7 +156,7 @@ class FileServiceImplTest {
 
         FileResultInfo fileResultInfo = fileService.uploadFiles(files);
 
-        boolean result = fileService.deleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileService.canDeleteFiles(fileResultInfo.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -177,7 +176,7 @@ class FileServiceImplTest {
 
         FileResultInfo fileResultInfo = fileService.uploadFiles(files);
 
-        boolean result = fileService.deleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileService.canDeleteFiles(fileResultInfo.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -236,7 +235,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(localFileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 
@@ -255,7 +254,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(s3FileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 
@@ -274,7 +273,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(localFileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 
@@ -293,7 +292,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(s3FileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 

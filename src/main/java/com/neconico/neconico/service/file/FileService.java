@@ -12,6 +12,6 @@ public interface FileService {
 
     FileResultInfo uploadFiles(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException;
 
-    boolean deleteFiles(String fileNames) throws IllegalArgumentException;
+    boolean canDeleteFiles(String fileNames) throws IllegalArgumentException;
 
 }

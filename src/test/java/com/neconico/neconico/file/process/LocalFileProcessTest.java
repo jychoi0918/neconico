@@ -115,7 +115,7 @@ class LocalFileProcessTest {
         //when
         FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.deleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -132,7 +132,7 @@ class LocalFileProcessTest {
         //when
         FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.deleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -149,7 +149,7 @@ class LocalFileProcessTest {
         //when
         FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.deleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -166,7 +166,7 @@ class LocalFileProcessTest {
         //when
         FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.deleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -232,7 +232,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ADVERTISEMENT);
 
         //then
-        assertThatThrownBy(() -> localFileProcess.deleteFiles(fileNames))
+        assertThatThrownBy(() -> localFileProcess.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -247,7 +247,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ADVERTISEMENT);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -263,7 +263,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ITEM);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -278,7 +278,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ITEM);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -293,7 +293,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.STORE);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -308,7 +308,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.STORE);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }

@@ -51,21 +51,8 @@ public class S3FileProcess implements FileProcess{
         return new FileResultInfo(fileUrls.toString(), fileNames.toString());
     }
 
-    private String convertUniqueFileName(MultipartFile file) {
-        String fileName = UUID.randomUUID() + file.getOriginalFilename();
-
-        fileNames.append(fileName + ":");
-
-        return fileName;
-    }
-
-    private void deleteLastColon() {
-        fileNames.deleteCharAt(fileNames.length() - 1);
-        fileUrls.deleteCharAt(fileUrls.length() - 1);
-    }
-
     @Override
-    public boolean deleteFiles(String fileName) throws IllegalArgumentException {
+    public boolean canDeleteFiles(String fileName) throws IllegalArgumentException {
         if(fileName == null || fileName.length() == 0) {
             throw new IllegalArgumentException("Entered the wrong path");
         }
@@ -78,6 +65,19 @@ public class S3FileProcess implements FileProcess{
 
         s3Deleter.delete(dirName, fileOriginNames[0]);
         return true;
+    }
+
+    private String convertUniqueFileName(MultipartFile file) {
+        String fileName = UUID.randomUUID() + file.getOriginalFilename();
+
+        fileNames.append(fileName + ":");
+
+        return fileName;
+    }
+
+    private void deleteLastColon() {
+        fileNames.deleteCharAt(fileNames.length() - 1);
+        fileUrls.deleteCharAt(fileUrls.length() - 1);
     }
 
     private boolean deleteFiles(String[] fileOriginNames) {

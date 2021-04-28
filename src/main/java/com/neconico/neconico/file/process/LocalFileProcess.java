@@ -40,11 +40,23 @@ public class LocalFileProcess implements FileProcess {
 
             file.transferTo(dest);
 
-            makeFileNamesAndURLs(dest);
+            insertFileNamesAndURLs(dest);
 
         }
 
-        return makeFileResultInfo();
+        return createFileResultInfo();
+    }
+
+    @Override
+    public boolean canDeleteFiles(String fileNames) throws IllegalArgumentException {
+        if(fileNames == null || fileNames.length() == 0) {
+            throw new IllegalArgumentException("Entered the wrong path");
+        }
+
+        String[] originalFileNames = fileNames.split(":");
+
+        return deleteOriginFiles(originalFileNames);
+
     }
 
     private void createDir() {
@@ -62,29 +74,17 @@ public class LocalFileProcess implements FileProcess {
         return UUID.randomUUID() + originalFileName;
     }
 
-    private void makeFileNamesAndURLs(File dest) throws IOException {
+    private void insertFileNamesAndURLs(File dest) throws IOException {
         fileNames.append(dest + ":");
         fileUrls.append(dest.toURI().toURL() + ":");
     }
 
-    private FileResultInfo makeFileResultInfo() {
+    private FileResultInfo createFileResultInfo() {
         String fileUrls = this.fileUrls.deleteCharAt(this.fileUrls.length() - 1).toString();
 
         String fileNames = this.fileNames.deleteCharAt(this.fileNames.length() - 1).toString();
 
         return new FileResultInfo(fileUrls, fileNames);
-    }
-
-    @Override
-    public boolean deleteFiles(String fileNames) throws IllegalArgumentException {
-        if(fileNames == null || fileNames.length() == 0) {
-            throw new IllegalArgumentException("Entered the wrong path");
-        }
-
-        String[] originalFileNames = fileNames.split(":");
-
-        return deleteOriginFiles(originalFileNames);
-
     }
 
     private boolean deleteOriginFiles(String[] originalFileNames) {
@@ -100,11 +100,11 @@ public class LocalFileProcess implements FileProcess {
             deleteResults.add(false);
         }
 
-        return countResult(deleteResults);
+        return isCountResult(deleteResults);
 
     }
 
-    private boolean countResult(List<Boolean> deleteResults) {
+    private boolean isCountResult(List<Boolean> deleteResults) {
         int resultCount = 0;
 
         for(boolean result : deleteResults) {
