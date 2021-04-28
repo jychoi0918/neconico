@@ -1,9 +1,7 @@
 package com.neconico.neconico.dto.file;
 
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
 public class FileResultInfoDto {
     private String fileUrls;
