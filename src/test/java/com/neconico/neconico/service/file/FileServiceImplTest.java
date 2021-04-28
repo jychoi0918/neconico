@@ -3,7 +3,7 @@ package com.neconico.neconico.service.file;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.process.LocalFileProcess;
 import com.neconico.neconico.file.process.S3FileProcess;
-import com.neconico.neconico.immutable.FileResultInfo;
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -100,12 +100,12 @@ class FileServiceImplTest {
         //when
         fileService.setFileProcess(localFileProcess);
 
-        FileResultInfo fileResultInfo = fileService.uploadFiles(files);
+        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(files);
 
         String[] fileNames = createFileName(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(fileNames);
+        assertThat(fileResultInfoDto.getFileNames()).contains(fileNames);
 
     }
 
@@ -121,12 +121,12 @@ class FileServiceImplTest {
         //when
         fileService.setFileProcess(s3FileProcess);
 
-        FileResultInfo fileResultInfo = fileService.uploadFiles(files);
+        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(files);
 
         String[] fileNames = createFileName(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(fileNames);
+        assertThat(fileResultInfoDto.getFileNames()).contains(fileNames);
 
     }
 
@@ -154,9 +154,9 @@ class FileServiceImplTest {
         //when
         fileService.setFileProcess(localFileProcess);
 
-        FileResultInfo fileResultInfo = fileService.uploadFiles(files);
+        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(files);
 
-        boolean result = fileService.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileService.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -174,9 +174,9 @@ class FileServiceImplTest {
         //when
         fileService.setFileProcess(s3FileProcess);
 
-        FileResultInfo fileResultInfo = fileService.uploadFiles(files);
+        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(files);
 
-        boolean result = fileService.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileService.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();

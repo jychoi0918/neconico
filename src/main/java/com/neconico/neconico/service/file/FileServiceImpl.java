@@ -4,7 +4,7 @@ import com.neconico.neconico.file.process.FileProcess;
 import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.file.s3provider.S3Deleter;
 import com.neconico.neconico.file.s3provider.S3Uploader;
-import com.neconico.neconico.immutable.FileResultInfo;
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,7 +31,7 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public FileResultInfo uploadFiles(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
+    public FileResultInfoDto uploadFiles(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
         return fileProcess.uploadFile(files);
     }
 

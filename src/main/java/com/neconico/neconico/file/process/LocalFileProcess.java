@@ -1,7 +1,7 @@
 package com.neconico.neconico.file.process;
 
 import com.neconico.neconico.file.policy.FilePolicy;
-import com.neconico.neconico.immutable.FileResultInfo;
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,7 +28,7 @@ public class LocalFileProcess implements FileProcess {
     }
 
     @Override
-    public FileResultInfo uploadFile(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
+    public FileResultInfoDto uploadFile(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
         if(files.length > fileCount) {
             throw new IllegalArgumentException("There are more files than should be received");
         }
@@ -79,12 +79,12 @@ public class LocalFileProcess implements FileProcess {
         fileUrls.append(dest.toURI().toURL() + ":");
     }
 
-    private FileResultInfo createFileResultInfo() {
+    private FileResultInfoDto createFileResultInfo() {
         String fileUrls = this.fileUrls.deleteCharAt(this.fileUrls.length() - 1).toString();
 
         String fileNames = this.fileNames.deleteCharAt(this.fileNames.length() - 1).toString();
 
-        return new FileResultInfo(fileUrls, fileNames);
+        return new FileResultInfoDto(fileUrls, fileNames);
     }
 
     private boolean deleteOriginFiles(String[] originalFileNames) {

@@ -3,7 +3,7 @@ package com.neconico.neconico.file.process;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.s3provider.S3Deleter;
 import com.neconico.neconico.file.s3provider.S3Uploader;
-import com.neconico.neconico.immutable.FileResultInfo;
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ public class S3FileProcess implements FileProcess{
     }
 
     @Override
-    public FileResultInfo uploadFile(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
+    public FileResultInfoDto uploadFile(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
         if(files.length > fileCount) {
             throw new IllegalArgumentException("There are more files than should be received");
         }
@@ -48,7 +48,7 @@ public class S3FileProcess implements FileProcess{
 
         deleteLastColon();
 
-        return new FileResultInfo(fileUrls.toString(), fileNames.toString());
+        return new FileResultInfoDto(fileUrls.toString(), fileNames.toString());
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.neconico.neconico.file.process;
 
 import com.neconico.neconico.file.policy.FilePolicy;
-import com.neconico.neconico.immutable.FileResultInfo;
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,10 +53,10 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
     }
 
     @Test
@@ -68,10 +68,10 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
 
     }
 
@@ -84,10 +84,10 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 3);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
     }
 
     @Test
@@ -98,10 +98,10 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
     }
 
     @Test
@@ -113,9 +113,9 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -130,9 +130,9 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -147,9 +147,9 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 3);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -164,9 +164,9 @@ class LocalFileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = localFileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();

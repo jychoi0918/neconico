@@ -3,7 +3,7 @@ package com.neconico.neconico.file.process;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.s3provider.S3Deleter;
 import com.neconico.neconico.file.s3provider.S3Uploader;
-import com.neconico.neconico.immutable.FileResultInfo;
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,10 +68,10 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
     }
 
     @Test
@@ -86,10 +86,10 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
 
     }
 
@@ -105,10 +105,10 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 3);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames())
+        assertThat(fileResultInfoDto.getFileNames())
                 .contains(
                         files[0].getOriginalFilename(),
                         files[1].getOriginalFilename(),
@@ -128,10 +128,10 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
         //then
-        assertThat(fileResultInfo.getFileNames()).contains(files[0].getOriginalFilename());
+        assertThat(fileResultInfoDto.getFileNames()).contains(files[0].getOriginalFilename());
     }
 
     @Test
@@ -146,9 +146,9 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -166,9 +166,9 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -186,9 +186,9 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 3);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
@@ -206,9 +206,9 @@ class S3FileProcessTest {
         MockMultipartFile[] files = Arrays.copyOf(this.files, 1);
 
         //when
-        FileResultInfo fileResultInfo = fileProcess.uploadFile(files);
+        FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfo.getFileNames());
+        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
 
         //then
         assertThat(result).isTrue();
