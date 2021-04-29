@@ -1,9 +1,9 @@
 package com.neconico.neconico.service.file;
 
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.process.LocalFileProcess;
 import com.neconico.neconico.file.process.S3FileProcess;
-import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,11 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class FileServiceImplTest {
@@ -156,10 +156,11 @@ class FileServiceImplTest {
 
         FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(files);
 
-        boolean result = fileService.canDeleteFiles(fileResultInfoDto.getFileNames());
+        fileService.deleteFiles(fileResultInfoDto.getFileNames());
 
+        File uploadFile = new File(fileResultInfoDto.getFileNames());
         //then
-        assertThat(result).isTrue();
+        assertThat(uploadFile.exists()).isFalse();
     }
 
     @ParameterizedTest(name = "{index} -> FilePolicy가 {0}이고 파일개수 {1}개 일때")
@@ -176,10 +177,9 @@ class FileServiceImplTest {
 
         FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(files);
 
-        boolean result = fileService.canDeleteFiles(fileResultInfoDto.getFileNames());
-
         //then
-        assertThat(result).isTrue();
+        assertThatCode(() -> fileService.deleteFiles(fileResultInfoDto.getFileNames()))
+                .doesNotThrowAnyException();
     }
 
     /**
@@ -235,7 +235,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(localFileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 
@@ -254,7 +254,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(s3FileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 
@@ -273,7 +273,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(localFileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 
@@ -292,7 +292,7 @@ class FileServiceImplTest {
         fileService.setFileProcess(s3FileProcess);
 
         //then
-        assertThatThrownBy(() -> fileService.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileService.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
 

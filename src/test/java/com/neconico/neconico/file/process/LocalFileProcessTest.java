@@ -7,8 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -115,10 +118,12 @@ class LocalFileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
+        localFileProcess.deleteFiles(fileResultInfoDto.getFileNames());
+
+        File uploadFile = new File(fileResultInfoDto.getFileNames());
 
         //then
-        assertThat(result).isTrue();
+        assertThat(uploadFile.exists()).isFalse();
     }
 
     @Test
@@ -132,10 +137,12 @@ class LocalFileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
+        localFileProcess.deleteFiles(fileResultInfoDto.getFileNames());
+
+        File uploadFile = new File(fileResultInfoDto.getFileNames());
 
         //then
-        assertThat(result).isTrue();
+        assertThat(uploadFile.exists()).isFalse();
     }
 
     @Test
@@ -149,10 +156,18 @@ class LocalFileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
+        localFileProcess.deleteFiles(fileResultInfoDto.getFileNames());
+
+        String[] originalFileNames = fileResultInfoDto.getFileNames().split(":");
+
+        List<Boolean> result = new ArrayList<>();
+
+        for(String originalFileName : originalFileNames) {
+            result.add(new File(originalFileName).exists());
+        }
 
         //then
-        assertThat(result).isTrue();
+        assertThat(result).doesNotContain(true);
     }
 
     @Test
@@ -166,10 +181,12 @@ class LocalFileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = localFileProcess.uploadFile(files);
 
-        boolean result = localFileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
+        localFileProcess.deleteFiles(fileResultInfoDto.getFileNames());
+
+        File uploadFile = new File(fileResultInfoDto.getFileNames());
 
         //then
-        assertThat(result).isTrue();
+        assertThat(uploadFile.exists()).isFalse();
     }
 
     /**
@@ -232,7 +249,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ADVERTISEMENT);
 
         //then
-        assertThatThrownBy(() -> localFileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> localFileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -247,7 +264,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ADVERTISEMENT);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -263,7 +280,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ITEM);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -278,7 +295,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.ITEM);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -293,7 +310,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.STORE);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -308,7 +325,7 @@ class LocalFileProcessTest {
         this.localFileProcess = new LocalFileProcess(FilePolicy.STORE);
 
         //then
-        assertThatThrownBy(() -> this.localFileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> this.localFileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }

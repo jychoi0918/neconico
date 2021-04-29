@@ -52,7 +52,7 @@ public class S3FileProcess implements FileProcess{
     }
 
     @Override
-    public boolean canDeleteFiles(String fileName) throws IllegalArgumentException {
+    public void deleteFiles(String fileName) throws IllegalArgumentException {
         if(fileName == null || fileName.length() == 0) {
             throw new IllegalArgumentException("Entered the wrong path");
         }
@@ -60,11 +60,10 @@ public class S3FileProcess implements FileProcess{
         String[] fileOriginNames = fileName.split(":");
 
         if(fileOriginNames.length > 1) {
-            return deleteFiles(fileOriginNames);
+            deleteFiles(fileOriginNames);
         }
 
         s3Deleter.delete(dirName, fileOriginNames[0]);
-        return true;
     }
 
     private String convertUniqueFileName(MultipartFile file) {
@@ -80,9 +79,8 @@ public class S3FileProcess implements FileProcess{
         fileUrls.deleteCharAt(fileUrls.length() - 1);
     }
 
-    private boolean deleteFiles(String[] fileOriginNames) {
+    private void deleteFiles(String[] fileOriginNames) {
         s3Deleter.deletes(dirName, convertList(fileOriginNames));
-        return true;
     }
 
     private List<String> convertList(String[] fileOriginNames) {
