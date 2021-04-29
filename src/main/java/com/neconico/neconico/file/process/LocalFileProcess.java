@@ -1,13 +1,11 @@
 package com.neconico.neconico.file.process;
 
-import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
+import com.neconico.neconico.file.policy.FilePolicy;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class LocalFileProcess implements FileProcess {
@@ -48,14 +46,14 @@ public class LocalFileProcess implements FileProcess {
     }
 
     @Override
-    public boolean canDeleteFiles(String fileNames) throws IllegalArgumentException {
+    public void deleteFiles(String fileNames) throws IllegalArgumentException {
         if(fileNames == null || fileNames.length() == 0) {
             throw new IllegalArgumentException("Entered the wrong path");
         }
 
         String[] originalFileNames = fileNames.split(":");
 
-        return deleteOriginFiles(originalFileNames);
+        deleteOriginFiles(originalFileNames);
 
     }
 
@@ -87,32 +85,13 @@ public class LocalFileProcess implements FileProcess {
         return new FileResultInfoDto(fileUrls, fileNames);
     }
 
-    private boolean deleteOriginFiles(String[] originalFileNames) {
-        List<Boolean> deleteResults = new ArrayList<>();
-
+    private void deleteOriginFiles(String[] originalFileNames) {
         for(String originalFileName : originalFileNames) {
             File originalFile = new File(originalFileName);
 
             if(originalFile.exists()) {
-                deleteResults.add(originalFile.delete());
-            }
-
-            deleteResults.add(false);
-        }
-
-        return isCountResult(deleteResults);
-
-    }
-
-    private boolean isCountResult(List<Boolean> deleteResults) {
-        int resultCount = 0;
-
-        for(boolean result : deleteResults) {
-            if(result) {
-                resultCount++;
+                originalFile.delete();
             }
         }
-
-        return resultCount > 0 ;
     }
 }

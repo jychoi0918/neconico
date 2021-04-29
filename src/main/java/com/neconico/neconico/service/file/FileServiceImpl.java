@@ -36,8 +36,8 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public boolean canDeleteFiles(String fileNames) throws IllegalArgumentException {
-        return fileProcess.canDeleteFiles(fileNames);
+    public void deleteFiles(String fileNames) throws IllegalArgumentException {
+        fileProcess.deleteFiles(fileNames);
     }
 
 }

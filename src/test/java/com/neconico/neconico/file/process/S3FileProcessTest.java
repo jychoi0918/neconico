@@ -1,9 +1,9 @@
 package com.neconico.neconico.file.process;
 
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.s3provider.S3Deleter;
 import com.neconico.neconico.file.s3provider.S3Uploader;
-import com.neconico.neconico.dto.file.FileResultInfoDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 class S3FileProcessTest {
@@ -148,10 +147,9 @@ class S3FileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
-
         //then
-        assertThat(result).isTrue();
+        assertThatCode(() -> fileProcess.deleteFiles(fileResultInfoDto.getFileNames()))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -168,10 +166,9 @@ class S3FileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
-
         //then
-        assertThat(result).isTrue();
+        assertThatCode(() -> fileProcess.deleteFiles(fileResultInfoDto.getFileNames()))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -188,10 +185,9 @@ class S3FileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
-
         //then
-        assertThat(result).isTrue();
+        assertThatCode(() -> fileProcess.deleteFiles(fileResultInfoDto.getFileNames()))
+                .doesNotThrowAnyException();
     }
 
     @Test
@@ -208,10 +204,9 @@ class S3FileProcessTest {
         //when
         FileResultInfoDto fileResultInfoDto = fileProcess.uploadFile(files);
 
-        boolean result = fileProcess.canDeleteFiles(fileResultInfoDto.getFileNames());
-
         //then
-        assertThat(result).isTrue();
+        assertThatCode(() -> fileProcess.deleteFiles(fileResultInfoDto.getFileNames()))
+                .doesNotThrowAnyException();
     }
 
     /**
@@ -285,7 +280,7 @@ class S3FileProcessTest {
         this.fileProcess = s3FileProcess;
 
         //then
-        assertThatThrownBy(() -> fileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -303,7 +298,7 @@ class S3FileProcessTest {
         this.fileProcess = s3FileProcess;
 
         //then
-        assertThatThrownBy(() -> fileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -322,7 +317,7 @@ class S3FileProcessTest {
         this.fileProcess = s3FileProcess;
 
         //then
-        assertThatThrownBy(() -> fileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -340,7 +335,7 @@ class S3FileProcessTest {
         this.fileProcess = s3FileProcess;
 
         //then
-        assertThatThrownBy(() -> fileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -358,7 +353,7 @@ class S3FileProcessTest {
         this.fileProcess = s3FileProcess;
 
         //then
-        assertThatThrownBy(() -> fileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
@@ -376,7 +371,7 @@ class S3FileProcessTest {
         this.fileProcess = s3FileProcess;
 
         //then
-        assertThatThrownBy(() -> fileProcess.canDeleteFiles(fileNames))
+        assertThatThrownBy(() -> fileProcess.deleteFiles(fileNames))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Entered the wrong path");
     }
