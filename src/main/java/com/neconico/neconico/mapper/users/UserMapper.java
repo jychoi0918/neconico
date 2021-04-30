@@ -14,7 +14,7 @@ public interface UserMapper {
 
     SessionUser selectSessionUserInfoByAccountId(String accountId);
 
-    UserReturnAccountId selectUserByAccountIdAndEmail(UserFindAccountIdForm findAccountIdForm);
+    UserReturnAccountIdDto selectUserByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
 
     void insertUser(UserJoinDto userJoinDto);
 
@@ -22,7 +22,5 @@ public interface UserMapper {
 
     void updateUserInfo(UserInfoDto userInfoDto);
 
-
-
-
 }
+

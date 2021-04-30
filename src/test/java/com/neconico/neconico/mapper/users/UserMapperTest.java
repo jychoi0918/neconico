@@ -61,7 +61,7 @@ class UserMapperTest {
 
     @Test
     @DisplayName("모든회원 정보를 DB에서 가져온다")
-   void get_user_information_in_database() {
+    void get_user_information_in_database() {
         List<UserInfoDto> userInfos = userMapper.selectUserAll();
 
         assertThat(userInfos).isNotNull();
@@ -198,15 +198,15 @@ class UserMapperTest {
         }
 
         //when
-        UserFindAccountIdForm userFindAccountIdForm = new UserFindAccountIdForm();
-        userFindAccountIdForm.setAccountName(accountName);
-        userFindAccountIdForm.setEmail(email);
+        UserFindAccountIdDto userFindAccountIdDto = new UserFindAccountIdDto();
+        userFindAccountIdDto.setAccountName(accountName);
+        userFindAccountIdDto.setEmail(email);
 
-        UserReturnAccountId userReturnAccountId = userMapper
-                .selectUserByAccountIdAndEmail(userFindAccountIdForm);
+        UserReturnAccountIdDto userReturnAccountIdDto = userMapper
+                .selectUserByNameAndEmail(userFindAccountIdDto);
 
         //then
-        assertThat(userReturnAccountId).isNotNull();
+        assertThat(userReturnAccountIdDto).isNotNull();
 
     }
 }

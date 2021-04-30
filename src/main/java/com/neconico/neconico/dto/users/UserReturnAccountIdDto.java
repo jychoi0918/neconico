@@ -6,8 +6,8 @@ import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 @Getter @Setter
-@Alias("UserReturnAccountId")
+@Alias("userReturnAccountIdDto")
 @NoArgsConstructor
-public class UserReturnAccountId {
+public class UserReturnAccountIdDto {
     private String accountId;
 }
