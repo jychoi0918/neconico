@@ -57,6 +57,10 @@ class UserMapperTest {
 
             userJoinDtos.add(userJoinDto);
         }
+
+        for(UserJoinDto userJoinDto : userJoinDtos) {
+            userMapper.insertUser(userJoinDto);
+        }
     }
 
     @Test
@@ -72,17 +76,29 @@ class UserMapperTest {
     @DisplayName("회원가입시 회원정보를 DB에 저장")
     void insert_join_user_info_in_database() {
         //given
-        List<UserJoinDto> userJoinDtos = this.userJoinDtos;
+        UserJoinDto userJoinDto = UserJoinDto.builder()
+                .accountId("user11")
+                .accountPw(passwordEncoder.encode("1234"))
+                .accountName("user11")
+                .gender("F")
+                .brithdate("980631")
+                .email("user11" + "@gmail.com")
+                .phoneNumber("010-1111-1111")
+                .address("서울시")
+                .zipNo("01583")
+                .infoAgreement("check")
+                .createDate(LocalDateTime.of(2021, 04, 29, 04, 43))
+                .modifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43))
+                .authority("ROLE_USER")
+                .build();
 
         //when
-        for(UserJoinDto userJoinDto : userJoinDtos) {
-            userMapper.insertUser(userJoinDto);
-        }
+        userMapper.insertUser(userJoinDto);
 
         List<UserInfoDto> userInfoDtos = userMapper.selectUserAll();
 
         //then
-        assertThat(userInfoDtos.size()).isEqualTo(10);
+        assertThat(userInfoDtos.size()).isEqualTo(11);
 
     }
 
@@ -92,15 +108,9 @@ class UserMapperTest {
                     "user6", "user7", "user8", "user9", "user10"})
     @DisplayName("회원의 아이디로 해당 유저정보를 DB에서 가져온다")
     void select_user_by_account_id_in_database(String accountId) {
-        //given
-        for(UserJoinDto userJoinDto : userJoinDtos) {
-            userMapper.insertUser(userJoinDto);
-        }
 
-        //when
         UserInfoDto userInfoDto = userMapper.selectUserByAccountId(accountId);
 
-        //then
         assertThat(userInfoDto).extracting("accountId").isEqualTo(accountId);
 
     }
@@ -111,16 +121,10 @@ class UserMapperTest {
             strings = {"user1", "user2", "user3", "user4", "user5",
             "user6", "user7", "user8", "user9", "user10"})
     void update_authority_when_user_withdrawal(String accountId) {
-        //given
-        for(UserJoinDto userJoinDto : userJoinDtos) {
-            userMapper.insertUser(userJoinDto);
-        }
 
-        //when
         userMapper.updateUserAuthority(accountId);
         UserInfoDto userInfoDto = userMapper.selectUserByAccountId(accountId);
 
-        //then
         assertThat(userInfoDto)
                 .extracting("authority").isEqualTo("ROLE_DROP");
     }
@@ -129,11 +133,6 @@ class UserMapperTest {
     @DisplayName("회원 정보 변경 시 DB에 반영")
     void update_user_info_in_database() {
         //given
-        for(UserJoinDto userJoinDto : userJoinDtos) {
-            userMapper.insertUser(userJoinDto);
-        }
-
-        //when
         UserJoinDto userJoinDto = userJoinDtos.get(0);
 
         UserInfoDto userInfoDto = new UserInfoDto();
@@ -144,6 +143,7 @@ class UserMapperTest {
         userInfoDto.setAddress("부산시");
         userInfoDto.setModifiedDate(LocalDateTime.of(2021, 04, 30, 03, 13, 20));
 
+        //when
         userMapper.updateUserInfo(userInfoDto);
 
         UserInfoDto findUserInfo = userMapper.selectUserByAccountId(userJoinDto.getAccountId());
@@ -170,15 +170,9 @@ class UserMapperTest {
             strings = {"user1", "user2", "user3", "user4", "user5",
                     "user6", "user7", "user8", "user9", "user10"})
     void the_sessionUser_object_is_returned_with_the_corresponding_id(String accountId) {
-        //given
-        for(UserJoinDto userJoinDto : userJoinDtos) {
-            userMapper.insertUser(userJoinDto);
-        }
 
-        //when
         SessionUser sessionUser = userMapper.selectSessionUserInfoByAccountId(accountId);
 
-        //then
         assertThat(sessionUser)
                 .extracting("accountId", "authority")
                 .contains(accountId, "ROLE_USER");
@@ -192,21 +186,17 @@ class UserMapperTest {
                 "'user7', 'user7@gmail.com'", "'user8', 'user8@gmail.com'", "'user9', 'user9@gmail.com'",
                 "'user10', 'user10@gmail.com'"})
     void when_searching_for_a_account_id_check_whether_the_member_exists(String accountName, String email) {
-        //given
-        for(UserJoinDto userJoinDto : userJoinDtos) {
-            userMapper.insertUser(userJoinDto);
-        }
 
-        //when
+        //given
         UserFindAccountIdDto userFindAccountIdDto = new UserFindAccountIdDto();
         userFindAccountIdDto.setAccountName(accountName);
         userFindAccountIdDto.setEmail(email);
 
+        //when
         UserReturnAccountIdDto userReturnAccountIdDto = userMapper
                 .selectUserByNameAndEmail(userFindAccountIdDto);
 
         //then
         assertThat(userReturnAccountIdDto).isNotNull();
-
     }
 }
