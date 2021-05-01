@@ -54,25 +54,4 @@ public class UserJoinDto {
     private LocalDateTime modifiedDate;
     private String authority;
 
-    @Builder
-    public UserJoinDto(String accountId, String accountPw, String accountName,
-                       String gender, String brithdate, String email,
-                       String phoneNumber, String zipNo, String address,
-                       String infoAgreement, LocalDateTime createDate, LocalDateTime modifiedDate,
-                       String authority) {
-
-        this.accountId = accountId;
-        this.accountPw = accountPw;
-        this.accountName = accountName;
-        this.gender = gender;
-        this.brithdate = brithdate;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.zipNo = zipNo;
-        this.address = address;
-        this.infoAgreement = infoAgreement;
-        this.createDate = createDate;
-        this.modifiedDate = modifiedDate;
-        this.authority = authority;
-    }
 }

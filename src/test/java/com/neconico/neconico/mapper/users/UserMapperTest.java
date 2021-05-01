@@ -39,21 +39,20 @@ class UserMapperTest {
                 gender = "F";
             }
 
-            UserJoinDto userJoinDto = UserJoinDto.builder()
-                    .accountId("user" + i)
-                    .accountPw(passwordEncoder.encode("1234"))
-                    .accountName("user" + i)
-                    .gender(gender)
-                    .brithdate("940606")
-                    .email("user" + i + "@gmail.com")
-                    .phoneNumber("010-1111-1111")
-                    .address("서울시")
-                    .zipNo("0158" + i)
-                    .infoAgreement("check")
-                    .createDate(LocalDateTime.of(2021, 04, 29, 04, 43, i))
-                    .modifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43, i))
-                    .authority("ROLE_USER")
-                    .build();
+            UserJoinDto userJoinDto = new UserJoinDto();
+            userJoinDto.setAccountId("user" + i);
+            userJoinDto.setAccountPw(passwordEncoder.encode("1234"));
+            userJoinDto.setAccountName("user" + i);
+            userJoinDto.setGender(gender);
+            userJoinDto.setBrithdate("990331");
+            userJoinDto.setEmail("user" + i + "@gmail.com");
+            userJoinDto.setPhoneNumber("010-1111-1111");
+            userJoinDto.setAddress("서울시");
+            userJoinDto.setZipNo("0158" + i);
+            userJoinDto.setInfoAgreement("check");
+            userJoinDto.setCreateDate(LocalDateTime.of(2021, 04, 29, 04, 43, i));
+            userJoinDto.setModifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43, i));
+            userJoinDto.setAuthority("ROLE_USER");
 
             userJoinDtos.add(userJoinDto);
         }
@@ -76,21 +75,20 @@ class UserMapperTest {
     @DisplayName("회원가입시 회원정보를 DB에 저장")
     void insert_join_user_info_in_database() {
         //given
-        UserJoinDto userJoinDto = UserJoinDto.builder()
-                .accountId("user11")
-                .accountPw(passwordEncoder.encode("1234"))
-                .accountName("user11")
-                .gender("F")
-                .brithdate("980631")
-                .email("user11" + "@gmail.com")
-                .phoneNumber("010-1111-1111")
-                .address("서울시")
-                .zipNo("01583")
-                .infoAgreement("check")
-                .createDate(LocalDateTime.of(2021, 04, 29, 04, 43))
-                .modifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43))
-                .authority("ROLE_USER")
-                .build();
+        UserJoinDto userJoinDto = new UserJoinDto();
+        userJoinDto.setAccountId("user11");
+        userJoinDto.setAccountPw(passwordEncoder.encode("1234"));
+        userJoinDto.setAccountName("user11");
+        userJoinDto.setGender("F");
+        userJoinDto.setBrithdate("980631");
+        userJoinDto.setEmail("user11" + "@gmail.com");
+        userJoinDto.setPhoneNumber("010-1111-1111");
+        userJoinDto.setAddress("서울시");
+        userJoinDto.setZipNo("01583");
+        userJoinDto.setInfoAgreement("check");
+        userJoinDto.setCreateDate(LocalDateTime.of(2021, 04, 29, 04, 43));
+        userJoinDto.setModifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43));
+        userJoinDto.setAuthority("ROLE_USER");
 
         //when
         userMapper.insertUser(userJoinDto);
