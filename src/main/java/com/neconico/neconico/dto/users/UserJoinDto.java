@@ -27,6 +27,7 @@ public class UserJoinDto {
     @NotEmpty(message = "이름을 입력해 주세요.")
     @Size(min = 2, max = 10, message = "이름은 최소 2글자에서 최대 10글자 사이이어야 합니다.")
     private String accountName;
+
     private String gender;
 
     @FutureOrPresent(message = "날짜가 알맞지 않습니다.")
@@ -47,6 +48,7 @@ public class UserJoinDto {
 
     @NotEmpty(message = "집 주소를 입력해주세요.")
     private String address;
+
     private String infoAgreement;
     private LocalDateTime createDate;
     private LocalDateTime modifiedDate;
