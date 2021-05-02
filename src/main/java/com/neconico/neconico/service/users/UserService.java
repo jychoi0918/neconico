@@ -1,9 +1,6 @@
 package com.neconico.neconico.service.users;
 
-import com.neconico.neconico.dto.users.UserFindAccountIdDto;
-import com.neconico.neconico.dto.users.UserInfoDto;
-import com.neconico.neconico.dto.users.UserJoinDto;
-import com.neconico.neconico.dto.users.UserReturnAccountIdDto;
+import com.neconico.neconico.dto.users.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +12,11 @@ public interface UserService {
 
     UserInfoDto findUserByAccountId(String accountId);
 
-    List<UserInfoDto> findAll();
+    List<UserInfoDto> findUsers();
 
     UserReturnAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
+
+    UserReturnAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
 
     void changeDropUserAuthority(String accountId);
 

@@ -1,9 +1,6 @@
 package com.neconico.neconico.service.users;
 
-import com.neconico.neconico.dto.users.UserFindAccountIdDto;
-import com.neconico.neconico.dto.users.UserInfoDto;
-import com.neconico.neconico.dto.users.UserJoinDto;
-import com.neconico.neconico.dto.users.UserReturnAccountIdDto;
+import com.neconico.neconico.dto.users.*;
 import com.neconico.neconico.mapper.users.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +38,7 @@ public class DefaultPolicyUserService implements UserService{
     }
 
     @Override
-    public List<UserInfoDto> findAll() {
+    public List<UserInfoDto> findUsers() {
         return userMapper.selectUserAll();
     }
 
@@ -51,10 +48,15 @@ public class DefaultPolicyUserService implements UserService{
     }
 
     @Override
+    public UserReturnAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto) {
+        return userMapper.selectUserByAccountIdAndPhoneNumAndEmail(userFindAccountPwDto);
+    }
+
+    @Override
     @Transactional
     public void changeDropUserAuthority(String accountId) {
         userMapper.updateUserAuthority(accountId);
-        log.info("사용자 권한 변경 {} -> {}", "ROLE_USER", "ROLE_DROP");
+        log.info("사용자 권한 변경 해당아이디:{} {} -> {}", accountId, "ROLE_USER", "ROLE_DROP");
     }
 
     @Override

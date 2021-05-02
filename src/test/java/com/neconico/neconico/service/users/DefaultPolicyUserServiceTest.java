@@ -1,9 +1,6 @@
 package com.neconico.neconico.service.users;
 
-import com.neconico.neconico.dto.users.UserFindAccountIdDto;
-import com.neconico.neconico.dto.users.UserInfoDto;
-import com.neconico.neconico.dto.users.UserJoinDto;
-import com.neconico.neconico.dto.users.UserReturnAccountIdDto;
+import com.neconico.neconico.dto.users.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,8 +46,10 @@ class DefaultPolicyUserServiceTest {
             userJoinDto.setAddress("서울시");
             userJoinDto.setZipNo("0158" + i);
             userJoinDto.setInfoAgreement("check");
-            userJoinDto.setCreateDate(LocalDateTime.of(2021, 04, 29, 04, 43, i));
-            userJoinDto.setModifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43, i));
+            userJoinDto.setCreateDate(
+                    LocalDateTime.of(2021, 04, 29, 04, 43, i));
+            userJoinDto.setModifiedDate(
+                    LocalDateTime.of(2021, 04, 29, 04, 43, i));
             userJoinDto.setAuthority("ROLE_USER");
 
             userJoinDtos.add(userJoinDto);
@@ -104,7 +103,7 @@ class DefaultPolicyUserServiceTest {
     @Test
     @DisplayName("모든회원 정보를 DB에서 가져온다")
     void get_user_information_in_database() {
-        List<UserInfoDto> userInfoDtoList = userService.findAll();
+        List<UserInfoDto> userInfoDtoList = userService.findUsers();
 
         assertThat(userInfoDtoList.size()).isEqualTo(10);
     }
@@ -116,17 +115,46 @@ class DefaultPolicyUserServiceTest {
             "'user7', 'user7@gmail.com'", "'user8', 'user8@gmail.com'", "'user9', 'user9@gmail.com'",
             "'user10', 'user10@gmail.com'"})
     void when_searching_for_a_account_id_check_whether_the_member_exists(String accountName, String email) {
-
+        //given
         UserFindAccountIdDto userFindAccountIdDto = new UserFindAccountIdDto();
 
         userFindAccountIdDto.setAccountName(accountName);
         userFindAccountIdDto.setEmail(email);
 
+        //when
         UserReturnAccountIdDto userReturnAccountIdDto = userService
                 .findAccountIdByNameAndEmail(userFindAccountIdDto);
 
+        //then
         assertThat(userReturnAccountIdDto).isNotNull();
 
+    }
+
+    @ParameterizedTest(name = "{index} -> 유저이름이 {0}이고, 핸드폰 번호가 {1}이고 이메일이 {2}일때")
+    @DisplayName("회원 비밀번호 찾기 시 해당 회원이 존재하는지 확인")
+    @CsvSource(
+            {"'user1', '010-1111-1111', 'user1@gmail.com'", "'user2', '010-1111-1111', 'user2@gmail.com'",
+                    "'user3', '010-1111-1111', 'user3@gmail.com'", "'user4', '010-1111-1111', 'user4@gmail.com'",
+                    "'user5', '010-1111-1111', 'user5@gmail.com'", "'user6', '010-1111-1111', 'user6@gmail.com'",
+                    "'user7', '010-1111-1111', 'user7@gmail.com'", "'user8', '010-1111-1111', 'user8@gmail.com'",
+                    "'user9', '010-1111-1111', 'user9@gmail.com'", "'user10', '010-1111-1111', 'user10@gmail.com'"
+            }
+    )
+    void when_searching_for_a_account_pw_check_whether_the_member_exists(String accountId,
+                                                                         String phoneNumber,
+                                                                         String email) {
+        //given
+        UserFindAccountPwDto userFindAccountPwDto = new UserFindAccountPwDto();
+        userFindAccountPwDto.setAccountId(accountId);
+        userFindAccountPwDto.setPhoneNumber(phoneNumber);
+        userFindAccountPwDto.setEmail(email);
+
+        //when
+        UserReturnAccountIdDto userReturnAccountIdDto = userService
+                .findAccountPwByAccountIdAndPhoneNumAndEmail(userFindAccountPwDto);
+
+        //then
+        assertThat(userReturnAccountIdDto).isNotNull();
     }
 
     @ParameterizedTest(name = "{index} -> 유저아이디가 {0}일때")
@@ -146,23 +174,25 @@ class DefaultPolicyUserServiceTest {
     @Test
     @DisplayName("회원 정보 변경 시 DB에 반영")
     void update_user_info_in_database() {
-
+        //given
         UserJoinDto userJoinDto = userJoinDtos.get(0);
 
-        //변경된 회원정보
+        //when
         UserInfoDto userInfoDto = new UserInfoDto();
         userInfoDto.setAccountId(userJoinDto.getAccountId());
         userInfoDto.setPhoneNumber("010-2325-3535");
         userInfoDto.setEmail("user11111@gamil.com");
         userInfoDto.setZipNo("51562");
         userInfoDto.setAddress("부산시");
-        userInfoDto.setModifiedDate(LocalDateTime.of(2021, 04, 30, 03, 13, 20));
+        userInfoDto.setModifiedDate(
+                LocalDateTime.of(2021, 04, 30, 03, 13, 20)
+        );
 
         userService.changeUserInfo(userInfoDto);
 
         UserInfoDto findUserInfo = userService.findUserByAccountId(userInfoDto.getAccountId());
 
-
+        //then
         assertThat(findUserInfo).extracting(
                 "phoneNumber",
                 "email",

@@ -16,6 +16,8 @@ public interface UserMapper {
 
     UserReturnAccountIdDto selectUserByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
 
+    UserReturnAccountIdDto selectUserByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
+
     void insertUser(UserJoinDto userJoinDto);
 
     void updateUserAuthority(String accountId);

@@ -197,4 +197,30 @@ class UserMapperTest {
         //then
         assertThat(userReturnAccountIdDto).isNotNull();
     }
+
+    @ParameterizedTest(name = "{index} -> 유저이름이 {0}이고, 핸드폰 번호가 {1}이고 이메일이 {2}일때")
+    @DisplayName("회원 비밀번호 찾기 시 해당 회원이 존재하는지 확인")
+    @CsvSource(
+            {"'user1', '010-1111-1111', 'user1@gmail.com'", "'user2', '010-1111-1111', 'user2@gmail.com'",
+            "'user3', '010-1111-1111', 'user3@gmail.com'", "'user4', '010-1111-1111', 'user4@gmail.com'",
+            "'user5', '010-1111-1111', 'user5@gmail.com'", "'user6', '010-1111-1111', 'user6@gmail.com'",
+            "'user7', '010-1111-1111', 'user7@gmail.com'", "'user8', '010-1111-1111', 'user8@gmail.com'",
+                    "'user9', '010-1111-1111', 'user9@gmail.com'", "'user10', '010-1111-1111', 'user10@gmail.com'"
+            }
+    )
+    void when_searching_for_a_account_pw_check_whether_the_member_exists(String accountId, String phoneNumber, String email) {
+
+        //given
+        UserFindAccountPwDto userFindAccountPwDto = new UserFindAccountPwDto();
+        userFindAccountPwDto.setAccountId(accountId);
+        userFindAccountPwDto.setPhoneNumber(phoneNumber);
+        userFindAccountPwDto.setEmail(email);
+
+        //when
+        UserReturnAccountIdDto userReturnAccountIdDto = userMapper
+                .selectUserByAccountIdAndPhoneNumAndEmail(userFindAccountPwDto);
+
+        //then
+        assertThat(userReturnAccountIdDto).isNotNull();
+    }
 }
