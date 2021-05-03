@@ -8,6 +8,6 @@ import org.apache.ibatis.type.Alias;
 @Getter @Setter
 @Alias("userReturnAccountIdDto")
 @NoArgsConstructor
-public class UserReturnAccountIdDto {
+public class UserAccountIdDto {
     private String accountId;
 }

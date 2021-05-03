@@ -14,9 +14,9 @@ public interface UserMapper {
 
     SessionUser selectSessionUserInfoByAccountId(String accountId);
 
-    UserReturnAccountIdDto selectUserByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
+    UserAccountIdDto selectUserByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
 
-    UserReturnAccountIdDto selectUserByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
+    UserAccountIdDto selectUserByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
 
     void insertUser(UserJoinDto userJoinDto);
 

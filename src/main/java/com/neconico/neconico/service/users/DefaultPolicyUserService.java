@@ -39,12 +39,12 @@ public class DefaultPolicyUserService implements UserService{
     }
 
     @Override
-    public UserReturnAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto) {
+    public UserAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto) {
         return userMapper.selectUserByNameAndEmail(userFindAccountIdDto);
     }
 
     @Override
-    public UserReturnAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto) {
+    public UserAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto) {
         return userMapper.selectUserByAccountIdAndPhoneNumAndEmail(userFindAccountPwDto);
     }
 

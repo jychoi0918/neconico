@@ -14,9 +14,9 @@ public interface UserService {
 
     List<UserInfoDto> findUsers();
 
-    UserReturnAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
+    UserAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
 
-    UserReturnAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
+    UserAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
 
     void changeDropUserAuthority(String accountId);
 

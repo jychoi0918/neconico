@@ -184,18 +184,17 @@ class UserMapperTest {
                 "'user7', 'user7@gmail.com'", "'user8', 'user8@gmail.com'", "'user9', 'user9@gmail.com'",
                 "'user10', 'user10@gmail.com'"})
     void when_searching_for_a_account_id_check_whether_the_member_exists(String accountName, String email) {
-
         //given
         UserFindAccountIdDto userFindAccountIdDto = new UserFindAccountIdDto();
         userFindAccountIdDto.setAccountName(accountName);
         userFindAccountIdDto.setEmail(email);
 
         //when
-        UserReturnAccountIdDto userReturnAccountIdDto = userMapper
+        UserAccountIdDto userAccountIdDto = userMapper
                 .selectUserByNameAndEmail(userFindAccountIdDto);
 
         //then
-        assertThat(userReturnAccountIdDto).isNotNull();
+        assertThat(userAccountIdDto).isNotNull();
     }
 
     @ParameterizedTest(name = "{index} -> 유저이름이 {0}이고, 핸드폰 번호가 {1}이고 이메일이 {2}일때")
@@ -217,10 +216,10 @@ class UserMapperTest {
         userFindAccountPwDto.setEmail(email);
 
         //when
-        UserReturnAccountIdDto userReturnAccountIdDto = userMapper
+        UserAccountIdDto userAccountIdDto = userMapper
                 .selectUserByAccountIdAndPhoneNumAndEmail(userFindAccountPwDto);
 
         //then
-        assertThat(userReturnAccountIdDto).isNotNull();
+        assertThat(userAccountIdDto).isNotNull();
     }
 }

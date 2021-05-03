@@ -122,11 +122,11 @@ class DefaultPolicyUserServiceTest {
         userFindAccountIdDto.setEmail(email);
 
         //when
-        UserReturnAccountIdDto userReturnAccountIdDto = userService
+        UserAccountIdDto userAccountIdDto = userService
                 .findAccountIdByNameAndEmail(userFindAccountIdDto);
 
         //then
-        assertThat(userReturnAccountIdDto).isNotNull();
+        assertThat(userAccountIdDto).isNotNull();
 
     }
 
@@ -150,11 +150,11 @@ class DefaultPolicyUserServiceTest {
         userFindAccountPwDto.setEmail(email);
 
         //when
-        UserReturnAccountIdDto userReturnAccountIdDto = userService
+        UserAccountIdDto userAccountIdDto = userService
                 .findAccountPwByAccountIdAndPhoneNumAndEmail(userFindAccountPwDto);
 
         //then
-        assertThat(userReturnAccountIdDto).isNotNull();
+        assertThat(userAccountIdDto).isNotNull();
     }
 
     @ParameterizedTest(name = "{index} -> 유저아이디가 {0}일때")
