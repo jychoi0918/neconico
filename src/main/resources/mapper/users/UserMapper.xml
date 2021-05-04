@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.users.UserMapper">
+    <sql id="selectUser">
+        select
+            user_id
+            ,account_id
+            ,account_pw
+            ,account_name
+            ,gender
+            ,birthdate
+            ,email
+            ,phone_number
+            ,zip_no
+            ,address
+            ,info_agreement
+            ,created_date
+            ,modified_date
+            ,authority
+        from users
+    </sql>
+
+    <sql id="selectAccountId">
+        select account_id
+        from users
+    </sql>
+
+    <select id="selectUserAll" resultType="userInfoDto">
+        <include refid="selectUser"></include>
+    </select>
+
+    <select id="selectUserByAccountId" parameterType="string" resultType="userInfoDto">
+        <include refid="selectUser"></include>
+        where account_id = #{accountId}
+    </select>
+
+    <select id="selectSessionUserInfoByAccountId" parameterType="string" resultType="sessionUser">
+        select
+             user_id
+            ,account_id
+            ,account_name
+            ,email
+            ,authority
+        from users
+        where account_id = #{accountId}
+    </select>
+
+
+    <select id="selectUserByNameAndEmail" parameterType="userFindAccountIdDto" resultType="userReturnAccountIdDto">
+        <include refid="selectAccountId"></include>
+        where account_name = #{accountName}
+        and email = #{email}
+    </select>
+
+    <select id="selectUserByAccountIdAndPhoneNumAndEmail" parameterType="userFindAccountPwDto" resultType="userReturnAccountIdDto">
+        <include refid="selectAccountId"></include>
+        where account_id = #{accountId}
+        and email = #{email}
+        and phone_number = #{phoneNumber}
+    </select>
+
+    <insert id="insertUser" useGeneratedKeys="true" parameterType="userJoinDto" keyProperty="userId">
+        insert into users(
+                         account_id
+                         ,account_pw
+                         ,account_name
+                         ,gender
+                         ,birthdate
+                         ,email
+                         ,phone_number
+                         ,zip_no
+                         ,address
+                         ,info_agreement
+                         ,created_date
+                         ,modified_date
+                         ,authority
+        ) values (
+        #{accountId}
+        ,#{accountPw}
+        ,#{accountName}
+        ,#{gender}
+        ,#{brithdate}
+        ,#{email}
+        ,#{phoneNumber}
+        ,#{zipNo}
+        ,#{address}
+        ,#{infoAgreement}
+        ,#{createDate}
+        ,#{modifiedDate}
+        ,#{authority}
+        )
+    </insert>
+
+    <update id="updateUserAuthority" parameterType="string">
+        update users
+        set authority = 'ROLE_DROP'
+        where account_id = #{accountId}
+    </update>
+
+    <update id="updateUserInfo" parameterType="userInfoDto">
+        update users
+        set email = #{email}
+            ,phone_number = #{phoneNumber}
+            ,zip_no = #{zipNo}
+            ,address = #{address}
+            ,modified_date = #{modifiedDate}
+        where account_id = #{accountId}
+    </update>
+
+</mapper>
