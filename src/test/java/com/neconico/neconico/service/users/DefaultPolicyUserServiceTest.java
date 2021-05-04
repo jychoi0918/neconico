@@ -82,7 +82,6 @@ class DefaultPolicyUserServiceTest {
         //when
         Long user_id = userService.joinUser(userJoinDto);
 
-
         //then
         assertThat(user_id).isNotNull();
     }

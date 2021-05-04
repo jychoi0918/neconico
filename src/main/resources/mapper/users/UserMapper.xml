@@ -62,13 +62,9 @@
         and phone_number = #{phoneNumber}
     </select>
 
-    <insert id="insertUser" parameterType="userJoinDto">
-        <selectKey keyProperty="userId" resultType="long" order="BEFORE">
-            select users_seq.nextval from dual
-        </selectKey>
+    <insert id="insertUser" useGeneratedKeys="true" parameterType="userJoinDto" keyProperty="userId">
         insert into users(
-                          user_id
-                         ,account_id
+                         account_id
                          ,account_pw
                          ,account_name
                          ,gender
@@ -82,8 +78,7 @@
                          ,modified_date
                          ,authority
         ) values (
-        #{userId}
-        ,#{accountId}
+        #{accountId}
         ,#{accountPw}
         ,#{accountName}
         ,#{gender}
@@ -113,8 +108,6 @@
             ,address = #{address}
             ,modified_date = #{modifiedDate}
         where account_id = #{accountId}
-
-
     </update>
 
 </mapper>
