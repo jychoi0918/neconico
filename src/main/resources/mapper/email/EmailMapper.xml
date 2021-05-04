@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neconico.neconico.mapper.email.EmailMapper">
+
+    <insert id="insertAuthorNumber" useGeneratedKeys="true" parameterType="authorNumberDto" keyProperty="emailId">
+        insert into email(
+                        author_number
+                        ,created_date
+        )values(
+        #{authorNumber}
+        ,#{createdDate}
+        )
+    </insert>
+
+    <delete id="deleteAuthorNumber" parameterType="long">
+        delete from email where email_id = #{emailId}
+    </delete>
+
+    <select id="selectAll" resultType="authorNumberDto">
+        select
+            email_id
+             ,author_number
+             ,created_date
+        from email
+    </select>
+
+    <select id="selectByAuthorNumber" parameterType="string" resultType="long">
+        select email_id
+        from email
+        where author_number = #{authorNumber}
+    </select>
+
+</mapper>
