@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,6 +25,11 @@ public class DefaultPolicyUserService implements UserService{
         userJoinDto.setAccountPw(
                 passwordEncoder.encode(userJoinDto.getAccountPw())
         );
+
+        userJoinDto.setCreateDate(LocalDateTime.now());
+        userJoinDto.setModifiedDate(LocalDateTime.now());
+        userJoinDto.setAuthority("ROLE_USER");
+
         userMapper.insertUser(userJoinDto);
         return userJoinDto.getUserId();
     }

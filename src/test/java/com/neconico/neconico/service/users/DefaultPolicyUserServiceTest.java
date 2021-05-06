@@ -40,7 +40,7 @@ class DefaultPolicyUserServiceTest {
             userJoinDto.setAccountPw("1234");
             userJoinDto.setAccountName("user" + i);
             userJoinDto.setGender(gender);
-            userJoinDto.setBrithdate("990331");
+            userJoinDto.setBirthdate("990331");
             userJoinDto.setEmail("user" + i + "@gmail.com");
             userJoinDto.setPhoneNumber("010-1111-1111");
             userJoinDto.setAddress("서울시");
@@ -69,15 +69,12 @@ class DefaultPolicyUserServiceTest {
         userJoinDto.setAccountPw("1234");
         userJoinDto.setAccountName("user11");
         userJoinDto.setGender("F");
-        userJoinDto.setBrithdate("980631");
+        userJoinDto.setBirthdate("980631");
         userJoinDto.setEmail("user11" + "@gmail.com");
         userJoinDto.setPhoneNumber("010-1111-1111");
         userJoinDto.setAddress("서울시");
         userJoinDto.setZipNo("01583");
         userJoinDto.setInfoAgreement("check");
-        userJoinDto.setCreateDate(LocalDateTime.of(2021, 04, 29, 04, 43));
-        userJoinDto.setModifiedDate(LocalDateTime.of(2021, 04, 29, 04, 43));
-        userJoinDto.setAuthority("ROLE_USER");
 
         //when
         Long user_id = userService.joinUser(userJoinDto);
