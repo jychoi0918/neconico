@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@Builder
 @Alias("itemTradeDto")
 public class ItemTradeDto {
 

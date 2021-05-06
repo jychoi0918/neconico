@@ -7,7 +7,6 @@ import org.apache.ibatis.type.Alias;
 
 @Getter
 @Setter
-@Builder
 @Alias("storeinfodto")
 public class StoreInfoDto {
 
