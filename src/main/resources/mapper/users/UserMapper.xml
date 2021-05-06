@@ -82,7 +82,7 @@
         ,#{accountPw}
         ,#{accountName}
         ,#{gender}
-        ,#{brithdate}
+        ,#{birthdate}
         ,#{email}
         ,#{phoneNumber}
         ,#{zipNo}

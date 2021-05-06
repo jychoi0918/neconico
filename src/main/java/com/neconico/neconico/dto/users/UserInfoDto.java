@@ -16,7 +16,7 @@ public class UserInfoDto {
     private String accountPw;
     private String accountName;
     private String gender;
-    private String brithdate;
+    private String birthdate;
     private String email;
     private String phoneNumber;
     private String zipNo;

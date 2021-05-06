@@ -33,7 +33,7 @@ public class UserJoinDto {
     @FutureOrPresent(message = "날짜가 알맞지 않습니다.")
     @Pattern(regexp = "^\\d{6}$", message = "생년월일 형식에 맞지 않습니다.")
     @NotEmpty(message = "생년월일을 입력해 주세요.")
-    private String brithdate;
+    private String birthdate;
 
     @Email(message = "이메일 형식에 알맞지 않습니다.")
     @NotEmpty(message = "이메일을 입력해 주세요.")
