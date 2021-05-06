@@ -2,14 +2,16 @@ package com.neconico.neconico.service.store;
 
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.mapper.store.StoreInfoMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class StoreInfoService {
 
-    @Autowired
-    StoreInfoMapper storeInfoMapper;
+    private final StoreInfoMapper storeInfoMapper;
 
     public StoreInfoDto findStoreInfo(Long userId){
         return storeInfoMapper.selectStoreInfoByUser(userId);
