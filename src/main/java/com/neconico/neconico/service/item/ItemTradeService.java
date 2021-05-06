@@ -3,19 +3,19 @@ package com.neconico.neconico.service.item;
 import com.neconico.neconico.dto.item.ItemTradeDto;
 import com.neconico.neconico.mapper.item.ItemStatusMapper;
 import com.neconico.neconico.mapper.item.ItemTradeMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ItemTradeService {
 
-    @Autowired
-    ItemStatusMapper itemStatusMapper;
+    private final ItemStatusMapper itemStatusMapper;
 
-    @Autowired
-    ItemTradeMapper itemTradeMapper;
+    private final ItemTradeMapper itemTradeMapper;
 
     void tradeRequest(Long buyerId, Long itemId) {
         //상품 판매자 = 구매자 인 경우
