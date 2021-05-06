@@ -110,4 +110,10 @@
         where account_id = #{accountId}
     </update>
 
+    <update id="updateAccountPw" parameterType="map">
+        update users
+        set account_pw = #{accountPw}
+        where account_id = #{accountId}
+    </update>
+
 </mapper>
