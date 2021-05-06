@@ -1,14 +1,17 @@
 package com.neconico.neconico.service.item;
 
 import com.neconico.neconico.mapper.item.ItemFavoriteMapper;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Service
+@RequiredArgsConstructor
 public class ItemFavoriteService {
 
-    @Autowired
-    ItemFavoriteMapper itemFavoriteMapper;
+    private final ItemFavoriteMapper itemFavoriteMapper;
 
     public void addFavorite(Long itemId, Long userId) {
         if (checkItemFavorite(itemId, userId)) {
