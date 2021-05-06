@@ -65,4 +65,10 @@ public class DefaultPolicyUserService implements UserService{
     public void changeUserInfo(UserInfoDto userInfoDto) {
         userMapper.updateUserInfo(userInfoDto);
     }
+
+    @Override
+    @Transactional
+    public void changeUserAccountPw(String accountId, String changePw) {
+        userMapper.updateAccountPw(accountId, passwordEncoder.encode(changePw));
+    }
 }

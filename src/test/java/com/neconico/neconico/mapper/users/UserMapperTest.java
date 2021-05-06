@@ -222,4 +222,25 @@ class UserMapperTest {
         //then
         assertThat(userAccountIdDto).isNotNull();
     }
+
+    @Test
+    @DisplayName("비밀번호 찾기 시 비밀번호 변경")
+    void when_searching_for_a_account_pw_change_account_pw() {
+        //given
+        String changePw = "4321"; //변경될 비밀번호
+
+        List<UserInfoDto> userInfoDtoList = userMapper.selectUserAll();
+        UserInfoDto userInfoDto = userInfoDtoList.get(0);
+        String accountId = userInfoDto.getAccountId(); // 해당 유저 아이디
+        String accountPw = userInfoDto.getAccountPw(); // 해당 유저 비밀번호
+
+        //when
+        userMapper.updateAccountPw(accountId, passwordEncoder.encode(changePw));
+
+        UserInfoDto changeUserDto = userMapper.selectUserByAccountId(accountId); // 변경된 유저정보
+
+        //then
+        assertThat(changeUserDto.getAccountPw()).isNotEqualTo(accountPw);
+
+    }
 }

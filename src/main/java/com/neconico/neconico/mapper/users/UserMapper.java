@@ -2,6 +2,7 @@ package com.neconico.neconico.mapper.users;
 
 import com.neconico.neconico.dto.users.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public interface UserMapper {
 
     void updateUserInfo(UserInfoDto userInfoDto);
 
+    void updateAccountPw(@Param("accountId") String accountId, @Param("accountPw") String accountPw);
 }
 

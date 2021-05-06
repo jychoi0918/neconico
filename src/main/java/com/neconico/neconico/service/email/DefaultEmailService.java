@@ -7,6 +7,7 @@ import com.neconico.neconico.service.email.handler.MailHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service("defaultEmailService")
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class DefaultEmailService implements EmailService {
 
@@ -26,6 +28,7 @@ public class DefaultEmailService implements EmailService {
     private String fromAddress;
 
     @Override
+    @Transactional
     public Long sendAuthorNumberMail(String emailAddress, int length) throws Exception {
         generateCertCharacter.setNumberLength(length);
         String authNumber = generateCertCharacter.executeGenerate();
@@ -60,6 +63,7 @@ public class DefaultEmailService implements EmailService {
     }
 
     @Override
+    @Transactional
     public void deleteAuthorNumber(Long emailId) {
         emailMapper.deleteAuthorNumber(emailId);
     }
