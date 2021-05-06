@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.neconico.neconico.mapper.item.ItemFavoriteMapper">
-    <insert id="insertFavorite">
-        insert into FAVORITE
-        values (FAVORITE_SEQ.nextVal, #{userId}, #{itemId}, SYSTIMESTAMP)
+    <insert id="insertFavorite" keyProperty="FAVORITE_ID" >
+        insert into FAVORITE(USER_ID, ITEM_ID, CREATED_DATE)
+        values (#{userId}, #{itemId}, SYSDATE())
     </insert>
 
     <delete id="deleteFavorite">
