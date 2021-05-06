@@ -20,6 +20,7 @@ class ItemFavoriteServiceTest {
     Long userId = 1L;
     //test용 유저
     Long testUser = 10L;
+    Long testItem = 99L;
 
 
     @Autowired
@@ -60,7 +61,7 @@ class ItemFavoriteServiceTest {
     @Test
     @DisplayName("좋아요 안되있는거 취소하기")
     void cancelFavoriteNotExist() {
-        assertThatThrownBy(() -> itemFavoriteService.cancelFavorite(itemId, testUser)).isInstanceOf(IllegalArgumentException.class)
+        assertThatThrownBy(() -> itemFavoriteService.cancelFavorite(testItem, testUser)).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Favorite Not Exist");
     }
 
