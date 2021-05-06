@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.item.ItemTradeMapper">
+    <resultMap id="tradeList" type="itemtradedto">
+        <result property="tradeId" column="tradeId"/>
+        <result property="itemId" column="itemId"/>
+        <result property="buyerId" column="buyerId"/>
+        <result property="requestCreated" column="requestCreated"/>
+        <result property="responseCreated" column="responseCreated"/>
+        <result property="tradeStatus" column="tradeStatus"/>
+        <result property="itemName" column="itemName"/>
+        <result property="itemImgPath" column="itemImgPath"/>
+        <result property="sellerId" column="sellerId"/>
+        <result property="buyerName" column="buyerName"/>
+        <result property="sellerName" column="sellerName"/>
+    </resultMap>
+
+    <sql id="selectOverlap">
+        select t.TRADE_ID        AS tradeId,
+               t.USER_ID         AS itemId,
+               t.ITEM_ID         AS buyerId,
+               t.REQUEST_CREATE  AS requestCreated,
+               t.RESPONSE_CREATE AS responseCreated,
+               t.TRADE_STATUS    AS tradeStatus,
+               i.TITLE           AS itemName,
+               i.ITEM_IMG_URLS   AS itemImgPath,
+               i.USER_ID         AS sellerId,
+               ub.USER_ID        AS buyerName,
+               us.USER_ID        AS sellerName
+        from TRADE t
+                     inner join ITEM i on t.ITEM_ID = i.ITEM_ID
+                     inner join USERS us on i.USER_ID = us.USER_ID
+                     inner join USERS ub on t.USER_ID = ub.USER_ID
+    </sql>
+
+    <select id="selectItemTradeListBySeller" resultMap="tradeList">
+        <include refid="selectOverlap"/>
+        where us.USER_ID = #{sellerId}
+    </select>
+
+    <select id="selectItemTradeListByBuyer" resultMap="tradeList">
+        <include refid="selectOverlap"/>
+        where ub.USER_ID = #{buyerId}
+    </select>
+
+    <select id="selectItemTradeOneByBuyerAndItem" resultType="boolean">
+        select CASE
+                       WHEN Count(TRADE_ID) > 0 THEN 1
+                       ELSE 0 END RESULT
+        from TRADE
+        where USER_ID = #{buyerId}
+          AND ITEM_ID = #{itemId}
+          AND TRADE_STATUS = '요청'
+    </select>
+
+    <select id="selectItemTradeOneByTrade" resultType="itemtradedto">
+        <include refid="selectOverlap"/>
+        where t.TRADE_ID = #{tradeId}
+    </select>
+
+    <insert id="insertItemTradeRequestByBuyerAndItem"  keyProperty="TRADE_ID">
+        insert into TRADE(USER_ID, ITEM_ID, RESPONSE_CREATE, REQUEST_CREATE, TRADE_STATUS)
+        values (#{buyerId}, #{itemId}, SYSDATE(), SYSDATE(), '요청')
+    </insert>
+
+    <update id="updateItemTradeResponseByTradeAndItem">
+        update TRADE
+        set RESPONSE_CREATE = SYSDATE(),
+            TRADE_STATUS    = #{status}
+        where TRADE_ID = #{tradeId}
+    </update>
+
+    <select id="selectItemSellerByItemId" resultType="Long">
+        select USER_ID
+        from ITEM
+        where ITEM_ID = #{itemId}
+    </select>
+</mapper>

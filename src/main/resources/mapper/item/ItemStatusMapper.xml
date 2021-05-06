@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.neconico.neconico.mapper.item.ItemStatusMapper">
+    <select id="selectItemStatusByItemId" resultType="String">
+        select SALE_STATUS
+        from ITEM
+        where ITEM_ID = #{itemId}
+    </select>
+    <update id="updateItemStatus">
+        update ITEM
+        set SALE_STATUS = #{status}
+        where ITEM_ID = #{itemId}
+    </update>
+
+    <insert id="insertPurchaseItem" keyProperty="PURCHASE_ITEM_ID">
+        insert into PURCHASE_ITEM(USER_ID, ITEM_ID, PURCHASE_DATE)
+            values(#{buyerId}, #{itemId}, SYSDATE())
+    </insert>
+
+    <insert id="insertSaleItem" keyProperty="SALE_ITEM_ID">
+        insert into SALE_ITEM(USER_ID, ITEM_ID, SALE_DATE)
+        values(#{sellerId}, #{itemId}, SYSDATE())
+    </insert>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.neconico.neconico.mapper.store.StoreInfoMapper">
+    <select id="selectStoreInfoByUser" resultType="storeinfodto">
+        select USER_ID        userId,
+               STORE_NAME     storeName,
+               STORE_IMG_PATH storeImgUrl,
+               STORE_INFO     storeInfo,
+               IMG_FILE_NAMES storeImgName
+        from STORE
+        where USER_ID = #{userId}
+    </select>
+
+    <select id="selectStoreInfoByName" resultType="boolean">
+        select CASE
+                       WHEN Count(USER_ID) > 0 THEN 1
+                       ELSE 0 END RESULT
+        from STORE
+        where STORE_NAME = #{storeName}
+    </select>
+
+    <insert id="insertStoreInfo" parameterType="storeinfodto">
+        insert into STORE
+        values (#{userId},
+                #{storeName},
+                #{storeImgUrl},
+                #{storeInfo},
+                #{storeImgName})
+    </insert>
+
+    <update id="updateStoreInfo" parameterType="storeinfodto">
+        update STORE
+        <trim prefix="set" suffixOverrides=",">
+            <if test="storeName != null">
+                STORE_NAME =#{storeName},
+            </if>
+            <if test="storeImgUrl != null and storeImgName != null">
+                STORE_IMG_PATH =#{storeImgUrl},
+                IMG_FILE_NAMES =#{storeImgName},
+            </if>
+            <if test="storeInfo != null">
+                STORE_INFO =#{storeInfo}
+            </if>
+        </trim>
+        where USER_ID =#{userId}
+    </update>
+</mapper>
