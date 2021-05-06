@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.item.ItemQuestionMapper">
+    <insert id="insertItemQuestion" parameterType="itemquestiondto">
+        insert into FAVORITE
+        values (FAVORITE_SEQ.nextVal, #{userId}, #{itemId}, SYSTIMESTAMP)
+    </insert>
+
+    <insert id="insertItemQuestionComment" parameterType="itemquestiondto">
+        insert into FAVORITE
+        values (FAVORITE_SEQ.nextVal, #{userId}, #{itemId}, SYSTIMESTAMP)
+    </insert>
+
+</mapper>
