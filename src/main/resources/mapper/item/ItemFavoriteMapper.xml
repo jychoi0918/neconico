@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.item.ItemFavoriteMapper">
+    <insert id="insertFavorite">
+        insert into FAVORITE
+        values (FAVORITE_SEQ.nextVal, #{userId}, #{itemId}, SYSTIMESTAMP)
+    </insert>
+
+    <delete id="deleteFavorite">
+        delete
+        from FAVORITE
+        where USER_ID = #{userId}
+          AND ITEM_ID = #{itemId}
+    </delete>
+
+    <select id="selectFavoriteCheckByItemAndUser" resultType="boolean">
+        select CASE
+                       WHEN Count(FAVORITE_ID) > 0 THEN 1
+                       ELSE 0 END RESULT
+        from FAVORITE
+        where USER_ID = #{userId}
+          AND ITEM_ID = #{itemId}
+    </select>
+
+    <select id="selectFavoriteCountByItem" resultType="string">
+        select count(*)
+        from FAVORITE
+        where ITEM_ID = #{itemId}
+    </select>
+</mapper>
