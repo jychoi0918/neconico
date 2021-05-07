@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neconico.neconico.mapper.item.ItemMapper">
+
+    <sql id="selectItem">
+        select
+            item_id,
+            user_id,
+            category_sub_id,
+            title,
+            content,
+            price,
+            item_img_urls,
+            area,
+            item_status,
+            hits,
+            created_date,
+            modified_date,
+            sale_status,
+            shipping_price,
+            img_file_names
+        from item
+    </sql>
+
+    <select id="selectItems" resultType="itemInfoDto">
+        <include refid="selectItem"></include>
+    </select>
+
+    <select id="selectItemByItemId" parameterType="long" resultType="itemInfoDto">
+        <include refid="selectItem"></include>
+        where item_id = #{itemId}
+    </select>
+
+    <insert id="insertItems" useGeneratedKeys="true" keyProperty="itemId" parameterType="itemInfoDto">
+        insert into item(
+            user_id,
+            category_sub_id,
+            title,
+            content,
+            price,
+            item_img_urls,
+            area,
+            item_status,
+            hits,
+            created_date,
+            modified_date,
+            sale_status,
+            shipping_price,
+            img_file_names
+        )values (
+                    #{userId},
+                    #{categorySubId},
+                    #{title},
+                    #{content},
+                    #{price},
+                    #{itemImgUrls},
+                    #{area},
+                    #{itemStatus},
+                    #{hits},
+                    #{createdDate},
+                    #{modifiedDate},
+                    #{saleStatus},
+                    #{shippingPrice},
+                    #{imgFileNames}
+                )
+    </insert>
+
+    <update id="updateItemInfo" parameterType="itemInfoDto">
+        update item
+        set category_sub_id = #{categorySubId},
+            title = #{title},
+            content = #{content},
+            price = #{price},
+            item_img_urls = #{itemImgUrls},
+            area = #{area},
+            item_status = #{itemStatus},
+            modified_date = #{modifiedDate},
+            sale_status = #{saleStatus},
+            shipping_price = #{shippingPrice},
+            img_file_names = #{imgFileNames}
+        where item_id = #{itemId}
+    </update>
+
+    <delete id="deleteItem" parameterType="long">
+        delete from item
+        where item_id = #{itemId}
+    </delete>
+
+</mapper>
