@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.store.StoreItemListMapper">
+
+    <resultMap id="itemcard" type="itemcardvo">
+        <id column="itemid" property="itemId"/>
+        <result column="title" property="title"/>
+        <result column="price" property="price"/>
+        <result column="img" property="itemImg"/>
+        <result column="created" property="createdTime"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <resultMap id="questioncard" type="storequestioncardvo">
+        <id column="questionid" property="questionId"/>
+        <result column="writername" property="writerName"/>
+        <result column="content" property="content"/>
+        <result column="replycreatedtime" property="replyCreatedTime"/>
+        <association property="item" javaType="itemcardvo"/>
+    </resultMap>
+
+    <resultMap id="reviewcard" type="storereviewcardvo">
+        <id column="reviewId" property="reviewId"/>
+        <result column="writername" property="writerName"/>
+        <result column="content" property="content"/>
+        <result column="replycreatedtime" property="replyCreatedTime"/>
+        <association property="item" javaType="itemcardvo"/>
+    </resultMap>
+
+    <resultMap id="tradecard" type="storetradecardvo">
+        <id column="questionid" property="tradeId"/>
+        <result column="buyername" property="buyerName"/>
+        <result column="content" property="tradeStatus"/>
+        <result column="requesttiem" property="requestTime"/>
+        <result column="responsetime" property="requestTime"/>
+        <association property="item" javaType="itemcardvo"/>
+    </resultMap>
+
+    <sql id="overlapselect">
+        s
+                .
+                ITEM_ID
+                AS itemid,
+        i.TITLE         AS title,
+        i.PRICE         AS price,
+        i.ITEM_IMG_URLS AS img,
+        i.HITS          AS views,
+        i.CREATED_DATE  AS created,
+        i.ITEM_STATUS   AS status
+    </sql>
+
+    <select id="selectStoreItemList" parameterType="storeitempagingdto" resultMap="itemcard">
+        select *
+        from (select
+        <include refid="overlapselect"/>
+        from ${menuName} AS s
+        inner join ITEM AS i
+        on s.ITEM_ID = i.ITEM_ID
+        where s.USER_ID = #{userId}
+        order by i.${sortKind} ${sortOrder}
+        ) AS Z
+        LIMIT #{startRow}
+        , #{countRow}
+    </select>
+
+
+    <select id="selectStoreQuestionList" parameterType="storeitempagingdto" resultMap="questioncard">
+        select *
+        from (select
+        <include refid="overlapselect"/>,
+        s.store_review AS writername,
+        s.content AS content,
+        s.created_date AS replycreatedtime
+        from store_review AS s
+        inner join ITEM AS i
+        on s.ITEM_ID = i.ITEM_ID
+        where s.USER_ID = #{userId}
+        order by i.${sortKind} ${sortOrder}
+        ) AS Z
+        LIMIT #{startRow}
+        , #{countRow}
+    </select>
+
+
+    <select id="selectStoreReviewList" parameterType="storeitempagingdto" resultMap="reviewcard">
+        select *
+        from (select
+        <include refid="overlapselect"/>,
+        from ${menuName} AS s
+        inner join ITEM AS i
+        on s.ITEM_ID = i.ITEM_ID
+        where s.USER_ID = #{userId}
+        order by i.${sortKind} ${sortOrder}
+        ) AS Z
+        LIMIT #{startRow}
+        , #{countRow}
+    </select>
+
+    <select id="selectStoreTradeList" parameterType="storeitempagingdto" resultMap="tradecard">
+        select *
+        from (select
+        <include refid="overlapselect"/>,
+
+        from ${menuName} AS s
+        inner join ITEM AS i
+        on s.ITEM_ID = i.ITEM_ID
+        where s.USER_ID = #{userId}
+        order by i.${sortKind} ${sortOrder}
+        ) AS Z
+        LIMIT #{startRow}
+        , #{countRow}
+    </select>
+</mapper>
