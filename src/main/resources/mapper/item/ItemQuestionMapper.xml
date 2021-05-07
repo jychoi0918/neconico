@@ -4,14 +4,93 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.neconico.neconico.mapper.item.ItemQuestionMapper">
-    <insert id="insertItemQuestion" parameterType="itemquestiondto">
-        insert into FAVORITE
-        values (FAVORITE_SEQ.nextVal, #{userId}, #{itemId}, SYSTIMESTAMP)
+
+    <resultMap id="questionlist" type="itemquestionvo">
+        <id column="questionid" property="itemQuestionId"/>
+        <result column="qid" property="writerId"/>
+        <result column="qname" property="writerName"/>
+        <result column="qcontent" property="content"/>
+        <result column="qcreated" property="createdDate"/>
+        <collection property="commentList" ofType="itemquestioncommentvo">
+            <id column="commentid" property="questionCommentId"/>
+            <result column="cid" property="writerId"/>
+            <result column="cname" property="writerName"/>
+            <result column="ccontent" property="content"/>
+            <result column="ccreated" property="createdDate"/>
+        </collection>
+    </resultMap>
+
+    <sql id="choosewhere">
+        <where>
+            <choose>
+                <when test="kind == 'ITEM_QUESTION'">
+                    item_question_id = #{objectId}
+                </when>
+                <when test="kind == 'QUESTION_COMMENT'">
+                    question_comment_id = #{objectId}
+                </when>
+            </choose>
+        </where>
+    </sql>
+
+    <select id="selectItemQuestionById" resultType="ItemQuestionDto">
+        select
+        <choose>
+            <when test="kind == 'ITEM_QUESTION'">
+                item_id AS objectId
+            </when>
+            <when test="kind == 'QUESTION_COMMENT'">
+                question_id AS objectId
+            </when>
+        </choose>
+        , user_id AS userId,
+        content AS content
+        from ${kind}
+        <include refid="choosewhere"/>
+    </select>
+
+    <select id="selectItemQuestionListByItemID" resultMap="questionlist">
+        select u1.account_name AS qname,
+               u2.account_name AS cname,
+               z.*
+        from (select q.item_question_id    AS questionid,
+                     q.user_id             AS qid,
+                     q.content             AS qcontent,
+                     q.created_date        AS qcreated,
+                     c.question_comment_id AS commentid,
+                     c.user_id             AS cid,
+                     c.content             AS ccontent,
+                     c.created_date        AS ccreated
+              from item_question q
+                           left outer join question_comment c
+                      on q.item_question_id = c.question_id
+              where q.item_id = #{itemId}) z
+                     left outer join users u1
+                on qid = u1.user_id
+                     left outer join users u2
+                on cid = u2.user_id;
+    </select>
+
+    <insert id="insertItemQuestion" keyProperty="item_question_id" parameterType="itemquestiondto">
+        insert into item_question(item_id, user_id, created_date, content)
+        values (#{objectId}, #{userId}, SYSDATE(), #{content})
     </insert>
 
-    <insert id="insertItemQuestionComment" parameterType="itemquestiondto">
-        insert into FAVORITE
-        values (FAVORITE_SEQ.nextVal, #{userId}, #{itemId}, SYSTIMESTAMP)
+    <insert id="insertItemQuestionComment" keyProperty="question_comment_id" parameterType="itemquestiondto">
+        insert into question_comment(question_id, user_id, created_date, content)
+        values (#{objectId}, #{userId}, SYSDATE(), #{content})
     </insert>
 
+    <update id="updateItemQuestion">
+        update ${kind}
+        set content = #{content}
+        <include refid="choosewhere"/>
+    </update>
+
+    <delete id="deleteItemQuestion">
+        delete from ${kind}
+        <include refid="choosewhere"/>
+    </delete>
 </mapper>
+
+

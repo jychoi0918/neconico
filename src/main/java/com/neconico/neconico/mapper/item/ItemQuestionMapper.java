@@ -14,13 +14,15 @@ import java.util.List;
 @Mapper
 public interface ItemQuestionMapper {
 
+    ItemQuestionDto selectItemQuestionById(@Param("objectId") Long objectId, @Param("kind") String kind);
+
     List<ItemQuestionVo> selectItemQuestionListByItemID(@Param("itemId") Long itemId);
 
     void insertItemQuestion(ItemQuestionDto itemQuestionDto);
 
     void insertItemQuestionComment(ItemQuestionDto itemQuestionDto);
 
-    void updateItemQuestion(ItemQuestionDto itemQuestionDto, @Param("objectId") Long objectId, @Param("kind") String kind);
+    void updateItemQuestion(@Param("objectId") Long objectId, @Param("content") String content, @Param("kind") String kind);
 
     void deleteItemQuestion(@Param("objectId") Long objectId, @Param("kind") String kind);
 

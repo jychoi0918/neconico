@@ -1,12 +1,14 @@
 package com.neconico.neconico.vo.item;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 @Alias("itemquestionvo")
 public class ItemQuestionVo {
 
