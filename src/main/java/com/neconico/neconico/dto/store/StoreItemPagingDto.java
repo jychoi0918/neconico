@@ -25,5 +25,4 @@ public class StoreItemPagingDto {
         this.startRow = startRow;
         this.countRow = countRow;
     }
-
 }

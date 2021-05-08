@@ -3,6 +3,7 @@ package com.neconico.neconico.mapper.store;
 import com.neconico.neconico.dto.store.StoreItemPagingDto;
 import com.neconico.neconico.vo.item.ItemCardVo;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,9 @@ class StoreItemListMapperTest {
     Long userId = 7L;
 
     @ParameterizedTest
-    @CsvSource({"ITEM, CREATED_DATE, ASC, 0, 10", "SALE_ITEM, HITS, DESC, 20, 10"})
-    @DisplayName("가져오기 확인")
+    @CsvSource({"ITEM, CREATED_DATE, ASC, 1, 10",
+            "SALE_ITEM, HITS, DESC, 20, 10"})
+    @DisplayName("내상품, 판매된 상품, 구매한 상품, 찜한상품 가져오기")
     void selectStoreItemList(String menuName, String sortKind, String sortOrder, Long startRow, Long countRow) {
         //given
         StoreItemPagingDto pagingDto = new StoreItemPagingDto(userId, menuName, sortKind, sortOrder, startRow, countRow);
@@ -42,6 +44,26 @@ class StoreItemListMapperTest {
         //then
         assertThat(actual.size()).as("배열 크기 확인").isEqualTo(countRow.intValue());
         assertThat(sortingTest(actual, sortKind, sortOrder)).as("정렬 확인").isTrue();
+    }
+
+    @Test
+    @DisplayName("")
+    void selectStoreQuestionList() {
+        //given
+
+        //when
+
+        //then
+    }
+
+    @Test
+    @DisplayName("")
+    void test() {
+        //given
+
+        //when
+
+        //then
     }
 
     static boolean sortingTest(List<ItemCardVo> input, String sortKind, String sortOrder) {

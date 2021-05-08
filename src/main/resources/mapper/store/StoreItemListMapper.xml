@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.neconico.neconico.mapper.store.StoreItemListMapper">
-
     <resultMap id="itemcard" type="itemcardvo">
         <id column="itemid" property="itemId"/>
         <result column="title" property="title"/>
@@ -39,78 +38,56 @@
         <association property="item" javaType="itemcardvo"/>
     </resultMap>
 
-    <sql id="overlapselect">
-        s
-                .
-                ITEM_ID
-                AS itemid,
-        i.TITLE         AS title,
-        i.PRICE         AS price,
-        i.ITEM_IMG_URLS AS img,
-        i.HITS          AS views,
-        i.CREATED_DATE  AS created,
-        i.ITEM_STATUS   AS status
-    </sql>
 
     <select id="selectStoreItemList" parameterType="storeitempagingdto" resultMap="itemcard">
         select *
-        from (select
-        <include refid="overlapselect"/>
-        from ${menuName} AS s
-        inner join ITEM AS i
-        on s.ITEM_ID = i.ITEM_ID
-        where s.USER_ID = #{userId}
-        order by i.${sortKind} ${sortOrder}
-        ) AS Z
-        LIMIT #{startRow}
-        , #{countRow}
+        from (select s.ITEM_ID          AS itemid,
+                     i.TITLE            AS title,
+                     i.PRICE            AS price,
+                     i.ITEM_IMG_URLS    AS img,
+                     i.HITS             AS views,
+                     i.CREATED_DATE     AS created,
+                     i.ITEM_STATUS      AS status,
+                     q.ITEM_QUESITON_ID AS questionid,
+                     u.ACCOUNT_NAME     AS writername,
+                     q.CONTENT          AS content,
+                     q.CREATED_DATE     AS replycreatedtime
+              from ITEM AS s
+                           inner join ITEM AS i
+                      on s.ITEM_ID = i.ITEM_ID
+                           inner join item_question AS q
+                      on s.ITEM_ID = q.ITEM_ID
+                           inner join users AS u
+                      on u.USER_ID = q.USER_ID
+              where s.USER_ID = #{userId}
+              order by i.${sortKind} ${sortOrder}
+                ) AS Z
+                LIMIT ${startRow}
+           , ${countRow}
     </select>
-
 
     <select id="selectStoreQuestionList" parameterType="storeitempagingdto" resultMap="questioncard">
         select *
-        from (select
-        <include refid="overlapselect"/>,
-        s.store_review AS writername,
-        s.content AS content,
-        s.created_date AS replycreatedtime
-        from store_review AS s
-        inner join ITEM AS i
-        on s.ITEM_ID = i.ITEM_ID
-        where s.USER_ID = #{userId}
-        order by i.${sortKind} ${sortOrder}
-        ) AS Z
-        LIMIT #{startRow}
-        , #{countRow}
+        from (select s.ITEM_ID       AS itemid,
+                     i.TITLE         AS title,
+                     i.PRICE         AS price,
+                     i.ITEM_IMG_URLS AS img,
+                     i.HITS          AS views,
+                     i.CREATED_DATE  AS created,
+                     i.ITEM_STATUS   AS status
+              from ITEM s
+                           inner join item_question i
+                      on s.ITEM_ID = i.ITEM_ID
+                           inner join
+                           where USER_ID = #{userId}) AS Z
+                LIMIT ${startRow}
+           , ${countRow}
     </select>
 
 
     <select id="selectStoreReviewList" parameterType="storeitempagingdto" resultMap="reviewcard">
-        select *
-        from (select
-        <include refid="overlapselect"/>,
-        from ${menuName} AS s
-        inner join ITEM AS i
-        on s.ITEM_ID = i.ITEM_ID
-        where s.USER_ID = #{userId}
-        order by i.${sortKind} ${sortOrder}
-        ) AS Z
-        LIMIT #{startRow}
-        , #{countRow}
     </select>
 
     <select id="selectStoreTradeList" parameterType="storeitempagingdto" resultMap="tradecard">
-        select *
-        from (select
-        <include refid="overlapselect"/>,
-
-        from ${menuName} AS s
-        inner join ITEM AS i
-        on s.ITEM_ID = i.ITEM_ID
-        where s.USER_ID = #{userId}
-        order by i.${sortKind} ${sortOrder}
-        ) AS Z
-        LIMIT #{startRow}
-        , #{countRow}
     </select>
 </mapper>
