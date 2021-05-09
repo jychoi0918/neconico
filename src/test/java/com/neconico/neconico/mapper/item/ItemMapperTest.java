@@ -98,7 +98,7 @@ class ItemMapperTest {
     }
 
     @RepeatedTest(value = 10, name = "{displayName} {currentRepetition} / {totalRepetitions}")
-    @DisplayName("10개의 item을 DB에 저장한 후 생성된 itemId들로 item정보를 가져올 수 있는지")
+    @DisplayName("10개의 item을 DB에 저장한 후 생성된 itemId들로 item정보를 가져온다.")
     void select_item_by_item_id() {
         //given
         Long itemId = getItemId();
@@ -113,7 +113,7 @@ class ItemMapperTest {
 
     @RepeatedTest(value = 10, name = "{displayName} {currentRepetition} / {totalRepetitions}")
     @DisplayName("등록한 상품에 대해 변경할 시 변경사항 DB에 반영")
-    void update_item_info() {
+    void changes_are_reflected_in_the_DB() {
         //given
         Random random = new Random();
         int randomNumber = random.nextInt(10);
