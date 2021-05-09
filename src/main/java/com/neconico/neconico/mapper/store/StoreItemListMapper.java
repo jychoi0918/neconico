@@ -14,6 +14,10 @@ public interface StoreItemListMapper {
 
     List<ItemCardVo> selectStoreItemList(StoreItemPagingDto storeItemPagingDto);
 
+    List<ItemCardVo> selectStoreFavoriteList(StoreItemPagingDto storeItemPagingDto);
+
+    List<ItemCardVo> selectStoreSoldItemList(StoreItemPagingDto storeItemPagingDto);
+
     List<StoreQuestionCardVo> selectStoreQuestionList(StoreItemPagingDto storeItemPagingDto);
 
     List<StoreReviewCardVo> selectStoreReviewList(StoreItemPagingDto storeItemPagingDto);

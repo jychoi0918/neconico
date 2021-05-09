@@ -31,12 +31,12 @@ class StoreItemListMapperTest {
     Long userId = 7L;
 
     @ParameterizedTest
-    @CsvSource({"ITEM, CREATED_DATE, ASC, 1, 10",
-            "SALE_ITEM, HITS, DESC, 20, 10"})
+    @CsvSource({"CREATED_DATE, ASC, 1, 10",
+            "HITS, DESC, 20, 10"})
     @DisplayName("내상품, 판매된 상품, 구매한 상품, 찜한상품 가져오기")
-    void selectStoreItemList(String menuName, String sortKind, String sortOrder, Long startRow, Long countRow) {
+    void selectStoreItemList(String sortKind, String sortOrder, Long startRow, Long countRow) {
         //given
-        StoreItemPagingDto pagingDto = new StoreItemPagingDto(userId, menuName, sortKind, sortOrder, startRow, countRow);
+        StoreItemPagingDto pagingDto = new StoreItemPagingDto(userId, sortKind, sortOrder, startRow, countRow);
 
         //when
         List<ItemCardVo> actual = storeItemListMapper.selectStoreItemList(pagingDto);

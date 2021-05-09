@@ -11,15 +11,13 @@ import org.apache.ibatis.type.Alias;
 public class StoreItemPagingDto {
 
     private Long userId;
-    private String menuName;
     private String sortKind;
     private String sortOrder;
     private Long startRow;
     private Long countRow;
 
-    public StoreItemPagingDto(Long userId, String menuName, String sortKind, String sortOrder, Long startRow, Long countRow) {
+    public StoreItemPagingDto(Long userId, String sortKind, String sortOrder, Long startRow, Long countRow) {
         this.userId = userId;
-        this.menuName = menuName;
         this.sortKind = sortKind;
         this.sortOrder = sortOrder;
         this.startRow = startRow;

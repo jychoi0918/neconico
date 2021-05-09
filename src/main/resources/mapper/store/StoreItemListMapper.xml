@@ -38,56 +38,86 @@
         <association property="item" javaType="itemcardvo"/>
     </resultMap>
 
+    <sql id="selectItem">
+        select i.item_id       itemid,
+               i.title         title,
+               i.price         price,
+               i.item_img_urls img,
+               i.created_date  created,
+               i.item_status   status
+        from item i
+    </sql>
+
+    <sql id="sorting">
+        order by i.
+                ${sortKind}
+                ${sortOrder}
+                LIMIT
+                ${startRow}
+                ,
+                ${countRow}
+    </sql>
+
 
     <select id="selectStoreItemList" parameterType="storeitempagingdto" resultMap="itemcard">
-        select *
-        from (select s.ITEM_ID          AS itemid,
-                     i.TITLE            AS title,
-                     i.PRICE            AS price,
-                     i.ITEM_IMG_URLS    AS img,
-                     i.HITS             AS views,
-                     i.CREATED_DATE     AS created,
-                     i.ITEM_STATUS      AS status,
-                     q.ITEM_QUESITON_ID AS questionid,
-                     u.ACCOUNT_NAME     AS writername,
-                     q.CONTENT          AS content,
-                     q.CREATED_DATE     AS replycreatedtime
-              from ITEM AS s
-                           inner join ITEM AS i
-                      on s.ITEM_ID = i.ITEM_ID
-                           inner join item_question AS q
-                      on s.ITEM_ID = q.ITEM_ID
-                           inner join users AS u
-                      on u.USER_ID = q.USER_ID
-              where s.USER_ID = #{userId}
-              order by i.${sortKind} ${sortOrder}
-                ) AS Z
-                LIMIT ${startRow}
-           , ${countRow}
+        <include refid="selectItem"/>
+        where user_id = #{userId}
+        <include refid="sorting"/>
+    </select>
+
+    <select id="selectStoreFavoriteList">
+        select * from (
+        <include refid="selectItem"/>
+        inner join favorite f
+        on f.item_id = i.item_id
+        where f.user_id = #{userId}
+        <include refid="sorting"/>
+    </select>
+
+    <select id="selectStoreSoldItemList">
     </select>
 
     <select id="selectStoreQuestionList" parameterType="storeitempagingdto" resultMap="questioncard">
-        select *
-        from (select s.ITEM_ID       AS itemid,
-                     i.TITLE         AS title,
-                     i.PRICE         AS price,
-                     i.ITEM_IMG_URLS AS img,
-                     i.HITS          AS views,
-                     i.CREATED_DATE  AS created,
-                     i.ITEM_STATUS   AS status
-              from ITEM s
-                           inner join item_question i
-                      on s.ITEM_ID = i.ITEM_ID
-                           inner join
-                           where USER_ID = #{userId}) AS Z
-                LIMIT ${startRow}
-           , ${countRow}
+        select q.item_question_id,
+        q.user_id writer,
+        q.created_date,
+        q.content,
+        u.account_name,
+        i.*
+        from item_question q
+        inner join (
+        <include refid="selectItem"/>
+        where user_id = #{userId}) i
+        on itemid = q.item_id
+        inner join users u
+        on u.user_id = q.user_id
+        <include refid="sorting"/>
     </select>
 
 
     <select id="selectStoreReviewList" parameterType="storeitempagingdto" resultMap="reviewcard">
+        select *
+        from store_review sr
+        inner join (
+        <include refid="selectItem"/>
+        inner join purchase_item p
+        on i.item_id = p.item_id
+        where p.user_id = #{userId}) i
+        on sr.purchase_item_id = i.p.purchase_item_id
+        <include refid="sorting"/>
     </select>
 
     <select id="selectStoreTradeList" parameterType="storeitempagingdto" resultMap="tradecard">
+        select t.trade_id,
+        t.user_id,
+        IF(t.response_create = t.request_create, t.response_create, t.request_create) createdDate,
+        t.trade_status,
+        i.*
+        from trade t
+        inner join (
+        <include refid="selectItem"/>
+        where user_id = #{userId}) i
+        on itemid = t.item_id
+        <include refid="sorting"/>
     </select>
 </mapper>
