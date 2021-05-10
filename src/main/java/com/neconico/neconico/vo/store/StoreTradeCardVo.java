@@ -19,15 +19,13 @@ public class StoreTradeCardVo {
     private Long tradeId;
     private String buyerName;
     private String tradeStatus;
-    private LocalDateTime requestTime;
-    private LocalDateTime responseTime;
+    private LocalDateTime createdDate;
 
-    public StoreTradeCardVo(ItemCardVo item, Long tradeId, String buyerName, String tradeStatus, LocalDateTime requestTime, LocalDateTime responseTime) {
+    public StoreTradeCardVo(ItemCardVo item, Long tradeId, String buyerName, String tradeStatus, LocalDateTime createdDate) {
         this.item = item;
         this.tradeId = tradeId;
         this.buyerName = buyerName;
         this.tradeStatus = tradeStatus;
-        this.requestTime = requestTime;
-        this.responseTime = responseTime;
+        this.createdDate = createdDate;
     }
 }

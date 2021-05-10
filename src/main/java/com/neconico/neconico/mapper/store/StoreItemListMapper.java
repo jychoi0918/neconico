@@ -1,6 +1,6 @@
 package com.neconico.neconico.mapper.store;
 
-import com.neconico.neconico.dto.store.StoreItemPagingDto;
+import com.neconico.neconico.dto.store.StoreItemSortingDto;
 import com.neconico.neconico.vo.item.ItemCardVo;
 import com.neconico.neconico.vo.store.StoreQuestionCardVo;
 import com.neconico.neconico.vo.store.StoreReviewCardVo;
@@ -12,15 +12,15 @@ import java.util.List;
 @Mapper
 public interface StoreItemListMapper {
 
-    List<ItemCardVo> selectStoreItemList(StoreItemPagingDto storeItemPagingDto);
+    List<ItemCardVo> selectStoreMyItemList(StoreItemSortingDto storeItemPagingDto);
 
-    List<ItemCardVo> selectStoreFavoriteList(StoreItemPagingDto storeItemPagingDto);
+    List<ItemCardVo> selectStoreFavoriteList(StoreItemSortingDto storeItemPagingDto);
 
-    List<ItemCardVo> selectStoreSoldItemList(StoreItemPagingDto storeItemPagingDto);
+    List<ItemCardVo> selectStoreSoldItemList(StoreItemSortingDto storeItemPagingDto);
 
-    List<StoreQuestionCardVo> selectStoreQuestionList(StoreItemPagingDto storeItemPagingDto);
+    List<StoreQuestionCardVo> selectStoreQuestionList(StoreItemSortingDto storeItemPagingDto);
 
-    List<StoreReviewCardVo> selectStoreReviewList(StoreItemPagingDto storeItemPagingDto);
+    List<StoreReviewCardVo> selectStoreReviewList(StoreItemSortingDto storeItemPagingDto);
 
-    List<StoreTradeCardVo> selectStoreTradeList(StoreItemPagingDto storeItemPagingDto);
+    List<StoreTradeCardVo> selectStoreTradeList(StoreItemSortingDto storeItemPagingDto);
 }

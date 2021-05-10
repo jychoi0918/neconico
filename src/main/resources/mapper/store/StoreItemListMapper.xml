@@ -17,25 +17,46 @@
         <id column="questionid" property="questionId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
-        <result column="replycreatedtime" property="replyCreatedTime"/>
-        <association property="item" javaType="itemcardvo"/>
+        <result column="questioncreated" property="replyCreatedTime"/>
+        <association property="item" javaType="itemcardvo">
+            <id column="itemid" property="itemId"/>
+            <result column="title" property="title"/>
+            <result column="price" property="price"/>
+            <result column="img" property="itemImg"/>
+            <result column="created" property="createdTime"/>
+            <result column="status" property="status"/>
+        </association>
     </resultMap>
 
+    
     <resultMap id="reviewcard" type="storereviewcardvo">
-        <id column="reviewId" property="reviewId"/>
+        <id column="reviewid" property="reviewId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
-        <result column="replycreatedtime" property="replyCreatedTime"/>
-        <association property="item" javaType="itemcardvo"/>
+        <result column="reviewcreated" property="replyCreatedTime"/>
+        <association property="item" javaType="itemcardvo">
+            <id column="itemid" property="itemId"/>
+            <result column="title" property="title"/>
+            <result column="price" property="price"/>
+            <result column="img" property="itemImg"/>
+            <result column="created" property="createdTime"/>
+            <result column="status" property="status"/>
+        </association>
     </resultMap>
 
     <resultMap id="tradecard" type="storetradecardvo">
-        <id column="questionid" property="tradeId"/>
+        <id column="tradeid" property="tradeId"/>
         <result column="buyername" property="buyerName"/>
-        <result column="content" property="tradeStatus"/>
-        <result column="requesttiem" property="requestTime"/>
-        <result column="responsetime" property="requestTime"/>
-        <association property="item" javaType="itemcardvo"/>
+        <result column="status" property="tradeStatus"/>
+        <result column="tradecreated" property="createdDate"/>
+        <association property="item" javaType="itemcardvo">
+            <id column="itemid" property="itemId"/>
+            <result column="title" property="title"/>
+            <result column="price" property="price"/>
+            <result column="img" property="itemImg"/>
+            <result column="created" property="createdTime"/>
+            <result column="status" property="status"/>
+        </association>
     </resultMap>
 
     <sql id="selectItem">
@@ -44,13 +65,13 @@
                i.price         price,
                i.item_img_urls img,
                i.created_date  created,
-               i.item_status   status
+               i.item_status   status,
+               i.hits          views
         from item i
     </sql>
 
     <sql id="sorting">
-        order by i.
-                ${sortKind}
+        order by ${sortKind}
                 ${sortOrder}
                 LIMIT
                 ${startRow}
@@ -59,14 +80,13 @@
     </sql>
 
 
-    <select id="selectStoreItemList" parameterType="storeitempagingdto" resultMap="itemcard">
+    <select id="selectStoreMyItemList" parameterType="storeitemsortingdto" resultMap="itemcard">
         <include refid="selectItem"/>
         where user_id = #{userId}
         <include refid="sorting"/>
     </select>
 
-    <select id="selectStoreFavoriteList">
-        select * from (
+    <select id="selectStoreFavoriteList" parameterType="storeitemsortingdto" resultMap="itemcard">
         <include refid="selectItem"/>
         inner join favorite f
         on f.item_id = i.item_id
@@ -74,20 +94,24 @@
         <include refid="sorting"/>
     </select>
 
-    <select id="selectStoreSoldItemList">
+    <select id="selectStoreSoldItemList" parameterType="storeitemsortingdto" resultMap="itemcard">
+        <include refid="selectItem"/>
+        inner join sale_item s
+        on s.item_id = i.item_id
+        where s.user_id = #{userId}
+        <include refid="sorting"/>
     </select>
 
-    <select id="selectStoreQuestionList" parameterType="storeitempagingdto" resultMap="questioncard">
-        select q.item_question_id,
-        q.user_id writer,
-        q.created_date,
-        q.content,
-        u.account_name,
+    <select id="selectStoreQuestionList" parameterType="storeitemsortingdto" resultMap="questioncard">
+        select q.item_question_id questionid,
+        u.account_name writername,
+        q.created_date questioncreated,
+        q.content content,
         i.*
         from item_question q
         inner join (
         <include refid="selectItem"/>
-        where user_id = #{userId}) i
+        where i.user_id = #{userId}) i
         on itemid = q.item_id
         inner join users u
         on u.user_id = q.user_id
@@ -95,29 +119,37 @@
     </select>
 
 
-    <select id="selectStoreReviewList" parameterType="storeitempagingdto" resultMap="reviewcard">
-        select *
-        from store_review sr
-        inner join (
+    <select id="selectStoreReviewList" parameterType="storeitemsortingdto" resultMap="reviewcard">
+        select sr.store_review_id reviewid,
+        u.account_name writername,
+        sr.created_date reviewcreated,
+        sr.content content,
+        i.*
+        from (
         <include refid="selectItem"/>
+        where i.user_id = #{userId}) i
         inner join purchase_item p
-        on i.item_id = p.item_id
-        where p.user_id = #{userId}) i
-        on sr.purchase_item_id = i.p.purchase_item_id
+        on p.item_id = itemid
+        inner join users u
+        on p.user_id = u.user_id
+        inner join store_review sr
+        on sr.purchase_item_id = p.purchase_item_id
         <include refid="sorting"/>
     </select>
 
-    <select id="selectStoreTradeList" parameterType="storeitempagingdto" resultMap="tradecard">
-        select t.trade_id,
-        t.user_id,
-        IF(t.response_create = t.request_create, t.response_create, t.request_create) createdDate,
-        t.trade_status,
+    <select id="selectStoreTradeList" parameterType="storeitemsortingdto" resultMap="tradecard">
+        select t.trade_id tradeid,
+        u.account_name buyername,
+        t.trade_status status,
+        IF(t.response_create = t.request_create, t.response_create, t.request_create) tradecreated,
         i.*
-        from trade t
-        inner join (
+        from (
         <include refid="selectItem"/>
         where user_id = #{userId}) i
+        inner join trade t
         on itemid = t.item_id
+        inner join users u
+        on t.user_id = u.user_id
         <include refid="sorting"/>
     </select>
 </mapper>
