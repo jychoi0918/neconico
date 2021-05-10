@@ -75,6 +75,19 @@ class StoreItemListMapperTest {
         assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
     }
 
+    @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}")
+    @DisplayName("구매한 상품 테스트")
+    @CsvSource({"3, 'PRICE', 'ASC', 0, 60"})
+    void selectStorePurchasedItemList(Long userId, String sortKind, String sortOrder, Long startRow, Long countRow) {
+        //given
+        StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
+        //when
+        List<ItemCardVo> result = storeItemListMapper.selectStorePurchasedItemList(input);
+        //then
+        assertThat(result.size()).isEqualTo(countRow.intValue());
+        assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
+    }
+
     @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}, db에 존재하는 질문 갯수 {5} ")
     @DisplayName("구매한 상품 테스트")
     @CsvSource({"1, 'PRICE', 'ASC', 0, 10, 10"})

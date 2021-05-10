@@ -102,6 +102,14 @@
         <include refid="sorting"/>
     </select>
 
+    <select id="selectStorePurchasedItemList" parameterType="storeitemsortingdto" resultMap="itemcard">
+        <include refid="selectItem"/>
+        inner join purchase_item p
+        on p.item_id = i.item_id
+        where p.user_id = #{userId}
+        <include refid="sorting"/>
+    </select>
+
     <select id="selectStoreQuestionList" parameterType="storeitemsortingdto" resultMap="questioncard">
         select q.item_question_id questionid,
         u.account_name writername,
