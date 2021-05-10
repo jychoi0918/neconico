@@ -2,10 +2,14 @@ package com.neconico.neconico.service.item;
 
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
+import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.mapper.item.ItemMapper;
+import com.neconico.neconico.paging.Criteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -45,5 +49,35 @@ public class DefaultItemService implements ItemService{
     @Transactional
     public void removeItem(Long itemId) {
         itemMapper.deleteItem(itemId);
+    }
+
+    /**
+     * main페이지 추천 상품 리스트
+     * 상품 조건 검색
+     */
+    @Override
+    public List<ItemInfoDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto) {
+        if( searchInfoDto.getSearchText() == null) {
+            searchInfoDto.setSearchText("");
+        }
+        return itemMapper.selectItemBySearch(setCriteria(criteria), searchInfoDto);
+    }
+
+    @Override
+    public int countTotalItems() {
+        return itemMapper.selectTotalItemCount();
+    }
+
+    private Criteria setCriteria(Criteria criteria) {
+        int currentPage = criteria.getCurrentPage();
+        currentPage = currentPage == 0 ? currentPage + 1 : currentPage;
+        criteria.setCurrentPage(currentPage);
+
+        //item page 설정
+        criteria.setContentPerPage(20);
+        criteria.setRequestOrder("desc");
+        criteria.setSortingColumn("created_date");
+
+        return criteria;
     }
 }

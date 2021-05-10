@@ -33,6 +33,20 @@
         where item_id = #{itemId}
     </select>
 
+    <select id="selectItemBySearch" resultType="itemInfoDto">
+        <include refid="selectItem"></include>
+        where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
+        <trim prefix="order by">
+            ${criteria.sortingColumn} ${criteria.requestOrder}
+        </trim>
+        limit #{criteria.contentPerPage} offset #{criteria.pageStart}
+
+    </select>
+
+    <select id="selectTotalItemCount" resultType="int">
+        select count(item_id) from item
+    </select>
+
     <insert id="insertItems" useGeneratedKeys="true" keyProperty="itemId" parameterType="itemInfoDto">
         insert into item(
             user_id,
