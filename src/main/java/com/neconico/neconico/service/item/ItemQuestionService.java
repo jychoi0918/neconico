@@ -10,29 +10,32 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ItemQuestionService {
 
     private final ItemQuestionMapper itemQuestionMapper;
 
-    @Transactional(readOnly = true)
     public List<ItemQuestionVo> getQuestion(Long itemId) {
         return itemQuestionMapper.selectItemQuestionListByItemID(itemId);
     }
 
+    @Transactional
     public void createQuestion(ItemQuestionDto inputQuestion) {
         itemQuestionMapper.insertItemQuestion(inputQuestion);
     }
 
+    @Transactional
     public void createComment(ItemQuestionDto inputComment) {
         itemQuestionMapper.insertItemQuestionComment(inputComment);
     }
 
+    @Transactional
     public void modifyQuestion(Long questionId, String content, String kind) {
         itemQuestionMapper.updateItemQuestion(questionId, content, kind);
     }
 
+    @Transactional
     public void deleteQuestion(Long questionId, String kind) {
         itemQuestionMapper.deleteItemQuestion(questionId, kind);
     }
