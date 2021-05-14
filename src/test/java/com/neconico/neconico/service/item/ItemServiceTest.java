@@ -3,11 +3,14 @@ package com.neconico.neconico.service.item;
 import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
+import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.service.category.CategoryService;
+import com.neconico.neconico.service.store.StoreInfoService;
 import com.neconico.neconico.service.users.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +40,9 @@ class ItemServiceTest {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private StoreInfoService storeInfoService;
+
     private Long userId;
 
     private List<Long> itemIds = new ArrayList<>();
@@ -60,6 +66,13 @@ class ItemServiceTest {
         userService.joinUser(userJoinDto);
 
         this.userId = userJoinDto.getUserId();
+        StoreInfoDto store = new StoreInfoDto(
+                userJoinDto.getUserId(),
+                userJoinDto.getAccountName(),
+                "",
+                "user1의 store",
+                "");
+        storeInfoService.createStoreInfo(store);
 
         List<CategorySubInfoDto> categorySubInfoDtoList = categoryService.findCategorySubAll();
 
@@ -103,7 +116,7 @@ class ItemServiceTest {
         Long itemId = getItemId();
 
         //when
-        ItemInfoDto findItemInfo = itemService.findItemByItemId(itemId);
+        ItemInquireInfoDto findItemInfo = itemService.findItemByItemId(itemId);
 
         //then
         assertThat(findItemInfo.getItemId()).isEqualTo(itemId);
@@ -116,7 +129,7 @@ class ItemServiceTest {
         Long itemId = getItemId();
 
 
-        ItemInfoDto itemInfoDto = itemService.findItemByItemId(itemId); // 기존 DB에 저장된 아이템정보
+        ItemInfoDto itemInfoDto = itemService.findItemByItemIdForUpdate(itemId); // 기존 DB에 저장된 아이템정보
 
         FileResultInfoDto fileResultInfoDto = new FileResultInfoDto(
                 "https//fdd",
@@ -127,14 +140,12 @@ class ItemServiceTest {
         itemInfoDto.setContent("바뀐 내용");
 
         itemService.changeItemInfo(fileResultInfoDto, itemInfoDto);
-        ItemInfoDto changeItemInfo = itemService.findItemByItemId(itemId);
+        ItemInquireInfoDto changeItemInfo = itemService.findItemByItemId(itemId);
 
         //then
         assertAll(
                 () -> assertThat(changeItemInfo.getTitle()).isEqualTo("바뀐제목"),
                 () -> assertThat(changeItemInfo.getContent()).isEqualTo("바뀐 내용"),
-                () -> assertThat(fileResultInfoDto.getFileNames())
-                        .isEqualTo(changeItemInfo.getImgFileNames()),
                 () -> assertThat(fileResultInfoDto.getFileUrls())
                         .isEqualTo(changeItemInfo.getItemImgUrls())
         );
@@ -148,7 +159,7 @@ class ItemServiceTest {
 
         //when
         itemService.removeItem(itemId);
-        ItemInfoDto findItemInfoDto = itemService.findItemByItemId(itemId);
+        ItemInquireInfoDto findItemInfoDto = itemService.findItemByItemId(itemId);
 
         //then
         assertThat(findItemInfoDto).isNull();
@@ -207,4 +218,6 @@ class ItemServiceTest {
 
         return criteria;
     }
+
+
 }

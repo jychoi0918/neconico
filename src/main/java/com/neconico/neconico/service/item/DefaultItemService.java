@@ -2,6 +2,7 @@ package com.neconico.neconico.service.item;
 
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
+import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
 import com.neconico.neconico.mapper.item.ItemMapper;
@@ -20,8 +21,13 @@ public class DefaultItemService implements ItemService{
     private final ItemMapper itemMapper;
 
     @Override
-    public ItemInfoDto findItemByItemId(Long itemId) {
+    public ItemInquireInfoDto findItemByItemId(Long itemId) {
         return itemMapper.selectItemByItemId(itemId);
+    }
+
+    @Override
+    public ItemInfoDto findItemByItemIdForUpdate(Long itemId) {
+        return itemMapper.selectItemByItemIdForUpdate(itemId);
     }
 
     @Override

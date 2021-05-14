@@ -2,10 +2,13 @@ package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
+import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.mapper.category.CategoryMapper;
+import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
 import com.neconico.neconico.paging.Criteria;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +44,9 @@ class ItemMapperTest {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private StoreInfoMapper storeInfoMapper;
+
     private Long userId;
 
     private List<Long> itemIds = new ArrayList<>();
@@ -65,6 +71,16 @@ class ItemMapperTest {
 
         this.userId = userJoinDto.getUserId();
 
+        // store 정보 저장
+        StoreInfoDto store = new StoreInfoDto(
+                userJoinDto.getUserId(),
+                userJoinDto.getAccountName(),
+                "",
+                "user1의 store",
+                "");
+        storeInfoMapper.insertStoreInfo(store);
+
+        //item 저장을 위한 중분류 카테고리
         List<CategorySubInfoDto> categorySubInfoDtoList = categoryMapper.selectCategorySubs();
 
         for (int i = 1; i <= 10; i++) {
@@ -96,15 +112,6 @@ class ItemMapperTest {
         }
     }
 
-    @Test
-    @DisplayName("아이템 정보를 모두 DB에서 가져온다.")
-    void select_item_all() {
-
-        List<ItemInfoDto> itemInfoDtoList = itemMapper.selectItems();
-
-        assertThat(itemInfoDtoList.size()).isEqualTo(itemIds.size());
-    }
-
     @RepeatedTest(value = 10, name = "{displayName} {currentRepetition} / {totalRepetitions}")
     @DisplayName("10개의 item을 DB에 저장한 후 생성된 itemId들로 item정보를 가져온다.")
     void select_item_by_item_id() {
@@ -112,10 +119,13 @@ class ItemMapperTest {
         Long itemId = getItemId();
 
         //when
-        ItemInfoDto itemInfoDto = itemMapper.selectItemByItemId(itemId);
+        ItemInquireInfoDto itemInquireInfoDto = itemMapper.selectItemByItemId(itemId);
 
         //then
-        assertThat(itemInfoDto.getItemId()).isEqualTo(itemId);
+        assertAll(
+                () -> assertThat(itemInquireInfoDto).isNotNull(),
+                () -> assertThat(itemInquireInfoDto.getStoreInquireInfoDto()).isNotNull()
+        );
 
     }
 
@@ -132,7 +142,7 @@ class ItemMapperTest {
         CategorySubInfoDto categorySubInfoDto = categorySubInfoDtoList.get(randomNumber);
         Long categorySubId = categorySubInfoDto.getCategorySubId();
 
-        ItemInfoDto itemInfoDto = itemMapper.selectItemByItemId(itemId);
+        ItemInfoDto itemInfoDto = itemMapper.selectItemByItemIdForUpdate(itemId);
         String content = itemInfoDto.getContent();
         String itemImgUrls = itemInfoDto.getItemImgUrls();
         String title = itemInfoDto.getTitle();
@@ -148,14 +158,15 @@ class ItemMapperTest {
 
         itemMapper.updateItemInfo(itemInfoDto);
 
-        ItemInfoDto changeItemInfoDto = itemMapper.selectItemByItemId(itemId);
-
+        ItemInquireInfoDto changeItemInfoDto = itemMapper.selectItemByItemId(itemId);
 
         //then
-        assertThat(content).isNotEqualTo(changeItemInfoDto.getContent());
-        assertThat(itemImgUrls).isNotEqualTo(changeItemInfoDto.getItemImgUrls());
-        assertThat(title).isNotEqualTo(changeItemInfoDto.getTitle());
-        assertThat(price).isNotEqualTo(changeItemInfoDto.getPrice());
+        assertAll(
+                () -> assertThat(content).isNotEqualTo(changeItemInfoDto.getContent()),
+                () -> assertThat(itemImgUrls).isNotEqualTo(changeItemInfoDto.getItemImgUrls()),
+                () -> assertThat(title).isNotEqualTo(changeItemInfoDto.getTitle()),
+                () -> assertThat(price).isNotEqualTo(changeItemInfoDto.getPrice())
+        );
     }
 
     @RepeatedTest(value = 10, name = "{displayName} {currentRepetition} / {totalRepetitions}")
@@ -164,34 +175,26 @@ class ItemMapperTest {
         //given
         Long itemId = getItemId();
 
+        Criteria criteria = getCriteria();
+
+        SearchInfoDto searchInfoDto = createSerSearchInfoDto("");
+
         //when
         itemMapper.deleteItem(itemId);
 
-        List<ItemInfoDto> itemInfoDtoList = itemMapper.selectItems();
+        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
 
         //then
-        assertThat(itemInfoDtoList.size()).isLessThan(itemIds.size());
-
-    }
-
-    private Long getItemId() {
-        Random random = new Random();
-        int randomNumber = random.nextInt(10);
-        return this.itemIds.get(randomNumber);
+        assertThat(itemCardDtoList.size()).isLessThan(itemIds.size());
     }
 
     @Test
     @DisplayName("상품거래 지역명 검색 시 해당 상품들 조회")
     void search_for_relevant_items_when_searching_for_a_item_transaction_area_name() throws Exception {
         //given
-        Criteria criteria = new Criteria();
-        criteria.setContentPerPage(10);
-        criteria.setRequestOrder("DESC");
-        criteria.setCurrentPage(1);
-        criteria.setSortingColumn("created_date");
+        Criteria criteria = getCriteria();
 
-        SearchInfoDto searchInfoDto = new SearchInfoDto();
-        searchInfoDto.setSearchText("수원");
+        SearchInfoDto searchInfoDto = createSerSearchInfoDto("수원");
 
         //when
         List<ItemCardDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
@@ -204,14 +207,9 @@ class ItemMapperTest {
     @DisplayName("상품거래 제목명 검색 시 해당 상품들 조회")
     void search_for_relevant_items_when_searching_for_a_item_transaction_title() throws Exception {
         //given
-        Criteria criteria = new Criteria();
-        criteria.setContentPerPage(10);
-        criteria.setRequestOrder("DESC");
-        criteria.setCurrentPage(1);
-        criteria.setSortingColumn("created_date");
+        Criteria criteria = getCriteria();
 
-        SearchInfoDto searchInfoDto = new SearchInfoDto();
-        searchInfoDto.setSearchText("제목");
+        SearchInfoDto searchInfoDto = createSerSearchInfoDto("제목");
 
         //when
         List<ItemCardDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
@@ -219,7 +217,7 @@ class ItemMapperTest {
         //then
         assertThat(itemInfoDtoList)
                 .hasSize(10)
-                .anyMatch( i -> i.getTitle().contains("제목"));
+                .anyMatch(i -> i.getTitle().contains("제목"));
     }
 
     @Test
@@ -228,5 +226,27 @@ class ItemMapperTest {
         Long totalItemCount = itemMapper.selectTotalItemCount();
 
         assertThat(totalItemCount).isEqualTo(itemIds.size());
+    }
+
+    private Long getItemId() {
+        Random random = new Random();
+        int randomNumber = random.nextInt(10);
+        return this.itemIds.get(randomNumber);
+    }
+
+    private Criteria getCriteria() {
+        Criteria criteria = new Criteria();
+        criteria.setContentPerPage(10);
+        criteria.setRequestOrder("DESC");
+        criteria.setCurrentPage(1);
+        criteria.setSortingColumn("created_date");
+
+        return criteria;
+    }
+
+    private SearchInfoDto createSerSearchInfoDto(String text) {
+        SearchInfoDto searchInfoDto = new SearchInfoDto();
+        searchInfoDto.setSearchText(text);
+        return searchInfoDto;
     }
 }
