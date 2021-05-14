@@ -2,12 +2,11 @@ package com.neconico.neconico.mapper.store;
 
 
 import com.neconico.neconico.dto.store.StoreItemSortingDto;
-import com.neconico.neconico.vo.item.ItemCardVo;
-import com.neconico.neconico.vo.store.StoreQuestionCardVo;
-import com.neconico.neconico.vo.store.StoreReviewCardVo;
-import com.neconico.neconico.vo.store.StoreTradeCardVo;
+import com.neconico.neconico.vo.item.ItemCardDto;
+import com.neconico.neconico.vo.store.StoreQuestionCardDto;
+import com.neconico.neconico.vo.store.StoreReviewCardDto;
+import com.neconico.neconico.vo.store.StoreTradeCardDto;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ class StoreItemListMapperTest {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<ItemCardVo> result = storeItemListMapper.selectStoreMyItemList(input);
+        List<ItemCardDto> result = storeItemListMapper.selectStoreMyItemList(input);
         //then
         assertThat(result.size()).isEqualTo(countRow.intValue());
         assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
@@ -55,7 +54,7 @@ class StoreItemListMapperTest {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<ItemCardVo> result = storeItemListMapper.selectStoreFavoriteList(input);
+        List<ItemCardDto> result = storeItemListMapper.selectStoreFavoriteList(input);
         //then
         assertThat(result.size()).isEqualTo(countRow.intValue());
         assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
@@ -69,7 +68,7 @@ class StoreItemListMapperTest {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<ItemCardVo> result = storeItemListMapper.selectStoreSoldItemList(input);
+        List<ItemCardDto> result = storeItemListMapper.selectStoreSoldItemList(input);
         //then
         assertThat(result.size()).isEqualTo(countRow.intValue());
         assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
@@ -82,25 +81,25 @@ class StoreItemListMapperTest {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<ItemCardVo> result = storeItemListMapper.selectStorePurchasedItemList(input);
+        List<ItemCardDto> result = storeItemListMapper.selectStorePurchasedItemList(input);
         //then
         assertThat(result.size()).isEqualTo(countRow.intValue());
         assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
     }
 
     @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}, db에 존재하는 질문 갯수 {5} ")
-    @DisplayName("구매한 상품 테스트")
+    @DisplayName("상품문의 리스트 테스트")
     @CsvSource({"1, 'PRICE', 'ASC', 0, 10, 10"})
     void selectStoreQuestionListTest(Long userId, String sortKind, String sortOrder, Long startRow, Long countRow, int count) {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<StoreQuestionCardVo> result = storeItemListMapper.selectStoreQuestionList(input);
+        List<StoreQuestionCardDto> result = storeItemListMapper.selectStoreQuestionList(input);
         //then
 
         assertThat(result.size()).isEqualTo(count);
 
-        List<ItemCardVo> cardResult = new ArrayList<>();
+        List<ItemCardDto> cardResult = new ArrayList<>();
         result.forEach(o -> cardResult.add(o.getItem()));
         assertThat(sortingTest(cardResult, sortKind, sortOrder)).isTrue();
     }
@@ -112,33 +111,33 @@ class StoreItemListMapperTest {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<StoreReviewCardVo> result = storeItemListMapper.selectStoreReviewList(input);
+        List<StoreReviewCardDto> result = storeItemListMapper.selectStoreReviewList(input);
         //then
         assertThat(result.size()).isEqualTo(count);
 
-        List<ItemCardVo> cardResult = new ArrayList<>();
+        List<ItemCardDto> cardResult = new ArrayList<>();
         result.forEach(o -> cardResult.add(o.getItem()));
         assertThat(sortingTest(cardResult, sortKind, sortOrder)).isTrue();
     }
 
     @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}, 데이터 갯수 {5} ")
-    @DisplayName("상점 거래 테스트")
+    @DisplayName("상점 거래 리스트 테스트")
     @CsvSource({"2, 'PRICE', 'ASC', 0, 10, 5"})
     void selectStoreTradeListTest(Long userId, String sortKind, String sortOrder, Long startRow, Long countRow, int count) {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<StoreTradeCardVo> result = storeItemListMapper.selectStoreTradeList(input);
+        List<StoreTradeCardDto> result = storeItemListMapper.selectStoreTradeList(input);
         //then
         assertThat(result.size()).isEqualTo(count);
 
-        List<ItemCardVo> cardResult = new ArrayList<>();
+        List<ItemCardDto> cardResult = new ArrayList<>();
         result.forEach(o -> cardResult.add(o.getItem()));
         assertThat(sortingTest(cardResult, sortKind, sortOrder)).isTrue();
     }
 
 
-    static boolean sortingTest(List<ItemCardVo> input, String sortKind, String sortOrder) {
+    static boolean sortingTest(List<ItemCardDto> input, String sortKind, String sortOrder) {
         for (int i = 0; i < input.size() - 1; i++) {
             if (sortKind.equals("CREATED_DATE")) {
                 LocalDateTime a = input.get(i).getCreatedTime();

@@ -1,7 +1,7 @@
 package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
-import com.neconico.neconico.vo.item.ItemQuestionVo;
+import com.neconico.neconico.vo.item.ItemQuestionCardDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,14 +48,14 @@ class ItemQuestionMapperTest {
     @DisplayName("문의 리스트 가져오기 테스트")
     void selectListTest() {
         //when
-        List<ItemQuestionVo> list = itemQuestionMapper.selectItemQuestionListByItemID(itemId);
+        List<ItemQuestionCardDto> list = itemQuestionMapper.selectItemQuestionListByItemID(itemId);
 
         assertThat(list.size()).isEqualTo(initQuestionSize);
         assertThat(list.get(1).getCommentList().size()).isEqualTo(2);
     }
 
     @Test
-    @DisplayName("상품 문의 작성 테스트")
+    @DisplayName("상품문의 삽입")
     void insertItemQuestionTest() {
         //given
         int init = itemQuestionMapper.selectItemQuestionListByItemID(itemId).size();
@@ -68,7 +68,7 @@ class ItemQuestionMapperTest {
     }
 
     @Test
-    @DisplayName("상품 문의 작성 테스트")
+    @DisplayName("상품문의 댓글 삽입")
     void insertItemQuestionCommentTest() {
         //given
         int init = itemQuestionMapper.selectItemQuestionListByItemID(itemId).get(0).getCommentList().size();
@@ -86,14 +86,14 @@ class ItemQuestionMapperTest {
     @DisplayName("업데이트")
     void updateTest() {
         //given
-        ItemQuestionDto questionInit = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
-        ItemQuestionDto commentInit = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
+        com.neconico.neconico.dto.item.ItemQuestionDto questionInit = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
+        com.neconico.neconico.dto.item.ItemQuestionDto commentInit = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
         //when
         itemQuestionMapper.updateItemQuestion(existId, "changeQuestion", "ITEM_QUESTION");
         itemQuestionMapper.updateItemQuestion(existId, "changeComment", "QUESTION_COMMENT");
         //then
-        ItemQuestionDto questionResult = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
-        ItemQuestionDto commentResult = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
+        com.neconico.neconico.dto.item.ItemQuestionDto questionResult = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
+        com.neconico.neconico.dto.item.ItemQuestionDto commentResult = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
 
         assertThat(questionResult).usingRecursiveComparison().isNotEqualTo(questionInit);
         assertThat(commentResult).usingRecursiveComparison().isNotEqualTo(commentInit);

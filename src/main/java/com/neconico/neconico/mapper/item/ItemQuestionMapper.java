@@ -1,7 +1,7 @@
 package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
-import com.neconico.neconico.vo.item.ItemQuestionVo;
+import com.neconico.neconico.vo.item.ItemQuestionCardDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,7 +16,7 @@ public interface ItemQuestionMapper {
 
     ItemQuestionDto selectItemQuestionById(@Param("objectId") Long objectId, @Param("kind") String kind);
 
-    List<ItemQuestionVo> selectItemQuestionListByItemID(@Param("itemId") Long itemId);
+    List<ItemQuestionCardDto> selectItemQuestionListByItemID(@Param("itemId") Long itemId);
 
     void insertItemQuestion(ItemQuestionDto itemQuestionDto);
 

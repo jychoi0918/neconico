@@ -4,58 +4,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.neconico.neconico.mapper.store.StoreItemListMapper">
-    <resultMap id="itemcard" type="itemcardvo">
+    <resultMap id="itemcard" type="itemcarddto">
         <id column="itemid" property="itemId"/>
         <result column="title" property="title"/>
         <result column="price" property="price"/>
         <result column="img" property="itemImg"/>
         <result column="created" property="createdTime"/>
         <result column="status" property="status"/>
+        <result column="views" property="views"/>
     </resultMap>
 
-    <resultMap id="questioncard" type="storequestioncardvo">
-        <id column="questionid" property="questionId"/>
+    <resultMap id="questioncard" type="storequestioncarddto">
+        <id column="id" property="questionId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
         <result column="questioncreated" property="replyCreatedTime"/>
-        <association property="item" javaType="itemcardvo">
+
+        <association property="item" javaType="itemcarddto">
             <id column="itemid" property="itemId"/>
             <result column="title" property="title"/>
             <result column="price" property="price"/>
             <result column="img" property="itemImg"/>
             <result column="created" property="createdTime"/>
             <result column="status" property="status"/>
+            <result column="views" property="views"/>
         </association>
     </resultMap>
 
     
-    <resultMap id="reviewcard" type="storereviewcardvo">
-        <id column="reviewid" property="reviewId"/>
+    <resultMap id="reviewcard" type="storereviewcarddto">
+        <id column="id" property="reviewId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
         <result column="reviewcreated" property="replyCreatedTime"/>
-        <association property="item" javaType="itemcardvo">
+
+        <association property="item" columnPrefix="i." javaType="itemcarddto">
             <id column="itemid" property="itemId"/>
             <result column="title" property="title"/>
             <result column="price" property="price"/>
             <result column="img" property="itemImg"/>
             <result column="created" property="createdTime"/>
             <result column="status" property="status"/>
+            <result column="views" property="views"/>
         </association>
     </resultMap>
 
-    <resultMap id="tradecard" type="storetradecardvo">
-        <id column="tradeid" property="tradeId"/>
+    <resultMap id="tradecard" type="storetradecarddto">
+        <id column="id" property="tradeId"/>
         <result column="buyername" property="buyerName"/>
         <result column="status" property="tradeStatus"/>
         <result column="tradecreated" property="createdDate"/>
-        <association property="item" javaType="itemcardvo">
-            <id column="itemid" property="itemId"/>
-            <result column="title" property="title"/>
-            <result column="price" property="price"/>
-            <result column="img" property="itemImg"/>
-            <result column="created" property="createdTime"/>
-            <result column="status" property="status"/>
+
+        <association property="item" javaType="itemcarddto" resultMap="itemcard">
         </association>
     </resultMap>
 
@@ -111,7 +111,7 @@
     </select>
 
     <select id="selectStoreQuestionList" parameterType="storeitemsortingdto" resultMap="questioncard">
-        select q.item_question_id questionid,
+        select q.item_question_id id,
         u.account_name writername,
         q.created_date questioncreated,
         q.content content,
@@ -128,7 +128,7 @@
 
 
     <select id="selectStoreReviewList" parameterType="storeitemsortingdto" resultMap="reviewcard">
-        select sr.store_review_id reviewid,
+        select sr.store_review_id id,
         u.account_name writername,
         sr.created_date reviewcreated,
         sr.content content,
@@ -146,7 +146,7 @@
     </select>
 
     <select id="selectStoreTradeList" parameterType="storeitemsortingdto" resultMap="tradecard">
-        select t.trade_id tradeid,
+        select t.trade_id id,
         u.account_name buyername,
         t.trade_status status,
         IF(t.response_create = t.request_create, t.response_create, t.request_create) tradecreated,
