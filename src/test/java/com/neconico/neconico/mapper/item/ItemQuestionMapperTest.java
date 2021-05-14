@@ -1,7 +1,7 @@
 package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
-import com.neconico.neconico.vo.item.ItemQuestionCardDto;
+import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

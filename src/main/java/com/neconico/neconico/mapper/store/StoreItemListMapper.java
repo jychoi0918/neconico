@@ -1,10 +1,10 @@
 package com.neconico.neconico.mapper.store;
 
 import com.neconico.neconico.dto.store.StoreItemSortingDto;
-import com.neconico.neconico.vo.item.ItemCardDto;
-import com.neconico.neconico.vo.store.StoreQuestionCardDto;
-import com.neconico.neconico.vo.store.StoreReviewCardDto;
-import com.neconico.neconico.vo.store.StoreTradeCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.store.card.StoreQuestionCardDto;
+import com.neconico.neconico.dto.store.card.StoreReviewCardDto;
+import com.neconico.neconico.dto.store.card.StoreTradeCardDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

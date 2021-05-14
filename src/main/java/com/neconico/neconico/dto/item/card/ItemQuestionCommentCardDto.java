@@ -1,4 +1,4 @@
-package com.neconico.neconico.vo.item;
+package com.neconico.neconico.dto.item.card;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

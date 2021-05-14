@@ -1,7 +1,7 @@
 package com.neconico.neconico.service.item;
 
 import com.neconico.neconico.mapper.item.ItemQuestionMapper;
-import com.neconico.neconico.vo.item.ItemQuestionCardDto;
+import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

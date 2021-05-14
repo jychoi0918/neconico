@@ -1,9 +1,7 @@
-package com.neconico.neconico.vo.store;
+package com.neconico.neconico.dto.store.card;
 
-import com.neconico.neconico.vo.item.ItemCardDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
@@ -20,6 +18,12 @@ public class StoreTradeCardDto {
     private final LocalDateTime createdDate;
 
     //item
-    private ItemCardDto item;
+    private final Long itemId;
+    private final String title;
+    private final String price;
+    private final String itemImg;
+    private final LocalDateTime createdTime;
+    private final String status;
+    private final String views;
 
 }

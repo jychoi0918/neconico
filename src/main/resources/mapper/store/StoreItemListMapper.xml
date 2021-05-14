@@ -15,48 +15,46 @@
     </resultMap>
 
     <resultMap id="questioncard" type="storequestioncarddto">
-        <id column="id" property="questionId"/>
+        <id column="questionid" property="questionId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
         <result column="questioncreated" property="replyCreatedTime"/>
-
-        <association property="item" javaType="itemcarddto">
-            <id column="itemid" property="itemId"/>
-            <result column="title" property="title"/>
-            <result column="price" property="price"/>
-            <result column="img" property="itemImg"/>
-            <result column="created" property="createdTime"/>
-            <result column="status" property="status"/>
-            <result column="views" property="views"/>
-        </association>
+        <result column="itemid" property="itemId"/>
+        <result column="title" property="title"/>
+        <result column="price" property="price"/>
+        <result column="img" property="itemImg"/>
+        <result column="created" property="createdTime"/>
+        <result column="status" property="status"/>
+        <result column="views" property="views"/>
     </resultMap>
 
     
     <resultMap id="reviewcard" type="storereviewcarddto">
-        <id column="id" property="reviewId"/>
+        <id column="reviewid" property="reviewId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
         <result column="reviewcreated" property="replyCreatedTime"/>
-
-        <association property="item" columnPrefix="i." javaType="itemcarddto">
-            <id column="itemid" property="itemId"/>
+            <result column="itemid" property="itemId"/>
             <result column="title" property="title"/>
             <result column="price" property="price"/>
             <result column="img" property="itemImg"/>
             <result column="created" property="createdTime"/>
             <result column="status" property="status"/>
             <result column="views" property="views"/>
-        </association>
     </resultMap>
 
     <resultMap id="tradecard" type="storetradecarddto">
-        <id column="id" property="tradeId"/>
+        <id column="tradeid" property="tradeId"/>
         <result column="buyername" property="buyerName"/>
         <result column="status" property="tradeStatus"/>
         <result column="tradecreated" property="createdDate"/>
-
-        <association property="item" javaType="itemcarddto" resultMap="itemcard">
-        </association>
+        <result column="itemid" property="itemId"/>
+        <result column="title" property="title"/>
+        <result column="price" property="price"/>
+        <result column="img" property="itemImg"/>
+        <result column="created" property="createdTime"/>
+        <result column="status" property="status"/>
+        <result column="views" property="views"/>
     </resultMap>
 
     <sql id="selectItem">
@@ -111,10 +109,10 @@
     </select>
 
     <select id="selectStoreQuestionList" parameterType="storeitemsortingdto" resultMap="questioncard">
-        select q.item_question_id id,
+        select q.item_question_id questionid,
         u.account_name writername,
-        q.created_date questioncreated,
         q.content content,
+        q.created_date questioncreated,
         i.*
         from item_question q
         inner join (
@@ -128,10 +126,10 @@
 
 
     <select id="selectStoreReviewList" parameterType="storeitemsortingdto" resultMap="reviewcard">
-        select sr.store_review_id id,
+        select sr.store_review_id reviewid,
+        sr.content content,
         u.account_name writername,
         sr.created_date reviewcreated,
-        sr.content content,
         i.*
         from (
         <include refid="selectItem"/>
@@ -146,7 +144,7 @@
     </select>
 
     <select id="selectStoreTradeList" parameterType="storeitemsortingdto" resultMap="tradecard">
-        select t.trade_id id,
+        select t.trade_id tradeid,
         u.account_name buyername,
         t.trade_status status,
         IF(t.response_create = t.request_create, t.response_create, t.request_create) tradecreated,
