@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.item.ItemQuestionMapper">
+
+    <sql id="choosewhere">
+        <where>
+            <choose>
+                <when test="kind == 'ITEM_QUESTION'">
+                    item_question_id = #{objectId}
+                </when>
+                <when test="kind == 'QUESTION_COMMENT'">
+                    question_comment_id = #{objectId}
+                </when>
+            </choose>
+        </where>
+    </sql>
+
+    <select id="selectItemQuestionById" resultType="itemquestiondto">
+        select
+        <choose>
+            <when test="kind == 'ITEM_QUESTION'">
+                item_id AS objectId
+            </when>
+            <when test="kind == 'QUESTION_COMMENT'">
+                question_id AS objectId
+            </when>
+        </choose>
+        , user_id AS userId,
+        content AS content
+        from ${kind}
+        <include refid="choosewhere"/>
+    </select>
+
+    <resultMap id="questionlist" type="itemquestioncarddto" autoMapping="true">
+        <id column="questionid" property="questionId"/>
+        <result column="qid" property="questionWriterId"/>
+        <result column="qname" property="questionWriterName"/>
+        <result column="qcontent" property="questionContent"/>
+        <result column="qcreated" property="questionCreatedDate"/>
+        <collection property="commentList" column="questionid" javaType="list"
+                    ofType="itemquestioncommentcarddto" select="selectCommentListById"/>
+    </resultMap>
+
+    <resultMap id="commentlist" type="itemquestioncommentcarddto">
+        <id column="commentid" property="commentId"/>
+        <result column="cid" property="commentWriterId"/>
+        <result column="cname" property="commentWriterName"/>
+        <result column="ccontent" property="commentContent"/>
+        <result column="ccreated" property="commentCreatedDate"/>
+    </resultMap>
+
+    <select id="selectItemQuestionListByItemID" resultMap="questionlist">
+        select q.item_question_id AS questionid,
+               q.user_id          AS qid,
+               u.account_name    AS qname,
+               q.content          AS qcontent,
+               q.created_date     AS qcreated
+        from item_question q
+                     inner join users u
+                on q.user_id = u.user_id
+        where q.item_id = #{itemId};
+    </select>
+
+    <select id="selectCommentListById" resultMap="commentlist">
+        select c.question_comment_id AS commentid,
+               c.user_id             AS cid,
+               u.account_name        AS cname,
+               c.content             AS ccontent,
+               c.created_date        AS ccreated
+        from question_comment c
+                     inner join users u
+                on c.user_id = u.user_id
+        where c.question_id = #{questionId};
+    </select>
+
+    <insert id="insertItemQuestion" keyProperty="item_question_id" parameterType="itemquestiondto">
+        insert into item_question(item_id, user_id, created_date, content)
+        values (#{objectId}, #{userId}, SYSDATE(), #{content})
+    </insert>
+
+    <insert id="insertItemQuestionComment" keyProperty="question_comment_id" parameterType="itemquestiondto">
+        insert into question_comment(question_id, user_id, created_date, content)
+        values (#{objectId}, #{userId}, SYSDATE(), #{content})
+    </insert>
+
+    <update id="updateItemQuestion">
+        update ${kind}
+        set content = #{content}
+        <include refid="choosewhere"/>
+    </update>
+
+    <delete id="deleteItemQuestion">
+        delete from ${kind}
+        <include refid="choosewhere"/>
+    </delete>
+</mapper>
+
+
