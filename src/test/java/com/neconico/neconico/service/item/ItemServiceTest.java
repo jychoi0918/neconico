@@ -4,6 +4,7 @@ import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
+import com.neconico.neconico.dto.item.card.ItemCardDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.service.category.CategoryService;
@@ -162,14 +163,10 @@ class ItemServiceTest {
         searchInfoDto.setSearchText("수원");
 
         //when
-        List<ItemInfoDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
+        List<ItemCardDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
 
         //then
-        assertAll(
-                () -> assertThat(itemInfoDtoList.size()).isLessThan(10),
-                () -> assertThat(itemInfoDtoList)
-                        .anyMatch(i -> i.getArea().contains("수원"))
-        );
+        assertThat(itemInfoDtoList).hasSize(5);
     }
 
     @Test
@@ -182,10 +179,8 @@ class ItemServiceTest {
         searchInfoDto.setSearchText("제목");
 
         //when
-        List<ItemInfoDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
-        for (ItemInfoDto itemInfoDto : itemInfoDtoList) {
-            System.out.println("itemInfoDto = " + itemInfoDto.getTitle());
-        }
+        List<ItemCardDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
+
         //then
         assertThat(itemInfoDtoList)
                 .hasSize(10)
@@ -195,7 +190,7 @@ class ItemServiceTest {
     @Test
     @DisplayName("DB에 저장된 item의 총 수를 계산한다.")
     void count_the_total_number_of_items_stored_in_the_DB() throws Exception {
-        int totalItemCount = itemService.countTotalItems();
+        Long totalItemCount = itemService.countTotalItems();
 
         assertThat(totalItemCount).isEqualTo(itemIds.size());
     }

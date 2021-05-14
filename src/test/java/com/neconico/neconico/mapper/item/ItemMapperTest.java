@@ -3,6 +3,7 @@ package com.neconico.neconico.mapper.item;
 import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
+import com.neconico.neconico.dto.item.card.ItemCardDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.mapper.category.CategoryMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
@@ -193,14 +194,10 @@ class ItemMapperTest {
         searchInfoDto.setSearchText("수원");
 
         //when
-        List<ItemInfoDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
+        List<ItemCardDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
 
         //then
-        assertAll(
-                () -> assertThat(itemInfoDtoList.size()).isLessThan(10),
-                () -> assertThat(itemInfoDtoList)
-                        .anyMatch(i -> i.getArea().contains("수원"))
-        );
+        assertThat(itemInfoDtoList).hasSize(5);
     }
 
     @Test
@@ -217,7 +214,7 @@ class ItemMapperTest {
         searchInfoDto.setSearchText("제목");
 
         //when
-        List<ItemInfoDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
+        List<ItemCardDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList)
@@ -228,7 +225,7 @@ class ItemMapperTest {
     @Test
     @DisplayName("DB에 저장된 item의 총 수를 계산한다.")
     void count_the_total_number_of_items_stored_in_the_DB() throws Exception {
-        int totalItemCount = itemMapper.selectTotalItemCount();
+        Long totalItemCount = itemMapper.selectTotalItemCount();
 
         assertThat(totalItemCount).isEqualTo(itemIds.size());
     }

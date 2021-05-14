@@ -33,8 +33,16 @@
         where item_id = #{itemId}
     </select>
 
-    <select id="selectItemBySearch" resultType="itemInfoDto">
-        <include refid="selectItem"></include>
+    <select id="selectItemBySearch" resultType="itemcarddto">
+        select
+            item_id,
+            title,
+            price,
+            item_img_urls as itemImg,
+            created_date as createdTime,
+            item_status as status,
+            hits as views
+        from item
         where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
         <trim prefix="order by">
             ${criteria.sortingColumn} ${criteria.requestOrder}
@@ -43,7 +51,7 @@
 
     </select>
 
-    <select id="selectTotalItemCount" resultType="int">
+    <select id="selectTotalItemCount" resultType="long">
         select count(item_id) from item
     </select>
 
