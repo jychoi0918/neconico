@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neconico.neconico.mapper.item.ItemMapper">
+
+    <sql id="selectItem">
+        select
+            item_id,
+            user_id,
+            category_sub_id,
+            title,
+            content,
+            price,
+            item_img_urls,
+            area,
+            item_status,
+            hits,
+            created_date,
+            modified_date,
+            sale_status,
+            shipping_price,
+            img_file_names
+        from item
+    </sql>
+
+    <resultMap id="itemInquire" type="itemInquireInfoDto">
+        <id column="item_id" property="itemId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="price" property="price"/>
+        <result column="item_img_urls" property="itemImgUrls"/>
+        <result column="area" property="area"/>
+        <result column="item_status" property="itemStatus"/>
+        <result column="views" property="views"/>
+        <result column="created_date" property="createdDate"/>
+        <result column="sale_status" property="saleStatus"/>
+        <result column="shipping_price" property="shippingPrice"/>
+        <association property="storeInquireInfoDto" javaType="storeInquireInfoDto">
+            <id column="user_id" property="userId"/>
+            <result column="store_name" property="storeName"/>
+            <result column="store_img_path" property="storeImgPath"/>
+        </association>
+        <association property="categorySubInfoDto" javaType="categorySubInfoDto">
+            <id column="category_sub_id" property="categorySubId"/>
+            <result column="category_main_id" property="categoryMainId"/>
+            <result column="category_sub_name" property="name"/>
+        </association>
+        <collection property="itemQuestionInquireDtoList" javaType="list" ofType="itemQuestionInquireDto">
+            <id column="item_question_id" property="itemQuestionId"/>
+            <result column="question_content" property="content"/>
+            <result column="question_created_date" property="createdDate"/>
+            <association property="storeInquireInfoDto" javaType="storeInquireInfoDto">
+                <id column="question_store_user_id" property="userId"/>
+                <result column="question_store_store_name" property="storeName"/>
+                <result column="question_store_img_path" property="storeImgPath"/>
+            </association>
+            <collection property="commentInquireDtoList" javaType="list" ofType="itemQuestionCommentInquireDto">
+                <id column="question_comment_id" property="questionCommentId"/>
+                <result column="comment_content" property="content"/>
+                <result column="comment_created_date" property="createdDate"/>
+                <association property="storeInquireInfoDto" javaType="storeInquireInfoDto">
+                    <id column="comment_store_user_id" property="userId"/>
+                    <result column="comment_store_name" property="storeName"/>
+                    <result column="comment_store_img_path" property="storeImgPath"/>
+                </association>
+            </collection>
+        </collection>
+    </resultMap>
+
+    
+    <select id="selectItems" resultType="itemInfoDto">
+        <include refid="selectItem"></include>
+    </select>
+
+    <select id="selectItemByItemId" parameterType="long" resultMap="itemInquire">
+        select
+            i.item_id as item_id,
+            i.title as title,
+            i.content as content,
+            i.price as price,
+            i.item_img_urls as item_img_urls,
+            i.area as area,
+            i.item_status as item_status,
+            i.hits as views,
+            i.created_date as created_date,
+            i.sale_status as sale_status,
+            i.shipping_price as shipping_price,
+            q.item_question_id as item_question_id,
+            q.content as question_content,
+            q.created_date as question_created_date,
+            c.question_comment_id as question_comment_id,
+            c.content as comment_content,
+            c.created_date as comment_created_date,
+            s.user_id as user_id,
+            s.store_name as store_name,
+            s.store_img_path as store_img_path,
+            cs.category_sub_id as category_sub_id,
+            cs.category_main_id as category_main_id,
+            cs.name as category_sub_name,
+            question_store.user_id as question_store_user_id,
+            question_store.store_name as question_store_store_name,
+            question_store.store_img_path as question_store_img_path,
+            comment_store.user_id as comment_store_user_id,
+            comment_store.store_name as comment_store_name,
+            comment_store.store_img_path as comment_store_img_path
+        from item i
+        inner join category_sub cs
+        on i.category_sub_id = cs.category_sub_id
+        left join item_question q
+        on i.item_id = q.item_id
+        left join question_comment c
+        on q.item_question_id = c.question_id
+        inner join store s
+        on i.user_id = s.user_id
+        left join store question_store
+        on q.user_id = question_store.user_id
+        left join store comment_store
+        on c.user_id = comment_store.user_id
+        where i.item_id = #{itemId}
+    </select>
+
+    <select id="selectItemByItemIdForUpdate" parameterType="long" resultType="itemInfoDto">
+        <include refid="selectItem"></include>
+        where item_id = #{itemId}
+    </select>
+
+    <select id="selectItemBySearch" resultType="itemcarddto">
+        select
+            item_id,
+            title,
+            price,
+            item_img_urls as itemImg,
+            created_date as createdTime,
+            item_status as status,
+            hits as views
+        from item
+        where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
+        <trim prefix="order by">
+            ${criteria.sortingColumn} ${criteria.requestOrder}
+        </trim>
+        limit #{criteria.contentPerPage} offset #{criteria.pageStart}
+    </select>
+
+    <select id="selectTotalItemCount" resultType="long">
+        select count(item_id) from item
+    </select>
+
+    <insert id="insertItems" useGeneratedKeys="true" keyProperty="itemId" parameterType="itemInfoDto">
+        insert into item(
+            user_id,
+            category_sub_id,
+            title,
+            content,
+            price,
+            item_img_urls,
+            area,
+            item_status,
+            hits,
+            created_date,
+            modified_date,
+            sale_status,
+            shipping_price,
+            img_file_names
+        )values (
+                    #{userId},
+                    #{categorySubId},
+                    #{title},
+                    #{content},
+                    #{price},
+                    #{itemImgUrls},
+                    #{area},
+                    #{itemStatus},
+                    #{hits},
+                    #{createdDate},
+                    #{modifiedDate},
+                    #{saleStatus},
+                    #{shippingPrice},
+                    #{imgFileNames}
+                )
+    </insert>
+
+    <update id="updateItemInfo" parameterType="itemInfoDto">
+        update item
+        set category_sub_id = #{categorySubId},
+            title = #{title},
+            content = #{content},
+            price = #{price},
+            item_img_urls = #{itemImgUrls},
+            area = #{area},
+            item_status = #{itemStatus},
+            modified_date = #{modifiedDate},
+            sale_status = #{saleStatus},
+            shipping_price = #{shippingPrice},
+            img_file_names = #{imgFileNames}
+        where item_id = #{itemId}
+    </update>
+
+    <delete id="deleteItem" parameterType="long">
+        delete from item
+        where item_id = #{itemId}
+    </delete>
+
+</mapper>

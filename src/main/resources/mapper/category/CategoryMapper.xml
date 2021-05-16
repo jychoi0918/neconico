@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neconico.neconico.mapper.category.CategoryMapper">
+    <resultMap id="categoryMain" type="categoryMainInfoDto">
+        <id column="category_main_id" property="categoryMainId"></id>
+        <result column="name" property="name"></result>
+        <collection property="categorySubInfoDtoList" javaType="list" ofType="categorySubInfoDto">
+            <id column="sub_id" property="categorySubId"></id>
+            <result column="main_id" property="categoryMainId"></result>
+            <result column="sub_name" property="name"></result>
+        </collection>
+    </resultMap>
+
+    <select id="selectCategoryInfos" resultMap="categoryMain">
+        select
+            m.category_main_id,
+            m.name,
+            s.category_sub_id as sub_id,
+            s.category_main_id as main_id,
+            s.name as sub_name
+        from category_main m
+        left join category_sub s
+        on m.category_main_id = s.category_main_id;
+    </select>
+
+    <sql id="selectCategorySubDto">
+        select
+            category_sub_id,
+            category_main_id,
+            name
+        from category_sub
+    </sql>
+
+    <select id="selectCategorySubByName" resultType="categorySubInfoDto">
+        <include refid="selectCategorySubDto"></include>
+        where name = #{name}
+    </select>
+
+    <select id="selectCategorySubs" resultType="categorySubInfoDto">
+        <include refid="selectCategorySubDto"></include>
+    </select>
+
+    <insert id="insertCategoryMain" parameterType="string">
+        insert into category_main(name)
+        values(#{name})
+    </insert>
+
+    <insert id="insertCategorySub">
+        insert into category_sub(category_main_id, name)
+        values(#{mainId}, #{name})
+    </insert>
+
+    <update id="updateCategoryMainByIdAndName">
+        update category_main
+        set name = #{name}
+        where category_main_id = #{mainId}
+    </update>
+
+    <update id="updateCategorySubByIdAndName">
+        update category_sub
+        set name = #{name}
+        where category_sub_id = #{subId}
+    </update>
+
+</mapper>
