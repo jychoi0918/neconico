@@ -47,18 +47,18 @@
         values(#{name})
     </insert>
 
-    <insert id="insertCategorySub" parameterType="map">
+    <insert id="insertCategorySub">
         insert into category_sub(category_main_id, name)
         values(#{mainId}, #{name})
     </insert>
 
-    <update id="updateCategoryMainByIdAndName" parameterType="map">
+    <update id="updateCategoryMainByIdAndName">
         update category_main
         set name = #{name}
         where category_main_id = #{mainId}
     </update>
 
-    <update id="updateCategorySubByIdAndName" parameterType="map">
+    <update id="updateCategorySubByIdAndName">
         update category_sub
         set name = #{name}
         where category_sub_id = #{subId}

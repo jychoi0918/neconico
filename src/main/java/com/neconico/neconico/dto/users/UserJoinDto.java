@@ -1,12 +1,14 @@
 package com.neconico.neconico.dto.users;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Getter @Setter
@@ -30,7 +32,6 @@ public class UserJoinDto {
 
     private String gender;
 
-    @FutureOrPresent(message = "날짜가 알맞지 않습니다.")
     @Pattern(regexp = "^\\d{6}$", message = "생년월일 형식에 맞지 않습니다.")
     @NotEmpty(message = "생년월일을 입력해 주세요.")
     private String birthdate;
