@@ -88,6 +88,7 @@ class ItemServiceTest {
             itemInfoDto.setTitle("아이템 제목" + i);
             itemInfoDto.setContent("아이템 내용" + i);
             itemInfoDto.setPrice(i + "0,000");
+            //5개씩 강북구, 수원시 설정
             if(i%2 ==0 ) {
                 itemInfoDto.setArea("서울특벌시 강북구");
             }else{
@@ -119,7 +120,10 @@ class ItemServiceTest {
         ItemInquireInfoDto findItemInfo = itemService.findItemByItemId(itemId);
 
         //then
-        assertThat(findItemInfo.getItemId()).isEqualTo(itemId);
+        assertAll(
+                () -> assertThat(findItemInfo.getItemId()).isEqualTo(itemId),
+                () -> assertThat(findItemInfo.getStoreInquireInfoDto()).isNotNull()
+        );
     }
 
     @RepeatedTest(value = 10, name = "{displayName} {currentRepetition} / {totalRepetitions}")
@@ -170,8 +174,7 @@ class ItemServiceTest {
         //given
         Criteria criteria = getCriteria(); //url로 넘어올 현재 페이지
 
-        SearchInfoDto searchInfoDto = new SearchInfoDto();
-        searchInfoDto.setSearchText("수원");
+        SearchInfoDto searchInfoDto = getSearchInfoDto("수원");
 
         //when
         List<ItemCardDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
@@ -186,8 +189,7 @@ class ItemServiceTest {
         //given
         Criteria criteria = getCriteria(); //url로 넘어올 현재 페이지
 
-        SearchInfoDto searchInfoDto = new SearchInfoDto();
-        searchInfoDto.setSearchText("제목");
+        SearchInfoDto searchInfoDto = getSearchInfoDto("제목");
 
         //when
         List<ItemCardDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
@@ -219,5 +221,10 @@ class ItemServiceTest {
         return criteria;
     }
 
+    private SearchInfoDto getSearchInfoDto(String searchText) {
+        SearchInfoDto searchInfoDto = new SearchInfoDto();
+        searchInfoDto.setSearchText(searchText);
+        return searchInfoDto;
+    }
 
 }

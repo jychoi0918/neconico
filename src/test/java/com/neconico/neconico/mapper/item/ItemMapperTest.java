@@ -124,7 +124,8 @@ class ItemMapperTest {
         //then
         assertAll(
                 () -> assertThat(itemInquireInfoDto).isNotNull(),
-                () -> assertThat(itemInquireInfoDto.getStoreInquireInfoDto()).isNotNull()
+                () -> assertThat(itemInquireInfoDto.getStoreInquireInfoDto()).isNotNull(),
+                () -> assertThat(itemInquireInfoDto.getItemQuestionInquireDtoList()).isEmpty()
         );
 
     }
