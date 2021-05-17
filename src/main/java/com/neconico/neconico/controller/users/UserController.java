@@ -1,5 +1,6 @@
 package com.neconico.neconico.controller.users;
 
+import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,12 @@ public class UserController {
             model.addAttribute("errorMessage", "아이디 혹은 암호가 올바르지 않습니다.");
         }
         return "users/login";
+    }
+
+    @GetMapping("/join")
+    public String joinView(Model model){
+        model.addAttribute("userJoinForm", new UserInfoDto());
+        return "users/join";
     }
 
 }

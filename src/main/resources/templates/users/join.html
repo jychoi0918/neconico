@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+    <div class="wrap">
+
+        <div class="section_wrap h_con">
+            <section class="join_wrap">
+                <h1 class="join_logo">
+                    <a th:href="@{/}">
+                        <img src="/img/logo.png" alt="">
+                    </a>
+                </h1>
+                <form action="#" th:object="${userJoinForm}" method="post" name="join" class="join_form">
+                    
+                    <input type="text" th:field="*{accountId}" class="join_id" placeholder="아이디">
+                    <label th:for="*{accountId}" class="join_label"></label>
+                    <input type="button" id="join_id_conf" class="join_id_conf" value="중복확인">
+
+                    <input type="password" th:field="*{accountPw}" class="join_pw" placeholder="비밀번호">
+                    <label th:for="*{accountPw}" class="join_label"></label>
+                    <p>* 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.</p>
+
+                    <input type="password" id="passwordConfirm" class="join_pw" placeholder="비밀번호 확인">
+                    <label for="passwordConfirm" class="join_label"></label>
+                    <p>* 비밀번호가 일치하지 않습니다.</p>
+
+                    <input type="text" th:field="*{accountName}" class="join_name" placeholder="이름">
+                    <label th:for="*{accountName}" class="join_label"></label>
+
+                    <input type="text" th:field="*{birthdate}" class="join_birth" placeholder="생년월일">
+                    <label th:for="*{birthdate}" class="join_label"></label>
+                    <input type="radio" th:field="*{gender}" class="join_m" name="join_sex" value="join_m">
+                    <label th:for="*{gender}">남</label>
+                    <input type="radio" th:field="*{gender}" class="join_fm" name="join_sex" value="join_fm">
+                    <label th:for="*{gender}">여</label>
+
+                    <input type="text" th:field="*{phoneNumber}" class="join_phone" placeholder="핸드폰번호">
+                    <label th:for="*{phoneNumber}" class="join_label"></label>
+
+                    <input type="email" th:field="*{email}" class="join_email2" placeholder="이메일">
+                    <label th:for="*{email}" class="join_label"></label>
+                    <input type="button" value="인증하기" id="join_email" class="join_email">
+
+                    <input type="email" id="join_email2" class="join_email2" placeholder="인증번호">
+                    <label for="join_email2" class="join_label"></label>
+                    <input type="button" value="인증확인" id="join_email2" class="join_email">
+                    <p>인증확인 남은시간 00:00</p>
+
+                    <input type="text" th:field="*{zipNo}" class="join_add" placeholder="우편번호">
+                    <label th:for="*{zipNo}" class="join_label"></label>
+                    <input type="button" value="주소검색" id="join_add_sch" class="join_add_sch">
+                    <input type="text" th:field="*{address}" class="join_add_detail" placeholder="상세주소">
+                    <label th:for="*{address}" class="join_label"></label>
+
+                    <div class="join_agreement_box">
+                        <textarea name="join_agreement" id="join_agreement" class="join_agreement" cols="30" rows="7">이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.이용약관 내용이 나옵니다.</textarea>
+                        <input type="checkbox" th:field="*{infoAgreement}" class="join_agree" placeholder="" value="check">
+                        <label th:for="*{infoAgreement}" class="join_label">동의합니다.</label>
+                    </div>
+
+                    <input type="button" value="회원가입">
+
+                </form>
+                
+            </section>
+        </div>
+
+    </div>
+</body>
+</html>

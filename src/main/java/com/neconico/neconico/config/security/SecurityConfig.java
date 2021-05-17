@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/store/mystore").hasRole("USER")
                 .antMatchers("item/new").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/", "/login*", "/user/**", "/item/**", "/notice/**").permitAll()
+                .antMatchers("/", "/login*", "/join", "/user/**", "/item/**", "/notice/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //로그인
