@@ -1,17 +1,16 @@
 package com.neconico.neconico.dto.users;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
-@Alias("sessionUser")
-@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SessionUser implements Serializable {
 
     private Long userId;
