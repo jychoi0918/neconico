@@ -15,9 +15,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String main(@LoginUser SessionUser sessionUser) {
-        if(sessionUser != null) {
-            System.out.println("sessionUser" + sessionUser.getAccountName());
-        }
         return "index";
     }
 }

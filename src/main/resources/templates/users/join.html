@@ -12,10 +12,16 @@
                     </a>
                 </h1>
                 <form action="#" th:object="${userJoinForm}" method="post" name="join" class="join_form">
-                    
+                    <!-- hidden-->
+                    <input type="hidden" id="email_id" value="">
+                    <input type="hidden" id="duplicate_check_result" value="false">
+                    <input type="hidden" id="author_number_check" value="false">
+
+                    <!-- form input -->
                     <input type="text" th:field="*{accountId}" class="join_id" placeholder="아이디">
                     <label th:for="*{accountId}" class="join_label"></label>
-                    <input type="button" id="join_id_conf" class="join_id_conf" value="중복확인">
+                    <input type="button" id="join_id_conf" class="join_id_conf" value="중복확인" onclick="checkDuplicate()">
+
 
                     <input type="password" th:field="*{accountPw}" class="join_pw" placeholder="비밀번호">
                     <label th:for="*{accountPw}" class="join_label"></label>
@@ -40,12 +46,13 @@
 
                     <input type="email" th:field="*{email}" class="join_email2" placeholder="이메일">
                     <label th:for="*{email}" class="join_label"></label>
-                    <input type="button" value="인증하기" id="join_email" class="join_email">
-
-                    <input type="email" id="join_email2" class="join_email2" placeholder="인증번호">
-                    <label for="join_email2" class="join_label"></label>
-                    <input type="button" value="인증확인" id="join_email2" class="join_email">
-                    <p>인증확인 남은시간 00:00</p>
+                    <input type="button" value="인증하기" id="join_email" class="join_email" onclick="sendAuthorNum()">
+                    <div id="email_confirm" style="display: none">
+                        <input type="email" id="author_number" class="join_email2" placeholder="인증번호">
+                        <label for="join_email2" class="join_label"></label>
+                        <input type="button" value="인증확인" id="join_email2" class="join_email" onclick="checkAuthorNum()">
+                        <p id="author_timer"></p>
+                    </div>
 
                     <input type="text" th:field="*{zipNo}" class="join_add" placeholder="우편번호">
                     <label th:for="*{zipNo}" class="join_label"></label>
@@ -65,7 +72,147 @@
                 
             </section>
         </div>
-
     </div>
+    <script type="text/javascript">
+        //아이디 증복 체크
+        const checkDuplicate = () => {
+            const accountId = document.getElementById("accountId").value;
+            const duplicateCheck = document.getElementById("duplicate_check_result");
+            const httpRequest = new XMLHttpRequest();
+
+            if(accountId === '' || accountId === null) {
+                alert('아이디를 입력해주세요.');
+                return;
+            }
+
+            httpRequest.onreadystatechange = function () {
+                if(this.readyState === 4 && this.status === 200) {
+                    if(this.responseText === null || this.responseText === '') {
+                        alert('사용가능한 아이디입니다.');
+                        duplicateCheck.value = true;
+                    }else{
+                        alert('사용불가능한 아이디입니다.')
+                        duplicateCheck.value = false;
+                    }
+                }
+            }
+
+            httpRequest.open("GET", "/user/" + accountId + "/check");
+            httpRequest.setRequestHeader("Content-Type", "text/plain");
+            httpRequest.send();
+        }
+
+        //이메일 전송
+        const emailId = document.getElementById("email_id");
+        const emailConfirm = document.getElementById("email_confirm");
+        const authorNumberCheck = document.getElementById("author_number_check");
+        let executeTimer = null;
+        let executeTimeOut = null;
+
+        const sendAuthorNum = () => {
+            const inputEmail = document.getElementById("email");
+            const httpRequest = new XMLHttpRequest();
+            //타이머 count
+            let timerCount = 180;
+
+            /*
+             * 인증버튼을 누른후 여러번 누를시 기존에 있는 인증번호, 타이머 제거
+             * 기존 인증확인되었을 시 확인 제거
+             */
+            if(emailId.value != '') {
+                deleteAuthorNumber();
+                authorNumberCheck.value = false;
+                clearInterval(executeTimer);
+                clearTimeout(executeTimeOut);
+            }
+
+            httpRequest.onreadystatechange = function () {
+                if(this.readyState === 4 && this.status === 200) {
+                    emailId.value = parseInt(this.responseText);
+                    emailConfirm.style.display = "block";
+                    alert('인증번호를 해당 메일로 발송하였습니다.');
+
+                    //이메일 인증 타이머
+                    executeTimer = setInterval(timer, 1000);
+                    executeTimeOut = setTimeout(timeOut, 180000, executeTimer);
+                }
+            }
+
+            httpRequest.open("POST", "/user/email/send?emailAddress=" + inputEmail.value);
+            httpRequest.setRequestHeader("Content-Type", "test/plain");
+            httpRequest.send();
+
+
+            //타이머
+            const timer = () => {
+                timerCount--;
+
+                const authorTimer = document.getElementById("author_timer");
+                let min;
+                let sec;
+
+                min = "0" + String(Math.floor(timerCount/60));
+                sec = String(timerCount%60);
+
+                if(sec.length === 1) {
+                    sec = "0" + sec;
+                }
+                authorTimer.innerHTML = "인증확인 남은시간 " + min + ":" + sec;
+            }
+
+            const timeOut = executeTimer => {
+                clearInterval(executeTimer); //타이머 정지
+                deleteAuthorNumber(); // 인증번호 제거
+                emailConfirm.style.display = "none";
+                alert('인증확인 시간을 초과하였습니다.');
+            }
+
+        }
+
+        //이메일 인증확인
+        const checkAuthorNum = () => {
+            const authorNumber = document.getElementById("author_number").value;
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.onreadystatechange = function () {
+                if(this.readyState === 4 && this.status ===200) {
+                    if(this.responseText === null || this.responseText === '') {
+                        alert('알맞지 않은 인증번호입니다.');
+                    }else{
+                        authorNumberCheck.value = true;
+                        clearInterval(executeTimer);
+                        clearTimeout(executeTimeOut);
+                        alert('인증되었습니다.');
+
+                        //인증한 후 삭제
+                        deleteAuthorNumber();
+                        emailConfirm.style.display = "none";
+                    }
+                }
+            }
+
+            httpRequest.open("POST", "/user/email/" + authorNumber + "/check");
+            httpRequest.setRequestHeader("Content-Type", "text/plain");
+            httpRequest.send();
+        }
+
+
+        //이메일 인증번호 삭제
+        const deleteAuthorNumber = () => {
+            const httpRequest = new XMLHttpRequest();
+            httpRequest.open("DELETE", "/user/email/" + emailId.value + "/delete");
+            httpRequest.setRequestHeader("Content-Type", "text/plain");
+            httpRequest.send();
+        }
+
+        //해당 페이지를 벗어났을경우 인증번호가 있을경우 삭제
+        window.addEventListener('beforeunload', (event) => {
+            event.preventDefault();
+            if(emailId.value != '') {
+                deleteAuthorNumber();
+            }
+        });
+
+
+    </script>
 </body>
 </html>
