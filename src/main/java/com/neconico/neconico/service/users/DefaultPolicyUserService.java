@@ -71,4 +71,9 @@ public class DefaultPolicyUserService implements UserService{
     public void changeUserAccountPw(String accountId, String changePw) {
         userMapper.updateAccountPw(accountId, passwordEncoder.encode(changePw));
     }
+
+    @Override
+    public UserInfoDto findUserByEmail(String email) {
+        return userMapper.selectUserByEmail(email);
+    }
 }

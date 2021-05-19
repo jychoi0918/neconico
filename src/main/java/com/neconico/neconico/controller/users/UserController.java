@@ -2,7 +2,7 @@ package com.neconico.neconico.controller.users;
 
 import com.neconico.neconico.dto.users.*;
 import com.neconico.neconico.service.store.StoreInfoService;
-import com.neconico.neconico.service.store.provider.StoreInfoProvider;
+import com.neconico.neconico.service.store.provider.StoreInfoMaker;
 import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -53,7 +53,7 @@ public class UserController {
         }
 
         Long userId = userService.joinUser(userJoinDto);
-        storeInfoService.createStoreInfo(StoreInfoProvider.createStoreInfoDtoByUserId(userId));
+        storeInfoService.createStoreInfo(StoreInfoMaker.createStoreInfoDtoByUserId(userId));
         return "users/join_success";
     }
 

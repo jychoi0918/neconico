@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
@@ -27,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     private final AuthenticationFailureHandler customAuthenticationFailureHandler;
+
+    private final OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService;
 
     private final DataSource dataSource;
 
@@ -65,14 +70,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //로그아웃
                 .logout()
                 .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID", "remember-me")
                 .and()
                 //자동로그인
                 .rememberMe()
                 .rememberMeParameter("remember")
                 .tokenValiditySeconds(3600)
                 .userDetailsService(customUserDetailsService)
-                .tokenRepository(getJDBCRepository());
+                .tokenRepository(getJDBCRepository())
+                .and()
+                //oauth 로그인
+                .oauth2Login()
+                .loginPage("/login")
+                .defaultSuccessUrl("/", true)
+                .userInfoEndpoint()
+                .userService(customOAuth2UserService);
 
+        //허용 session 1개, 동시로그인시 기존 세션만료
+        http.sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+                .expiredUrl("/");
+
+        http.sessionManagement().sessionFixation().changeSessionId(); // 세션 고정보호
     }
 
     private PersistentTokenRepository getJDBCRepository() {

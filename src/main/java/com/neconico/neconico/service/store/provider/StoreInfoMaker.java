@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class StoreInfoProvider {
+public class StoreInfoMaker {
 
     public static StoreInfoDto createStoreInfoDtoByUserId(Long userId) {
         return new StoreInfoDto(userId, createStoreName(userId), "", "", "");
