@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/img/**", "/error")
+                .antMatchers("/img/**", "/error", "/file/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
     }
 
@@ -49,8 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/store/mystore").hasRole("USER")
-                .antMatchers("item/new").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/", "/login*", "/join", "/user/**", "/item/**", "/notice/**").permitAll()
+                .antMatchers("/item/new", "/item/**/edit", "/item/**/delete").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/", "/login*", "/user/**", "/item/**", "/notice/**", "/store/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //로그인

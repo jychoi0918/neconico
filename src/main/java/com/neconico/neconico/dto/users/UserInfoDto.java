@@ -22,7 +22,7 @@ public class UserInfoDto {
     private String zipNo;
     private String address;
     private String infoAgreement;
-    private LocalDateTime createDate;
+    private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private String authority;
 }

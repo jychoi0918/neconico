@@ -171,23 +171,17 @@
 .find_id_form input { width: 100%; height: 50px; box-sizing: border-box; border-radius: 0; border: 1px solid #eaeaea; margin-bottom: 20px; font-size: 0.875rem; }
 .find_id_form input[type=text] { padding-left: 50px; }
 .find_id_form input[type=email] { padding-left: 50px; }
-.find_email { width: calc(70% - 15px) !important; margin-right: 5px; }
 .find_id_form input[type=button] { background: #7429ff; color: #fff; font-weight: bold; cursor: pointer; border: 1px solid #7429ff; }
 .find_id_form input[type=button]:focus { outline: 0; border: none; box-sizing: border-box; }
 .find_id_form input[type=button]:hover { background: #601edb; }
-.find_id_form .find_email { margin-bottom: 5px; }
-.find_id_form .find_id_email { width: 30%; margin-bottom: 5px; }
-.find_id_form .find_id_email + p { color: #f00; font-size: 12px; margin-bottom: 10px; }
-.find_id_form .find_email_btn { padding-left: 20px !important; }
+.find_id_form p { color: #f00; font-size: 12px; margin-bottom: 10px; }
+.find_id_form p { color: #f00; font-size: 12px; margin-bottom: 10px; }
 
 .find_id_label { position: relative; }
-.find_id_label2 { top: 68px; left: -313px; }
 .find_id_label i { display: inline-block; width: 15px; height: 15px; position: absolute; top: -68px; left: 20px; }
 .find_id_label i img { width: 100%; }
 
 .find_id_form input:focus { border: 1px solid #7429ff; outline: #7429ff; }
-
-.find_id_btn { margin-top: 30px; }
 
 
 
@@ -297,7 +291,7 @@
 .find_pw_email2 { padding-left: 20px !important; }
 .find_pw_label2 i { top: 2px; left: -295px; }
 .find_pw_btn, .find_pw_btn2 { width: 30% !important; }
-.find_pw_btn + p, .find_pw_btn2 + p { color: #f00; font-size: 12px; margin-bottom: 10px; }
+.find_pw_btn ~ p, .find_pw_btn2 + p { color: #f00; font-size: 12px; margin-bottom: 10px; }
 
 .find_pw_confirm { margin-top: 30px; }
 
