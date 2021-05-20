@@ -62,6 +62,11 @@
         and phone_number = #{phoneNumber}
     </select>
 
+    <select id="selectUserByEmail" parameterType="string" resultType="userInfoDto">
+        <include refid="selectUser"></include>
+        where email = #{email}
+    </select>
+
     <insert id="insertUser" useGeneratedKeys="true" parameterType="userJoinDto" keyProperty="userId">
         insert into users(
                          account_id

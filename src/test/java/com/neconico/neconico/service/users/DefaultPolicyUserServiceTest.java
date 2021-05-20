@@ -223,4 +223,17 @@ class DefaultPolicyUserServiceTest {
         //then
         assertThat(changeUserDto.getAccountPw()).isNotEqualTo(accountPw);
     }
+
+    @ParameterizedTest(name = "{index} -> 이메일이 {0}일때")
+    @DisplayName("이메일을 이용하여 회원 정보를 DB에서 찾아온다.")
+    @ValueSource(strings = {
+            "user1@gmail.com", "user2@gmail.com", "user3@gmail.com", "user4@gmail.com",
+            "user5@gmail.com", "user6@gmail.com", "user7@gmail.com", "user8@gmail.com",
+            "user9@gmail.com", "user10@gmail.com"})
+    void user_information_is_retrieved_from_database_using_email(String email) throws Exception {
+
+        UserInfoDto userInfoDto = userService.findUserByEmail(email);
+
+        assertThat(userInfoDto).extracting("email").isEqualTo(email);
+    }
 }

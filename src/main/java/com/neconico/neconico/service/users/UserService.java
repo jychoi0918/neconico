@@ -23,4 +23,6 @@ public interface UserService {
     void changeUserInfo(UserInfoDto userInfoDto);
 
     void changeUserAccountPw(String accountId, String changePw);
+
+    UserInfoDto findUserByEmail(String email);
 }

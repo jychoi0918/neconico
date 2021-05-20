@@ -26,5 +26,7 @@ public interface UserMapper {
     void updateUserInfo(UserInfoDto userInfoDto);
 
     void updateAccountPw(@Param("accountId") String accountId, @Param("accountPw") String accountPw);
+
+    UserInfoDto selectUserByEmail(@Param("email") String email);
 }
 

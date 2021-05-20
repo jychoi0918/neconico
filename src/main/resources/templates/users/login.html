@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+    <div class="wrap">
+        <div class="section_wrap h_con">
+            <section class="login_wrap">
+                <h1 class="login_logo">
+                    <a th:href="@{/}">
+                        <img src="/img/logo.png" alt="">
+                    </a>
+                </h1>
+
+                <form action="/login_proc" method="post" name="login" class="login_form">
+                    <p th:if="${error}" th:text="${errorMessage}"></p>
+                    <input type="text" id="login_id" name="username" class="login_id" placeholder="아이디">
+                    <label for="login_id" class="login_label"><i><img src="../img/login_id.png" alt=""></i></label>
+                    <input type="password" id="login_pw" name="password" class="login_pw" placeholder="비밀번호">
+                    <label for="login_pw" class="login_label"><i><img src="../img/login_pw.png" alt=""></i></label>
+                    <input type="button" value="로그인" onclick="loginSubmit()">
+                    <input type="checkbox" id="login_chk" name="remember" class="login_chk">
+                    <label for="login_chk" style="cursor:pointer;">로그인 상태 유지</label>
+                </form>
+                <ul class="login_list">
+                    <li class="h_fs_14">
+                        <a th:href="@{/user/find/id}">아이디 찾기</a>
+                    </li>
+                    <li class="h_fs_14">
+                        <a th:href="@{/user/find/pw}">비밀번호 찾기</a>
+                    </li>
+                    <li class="h_fs_14">
+                        <a th:href="@{/user/new}">회원가입</a>
+                    </li>
+                </ul>
+                <!-- <a href="#" class="login_kakao h_fs_14"><img src="../img/login_kakao.png" alt=""> 카카오톡으로 로그인</a> -->
+				<a href="/oauth2/authorization/google" class="login_google h_fs_14"><img src="/img/google_logo.png" alt=""> 구글로 로그인</a>
+                <a href="/oauth2/authorization/naver" class="login_naver h_fs_14"><img src="/img/naver_logo.png" alt=""> 네이버로 로그인</a>
+            </section>
+        </div>
+    </div>
+<script>
+    // 로그인 제출
+    function loginSubmit() {
+        const loginForm = document.getElementsByClassName("login_form")[0];
+        loginForm.submit();
+    }
+</script>
+</body>
+</html>
