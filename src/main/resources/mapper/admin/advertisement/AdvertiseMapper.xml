@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.admin.advertisement.AdvertiseMapper">
+    <select id="selectByPaging" resultType="AdvertiseReturnDto">
+        select a.advertisement_id as advertisementId,
+               u.account_id as accountId,
+               a.title,
+               a.start_date as startDate,
+               a.end_date as endDate,
+               a.ad_img_urls as adImgUrl,
+               a.url,
+               a.img_file_names as imgFileName,
+               a.ad_status as adStatus
+        from advertisement a
+                 inner join users u
+                            on u.user_id = a.user_id
+        order by ${sortingColumn} ${requestOrder}
+            limit ${contentPerPage} offset ${pageStart}
+
+    </select>
+    <select id="selectAll" resultType="AdvertiseReturnDto">
+        select a.advertisement_id as advertisementId,
+               u.account_id as accountId,
+               a.title,
+               a.start_date as startDate,
+               a.end_date as endDate,
+               a.ad_img_urls as adImgUrl,
+               a.url,
+               a.img_file_names as imgFileName,
+               a.ad_status as adStatus
+        from advertisement a
+                 inner join users u
+                            on u.user_id = a.user_id
+    </select>
+    <select id="countTable" resultType="long">
+        select count(advertisement_id)
+        from advertisement
+    </select>
+    <select id="selectAd" resultType="AdvertiseReturnDto">
+        select a.advertisement_id as advertisementId,
+            u.account_id as accountId,
+            a.title,
+            a.start_date as startDate,
+            a.end_date as endDate,
+            a.ad_img_urls as adImgUrl,
+            a.url,
+            a.img_file_names as imgFileName,
+            a.ad_status as adStatus
+        from advertisement a
+            inner join users u
+        on u.user_id = a.user_id
+            where advertisement_id = #{advertisement}
+    </select>
+    <insert id="insertAd" parameterType="AdvertiseDto"  useGeneratedKeys="true" keyProperty="advertisementId">
+        insert into advertisement(user_id,
+                                  title,
+                                  start_date,
+                                  end_date,
+                                  ad_img_urls,
+                                  url,
+                                  img_file_names,
+                                  ad_status)
+        values (#{userId},
+                #{title},
+                #{startDate},
+                #{endDate},
+                #{adImgUrl},
+                #{url},
+                #{imgFileName},
+                #{adStatus})
+    </insert>
+    <delete id="deleteAd" parameterType="long">
+        delete from advertisement
+        where advertisement_id=#{advertisementId}
+    </delete>
+    <update id="updateAd" parameterType="AdvertiseDto">
+        update advertisement
+        set title = #{title},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            ad_img_urls = #{adImgUrl},
+            url = #{url},
+            img_file_names = #{imgFileName},
+            ad_status = #{adStatus}
+        where advertisement_id = #{advertisementId}
+    </update>
+    <update id="updateStatus" parameterType="AdStatusDto">
+        update advertisement
+        set ad_status = #{adStatus}
+        where advertisement_id = #{advertisementId}
+    </update>
+
+
+    
+</mapper>

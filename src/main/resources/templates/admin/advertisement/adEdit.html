@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내꼬니꼬</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/xeicon.min.css}" href="../css/xeicon.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h_reset.css}" href="../css/h_reset.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h_style.css}" href="../css/h_style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h_sub.css}" href="../css/h_sub.css">
+    <link rel="stylesheet"  href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script th:src="@{/js/main.js}" src="../js/main.js"></script>
+</head>
+<body>
+    <div class="wrap">
+        <header class="header header_border">
+            <div class="sub_header sub_header_admin h_con">
+                <h1 class="logo">
+                    <a href="../index.html"><img src="../img/logo.png" alt=""></a>
+                    <span>관리자 페이지</span>
+                </h1>
+                <ul class="admin_wrap">
+                    <li>
+                        <a href="#" class="admin_img">
+                            <img src="../img/main_user_icon_p.png" alt="">
+                        </a>
+                        <div class="admin_name">
+                            <p><span>0 0 0</span>님</p>
+                        </div>
+                    </li>
+                    <li class="admin_logout clearfix">
+                        <a href="#">로그아웃</a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+
+        <div class="section_wrap">
+            <div class="admin_left">
+                <ul class="admin_menu">
+                    <li>
+                        <a href="#">회원관리</a>
+                        <ul class="admin_sub">
+                            <li>
+                                <a href="./admin.html">회원 목록 조회</a>
+                            </li>
+                            <li>
+                                <a href="./admin02.html">관리자 목록 조회</a>
+                            </li>
+                            <li>
+                                <a href="./admin03.html">회원 그룹별 조회</a>
+                            </li>
+                            <li>
+                                <a href="./admin04.html">회원가입 추이</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">상품관리</a>
+                        <ul class="admin_sub">
+                            <li>
+                                <a href="./admin05.html">상품 등록 수</a>
+                            </li>
+                            <li>
+                                <a href="./admin06.html">거래 완료 비율</a>
+                            </li>
+                            <li>
+                                <a href="./admin07.html">카테고리 관리</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="active">
+                        <a href="#">광고관리</a>
+                        <ul class="admin_sub">
+                            <li class="active">
+                                <a href="./admin08.html">광고관리</a>
+                            </li>
+                            <li>
+                                <a href="./admin09.html">광고등록</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">공지사항</a>
+                        <ul class="admin_sub">
+                            <li>
+                                <a href="./admin10.html">공지사항</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="admin_right">
+                <h3 class="h_fs_26">광고등록</h3>
+                <form action="" name="register" class="admin09_register">
+                    <div>
+                        <span>제목</span>
+                        <input type="text" placeholder="제목을 입력하세요.">
+                    </div>
+
+                    <div class="admin09_register_file">
+                        <span>광고이미지 사진 등록</span>
+                        <input type="text" disabled class="file_name_only">
+                        <input id="file_upload" class="admin09_fileupload" type="file" placeholder="이미지 이름이 나타납니다.">
+                        <label for="file_upload" class="admin09_fileupload_label">파일 불러오기</label>
+                    </div>
+
+                    <div>
+                        <span>광고 연결 주소</span>
+                        <input type="url" placeholder="URL을 입력해주세요.">
+                    </div>
+
+                    <div class="admin09_register_date">
+                        <div>
+                            <span>시작 일자</span>
+                            <input type="date">
+                        </div>
+
+                        <div>
+                            <span>종료 일자</span>
+                            <input type="date">
+                        </div>
+                    </div>
+
+                    <ul class="adm08_btn_box adm09_btn_box">
+                        <li class="on">
+                            <a href="#void" class="confrim_btn">수정완료</a>
+                        </li>
+                        <li>
+                            <a href="./admin08.html" class="list_btn">취소</a>
+                        </li>
+                    </ul>
+                </form>
+                
+
+                <script>
+                    $(function(){
+                        var fileTarget = $('.admin09_fileupload'); 
+                        fileTarget.on('change', function(){ // 값이 변경되면
+                            if(window.FileReader){ // modern browser 
+                                var filename = $(this)[0].files[0].name; 
+                            } else { // old IE 
+                                var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
+                            } 
+                            // 추출한 파일명 삽입 
+                            $(this).siblings('.file_name_only').val(filename); 
+                        }); 
+                    });
+                </script>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</body>
+</html>

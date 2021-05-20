@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.admin.notice.NoticeMapper">
+    <insert id="insertNotice" useGeneratedKeys="true" keyProperty="noticeId">
+        insert into notice(user_id
+                        ,title
+                        ,content
+                        ,created_date
+                        ,modified_date
+                        ,notice_status)
+        values (#{noticeDto.userId},
+                #{noticeDto.title},
+                #{noticeDto.content},
+                #{noticeDto.createdDate},
+                #{noticeDto.modifiedDate},
+                #{noticeDto.noticeStatus})
+    </insert>
+
+    <select id="selectByPaging" resultType="NoticeReturnDto">
+        select n.notice_id as noticeId,
+               u.account_id as accountId,
+               n.title,
+               n.content,
+               n.created_date as createdDate,
+               n.modified_date as modifiedDate,
+               n.notice_status as noticeStatus
+        from notice n
+            inner join users u
+            on n.user_id = u.user_id
+        order by ${cri.sortingColumn} ${cri.requestOrder}
+        limit #{cri.contentPerPage} offset #{cri.pageStart};
+    </select>
+    <select id="countTable" resultType="long">
+        select count(notice_id)
+        from notice
+    </select>
+    <delete id="deleteNotice">
+        delete from NOTICE
+        where notice_id=#{noticeId}
+    </delete>
+    <select id="selectNotice" resultType="NoticeReturnDto">
+        select n.notice_id as noticeId,
+               u.account_id as accountId,
+               n.title,
+               n.content,
+               n.created_date as createdDate,
+               n.modified_date as modifiedDate,
+               n.notice_status as noticeStatus
+
+        from notice n
+                 inner join users u
+                            on n.user_id = u.user_id
+        where notice_id=#{noticeId}
+    </select>
+    <update id="updateNotice">
+        update notice
+        set title = #{noticeDto.title},
+            content = #{noticeDto.content},
+            modified_date = #{noticeDto.modifiedDate}
+        where notice_id=#{noticeDto.noticeId}
+    </update>
+    <update id="updateStatus" parameterType="NoticeStatusDto">
+        update notice
+        set notice_status = #{noticeStatus}
+        where notice_id= #{noticeId}
+    </update>
+</mapper>

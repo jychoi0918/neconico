@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 @Component
 @RequiredArgsConstructor
 public class MailHandler {
+
     private final JavaMailSender sender;
     private MimeMessage message;
     private MimeMessageHelper messageHelper;

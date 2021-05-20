@@ -1,6 +1,7 @@
 package com.neconico.neconico.paging;
 
 
+import com.neconico.neconico.paging.Criteria;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,11 +18,11 @@ public class Pagination {
     private int endPage;        //(현재 페이지 기준으로 보이는) 끝 페이지 (예: << 6 7 8 9 10 >> 일 경우 10)
     private boolean hasNext;    //다음페이지 유무
     private boolean hasPrev;    //이전 페이지 유무
-    private int totalContent;   //전체 게시글
+    private long totalContent;   //전체 게시글
     private Criteria criteria;  //(현재 페이지 & 한 페이지에 보이는 게시글 수)
 
     //totalContent는 Mapper에서  int countTable() 을 통해 받는다.
-    public Pagination(Criteria criteria, int totalContent, int pageSize) {
+    public Pagination(Criteria criteria, long totalContent, int pageSize) {
         this.criteria = criteria;
         this.totalContent = totalContent;
         this.pageSize = pageSize;

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내꼬니꼬</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/xeicon.min.css}" href="../css/xeicon.min.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h_reset.css}" href="../css/h_reset.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h_style.css}" href="../css/h_style.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/h_sub.css}" href="../css/h_sub.css">
+    <link rel="stylesheet"  href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script th:src="@{/js/main.js}" src="../js/main.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <header class="header header_border">
+        <div class="sub_header sub_header_admin h_con">
+            <h1 class="logo">
+                <a href="../../../../../../../neconico_file/html/index.html"><img src="../img/logo.png" alt=""></a>
+                <span>관리자 페이지</span>
+            </h1>
+            <ul class="admin_wrap">
+                <li>
+                    <a href="#" class="admin_img">
+                        <img src="../img/main_user_icon_p.png" alt="">
+                    </a>
+                    <div class="admin_name">
+                        <p><span>0 0 0</span>님</p>
+                    </div>
+                </li>
+                <li class="admin_logout clearfix">
+                    <a href="#">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <div class="section_wrap">
+        <div class="admin_left">
+            <ul class="admin_menu">
+                <li>
+                    <a href="#">회원관리</a>
+                    <ul class="admin_sub">
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin.html">회원 목록 조회</a>
+                        </li>
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin02.html">관리자 목록 조회</a>
+                        </li>
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin03.html">회원 그룹별 조회</a>
+                        </li>
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin04.html">회원가입 추이</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">상품관리</a>
+                    <ul class="admin_sub">
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin05.html">상품 등록 수</a>
+                        </li>
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin06.html">거래 완료 비율</a>
+                        </li>
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin07.html">카테고리 관리</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">광고관리</a>
+                    <ul class="admin_sub">
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin08.html">광고관리</a>
+                        </li>
+                        <li>
+                            <a href="../../../../../../../neconico_file/html/page/admin09.html">광고등록</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="active">
+                    <a th:href="@{/admin/notices}">공지사항</a>
+                    <ul class="admin_sub">
+                        <li class="active">
+                            <a th:href="@{/admin/notices}">공지사항</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="admin_right">
+            <h3 class="h_fs_26">공지사항</h3>
+
+            <form action="" class="adm_notice_write" name="adm_notice_write" method="post">
+                <input type="text" name="title" placeholder="제목" th:value="${notice.title}">
+                <textarea name="content"  cols="30" rows="10" placeholder="공지사항 내용을 적어주세요." th:text="${notice.content}"></textarea>
+
+                <ul class="adm08_btn_box adm09_btn_box">
+                    <li class="on">
+                        <a href="#" class="confirm_btn" onclick="submit_form()">등록</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/notice}" class="list_btn">목록</a>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function submit_form() {
+        let title = document.forms["adm_notice_write"]["title"].value;
+        let content = document.forms["adm_notice_write"]["content"].value;
+
+        if (title.trim() == "" || content.trim() == "") {
+            alert("빈칸을 채워 주세요");
+            return false;
+        } else {
+            let submit_btn = document.getElementsByName('adm_notice_write');
+            submit_btn[0].submit();
+            submit_btn[1].submit();
+            /*왜 안뜨지?*/
+            alert("등록완료!");
+
+        }
+    }
+</script>
+</body>
+</html>
