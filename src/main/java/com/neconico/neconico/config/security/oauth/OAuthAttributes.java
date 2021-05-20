@@ -67,7 +67,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
-                .picture("")
+                .picture((String) response.get("profile_image"))
                 .gender((String) response.get("gender"))
                 .attributes(response)
                 .phoneNumber((String) response.get("mobile"))
@@ -80,9 +80,9 @@ public class OAuthAttributes {
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .picture((String) attributes.get("picture"))
-                .gender("M")
+                .gender("U")
                 .attributes(attributes)
-                .phoneNumber("구글로그인")
+                .phoneNumber(null)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
@@ -90,5 +90,25 @@ public class OAuthAttributes {
     private String extractAccountId(String email) {
         int index = email.indexOf("@");
         return email.substring(0, index);
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
+    public void changePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void changeGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void changePicture(String picture) {
+        this.picture = picture;
     }
 }

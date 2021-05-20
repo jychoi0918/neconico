@@ -3,10 +3,16 @@ $(function(){
 
 
 	//main menu event
-	$('.nav_btn').click(function(){
-		$('.main_menu').stop().slideToggle();
-		$(this).toggleClass('on');
+	$('.nav_btn').mouseover(function(){
+		$('.main_menu').stop().slideDown();
+		$(this).addClass('on');
 	});
+
+	$('nav').mouseleave(function(){
+		$('.main_menu').stop().slideUp();
+		$('.nav_btn').removeClass('on');
+	});
+
 
 	$('.main_menu > li').hover(function(){
 		$('.main_menu > li').find('.sub_menu').stop().fadeOut(500);

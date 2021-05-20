@@ -13,7 +13,7 @@ const checkDuplicate = () => {
         return;
     }
 
-    if(accountId.hasAttribute("disabled")) {
+    if(accountId.hasAttribute("readonly")) {
         return;
     }
 
@@ -21,7 +21,7 @@ const checkDuplicate = () => {
         if(this.readyState === 4 && this.status === 200) {
             if(this.responseText === null || this.responseText === '') {
                 if(confirm('사용가능한 아이디 입니다' + '\n' +'사용하시겠습니까?') == true) {
-                    accountId.setAttribute('disabled', "true");
+                    accountId.setAttribute('readonly', "true");
                 }
                 duplicateCheck.value = true;
             }else{
@@ -125,11 +125,11 @@ const checkPassWord = () => {
         if(pw.value === pwConfirm.value) {
             check.innerText = '비밀번호가 일치합니다.';
             check.style.color = '#7429ff';
-            passwordCheck.value = true;
+            passwordCheck.value = "true";
             return;
         }
         check.innerText = '비밀번호가 일치하지 않습니다.'
-        passwordCheck.value = false;
+        passwordCheck.value = "false";
         check.style.color = 'RED';
     }
 }

@@ -4,8 +4,8 @@
   <div class="pc_header">
     <div class="header_top">
       <ul class="h_con">
-        <li class="h_fs_12 h_fw_5">
-          <a th:href="@{/admin}">관리자</a>
+        <li th:unless="${session.sessionUser == null}" class="h_fs_12 h_fw_5">
+          <a th:if="${session.sessionUser.authority.equals('ROLE_ADMIN')}" th:href="@{/admin}">관리자</a>
         </li>
         <li class="h_fs_12 h_fw_5" th:if="${session.sessionUser == null}">
           <a th:href="@{/login}">로그인/회원가입</a>
@@ -29,7 +29,7 @@
                 id="header_search"
                 placeholder="상품명,지역명 검색"
         />
-        <a href="#"><img src="/img/search_p.png" alt="" /></a>
+        <a href="#"><img src="/img/search_p.png"  alt="" /></a>
       </div>
       <ul class="user">
         <li class="h_fs_14">

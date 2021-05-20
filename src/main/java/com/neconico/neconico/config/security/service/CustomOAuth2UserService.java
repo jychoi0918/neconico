@@ -8,6 +8,7 @@ import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
+import com.neconico.neconico.service.email.certgenerator.GenerateCertCharacter;
 import com.neconico.neconico.service.store.provider.StoreInfoMaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,7 @@ import java.util.Collections;
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserMapper userMapper;
     private final StoreInfoMapper storeInfoMapper;
+    private final GenerateCertCharacter generateCertCharacter;
     private final HttpSession httpSession;
     private final PasswordEncoder passwordEncoder;
 
@@ -58,8 +60,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private SessionUser saveOrUpdate(OAuthAttributes attributes) {
-        UserInfoDto userInfoDto = userMapper.selectUserByEmail(attributes.getEmail());
+        changeNullToGenerateParam(attributes);
 
+        UserInfoDto userInfoDto = userMapper.selectUserByEmail(attributes.getEmail());
+        
         if(userInfoDto == null) {
             UserJoinDto userJoinDto = attributes.createUserJoinDto();
             userJoinDto.setAccountPw(passwordEncoder.encode(userJoinDto.getAccountPw()));
@@ -79,6 +83,32 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         return createSessionUser(userInfoDto);
     }
+
+    private void changeNullToGenerateParam(OAuthAttributes attributes) {
+        generateCertCharacter.setNumberLength(5);
+        String generateNumber = generateCertCharacter.executeGenerate();
+
+        if(attributes.getName() == null) {
+            attributes.changeName(generateNumber);
+        }
+
+        if(attributes.getEmail() == null) {
+            attributes.changeEmail(generateNumber + "@");
+        }
+
+        if(attributes.getGender() == null) {
+            attributes.changeGender("U");
+        }
+
+        if(attributes.getPhoneNumber() == null){
+            attributes.changePhoneNumber("OAUTH" + generateNumber);
+        }
+
+        if(attributes.getPicture() == null) {
+            attributes.changePicture("");
+        }
+    }
+    
 
     private SessionUser createSessionUser(UserJoinDto userJoinDto) {
         return SessionUser.builder()
