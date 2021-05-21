@@ -1,5 +1,7 @@
 package com.neconico.neconico.restcontroller.users;
 
+import com.neconico.neconico.config.web.LoginUser;
+import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.service.email.EmailService;
 import com.neconico.neconico.service.users.UserService;
@@ -7,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,4 +44,10 @@ public class UsersRestController {
         emailService.deleteAuthorNumber(emailId);
     }
 
+    //아이템 등록시 내 주소 검색
+    @GetMapping("/user/find/address")
+    public ResponseEntity<UserInfoDto> findUserAddress(@LoginUser SessionUser sessionUser) {
+        UserInfoDto userInfoDto = userService.findUserByAccountId(sessionUser.getAccountId());
+        return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
+    }
 }

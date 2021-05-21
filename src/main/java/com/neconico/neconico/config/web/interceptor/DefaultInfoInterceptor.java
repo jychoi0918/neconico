@@ -28,7 +28,7 @@ public class DefaultInfoInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        //자동로그인 정보 등록록
+        //자동로그인 정보 등록
        if(authentication instanceof RememberMeAuthenticationToken) {
             if(session.getAttribute("sessionUser") == null) {
                 UserInfoDto userInfoDto = userService.findUserByAccountId(authentication.getName());

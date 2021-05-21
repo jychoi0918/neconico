@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,6 +40,8 @@ public class DefaultItemService implements ItemService{
         itemInfoDto.setCategorySubId(subId);
         itemInfoDto.setItemImgUrls(fileResultInfoDto.getFileUrls());
         itemInfoDto.setImgFileNames(fileResultInfoDto.getFileNames());
+        itemInfoDto.setCreatedDate(LocalDateTime.now());
+        itemInfoDto.setModifiedDate(LocalDateTime.now());
         itemMapper.insertItems(itemInfoDto);
 
         return itemInfoDto.getItemId();
