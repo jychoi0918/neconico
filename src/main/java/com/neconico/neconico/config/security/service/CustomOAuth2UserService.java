@@ -93,7 +93,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         if(attributes.getEmail() == null) {
-            attributes.changeEmail(generateNumber + "@");
+            attributes.changeEmail(attributes.getUniqueId() + "@");
         }
 
         if(attributes.getGender() == null) {

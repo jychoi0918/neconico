@@ -12,40 +12,51 @@ import java.util.UUID;
 @Getter
 public class OAuthAttributes {
     private Map<String, Object> attributes;
+    private String registrationId;
     private String nameAttributeKey;
     private String name;
     private String email;
     private String phoneNumber;
     private String gender;
     private String picture;
+    private String uniqueId; //NAVER 이용 시 해당 유저 고유식별 ID
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes,
-                           String nameAttributeKey, String name, String email,
-                           String phoneNumber, String gender, String picture) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey,
+                           String registrationId, String name, String email, String phoneNumber,
+                           String gender, String picture, String uniqueId) {
         this.attributes = attributes;
+        this.registrationId = registrationId;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.picture = picture;
+        this.uniqueId = uniqueId;
 
     }
 
     public static OAuthAttributes of(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         if(registrationId.equals("naver")) {
-            return ofNaver("id", attributes);
+            return ofNaver(registrationId, "id", attributes);
         }
-        return ofGoogle(userNameAttributeName, attributes);
+        return ofGoogle(registrationId, userNameAttributeName, attributes);
     }
 
 
 
     public UserJoinDto createUserJoinDto() {
+        String accountId = "";
+
+        if(registrationId.equals("naver")) {
+            accountId = extractAccountId(email) + "N";
+        }else {
+            accountId = extractAccountId(email) + "G";
+        }
 
         UserJoinDto userJoinDto = new UserJoinDto();
-        userJoinDto.setAccountId(extractAccountId(email));
+        userJoinDto.setAccountId(accountId);
         userJoinDto.setAccountPw(email + UUID.randomUUID());
         userJoinDto.setAccountName(name);
         userJoinDto.setGender(gender);
@@ -62,7 +73,7 @@ public class OAuthAttributes {
         return userJoinDto;
     }
 
-    private static OAuthAttributes ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+    private static OAuthAttributes ofNaver(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
         return OAuthAttributes.builder()
                 .name((String) response.get("name"))
@@ -71,10 +82,12 @@ public class OAuthAttributes {
                 .gender((String) response.get("gender"))
                 .attributes(response)
                 .phoneNumber((String) response.get("mobile"))
+                .uniqueId((String) response.get("id"))
+                .registrationId(registrationId)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
-    public static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
+    public static OAuthAttributes ofGoogle(String registrationId, String userNameAttributeName, Map<String, Object> attributes) {
 
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
@@ -83,6 +96,8 @@ public class OAuthAttributes {
                 .gender("U")
                 .attributes(attributes)
                 .phoneNumber(null)
+                .uniqueId(null)
+                .registrationId(registrationId)
                 .nameAttributeKey(userNameAttributeName)
                 .build();
     }
