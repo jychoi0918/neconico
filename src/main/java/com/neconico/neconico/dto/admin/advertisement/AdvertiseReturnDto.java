@@ -19,8 +19,8 @@ public class AdvertiseReturnDto {
     private long advertisementId;
     private String accountId;
     private String title;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String startDate;
+    private String endDate;
     private String adImgUrl;
     private String url;
     private String imgFileName;

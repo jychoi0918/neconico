@@ -1,10 +1,9 @@
 package com.neconico.neconico.mapper.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
 import com.neconico.neconico.paging.Criteria;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -13,12 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -75,14 +72,14 @@ class AdvertiseMapperTest {
 
         long countBefore = advertiseMapper.countTable();
 
-        AdvertiseDto ad = new AdvertiseDto();
+        AdvertiseInfoDto ad = new AdvertiseInfoDto();
         ad.setUserId(5L);
         ad.setTitle("광고");
         ad.setUrl("www.ggomi.is.love");
         ad.setAdImgUrl("C://adImg");
         ad.setImgFileName("광고사진");
-        ad.setStartDate(LocalDateTime.now());
-        ad.setEndDate(LocalDateTime.of(2021,10,20,18,0));
+        ad.setStartDate("2021-10-20");
+        ad.setEndDate("2021-10-20");
         ad.setAdStatus("숨김");
 
           //when
@@ -132,14 +129,14 @@ class AdvertiseMapperTest {
 
           //given
         Long advertiseId = 3L;
-        AdvertiseDto ad = new AdvertiseDto();
+        AdvertiseInfoDto ad = new AdvertiseInfoDto();
         ad.setAdvertisementId(advertiseId);
         ad.setTitle("광고 수정");
         ad.setUrl("www.gg.is.love");
         ad.setAdImgUrl("C://adImg");
         ad.setImgFileName("광고사진");
-        ad.setStartDate(LocalDateTime.now());
-        ad.setEndDate(LocalDateTime.of(2021,10,20,18,0));
+        ad.setStartDate("2021-10-20");
+        ad.setEndDate("2021-10-20");
         ad.setAdStatus("숨김");
 
         //when

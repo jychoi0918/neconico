@@ -2,7 +2,7 @@ package com.neconico.neconico.mapper.admin.advertisement;
 
 
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
 import com.neconico.neconico.paging.Criteria;
@@ -22,11 +22,11 @@ public interface AdvertiseMapper {
 
     Long countTable();
 
-    void insertAd(AdvertiseDto adDto);
+    void insertAd(AdvertiseInfoDto adDto);
 
     void deleteAd(long advertiseId);
 
-    void updateAd(AdvertiseDto advertiseDto);
+    void updateAd(AdvertiseInfoDto advertiseInfoDto);
 
     void updateStatus(AdvertiseStatusDto advertiseStatusDto);
 }

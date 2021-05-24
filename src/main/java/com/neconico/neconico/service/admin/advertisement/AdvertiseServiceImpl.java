@@ -1,6 +1,6 @@
 package com.neconico.neconico.service.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
@@ -58,18 +58,33 @@ public class AdvertiseServiceImpl implements AdvertiseService {
     //광고 등록
     @Override
     @Transactional
-    public void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseDto advertiseDto) {
+    public void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) {
 
-        advertiseDto.setAdStatus("숨김");
-        adMapper.insertAd(setAdvertiseDto(fileResultInfoDto,advertiseDto));
+        advertiseInfoDto.setAdStatus("숨김");
+        adMapper.insertAd(setAdvertiseDto(fileResultInfoDto, advertiseInfoDto));
     }
 
-    private AdvertiseDto setAdvertiseDto(FileResultInfoDto fileResultInfoDto, AdvertiseDto advertiseDto) {
+    //만일 같은 사진일때
+    @Override
+    @Transactional
+    public void updateAdSamePicture(AdvertiseInfoDto advertiseInfoDto) {
+        System.out.println("================================================");
+        System.out.println("같은사진일때");
+        adMapper.updateAd(advertiseInfoDto);
 
-        advertiseDto.setAdImgUrl(fileResultInfoDto.getFileUrls());
-        advertiseDto.setImgFileName(fileResultInfoDto.getFileNames());
-        return advertiseDto;
     }
+
+    @Override
+    @Transactional
+    public void updateAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) {
+
+
+        adMapper.updateAd(setAdvertiseDto(fileResultInfoDto,advertiseInfoDto));
+
+    }
+
+
+
 
 
 
@@ -83,6 +98,9 @@ public class AdvertiseServiceImpl implements AdvertiseService {
 
 
 
+
+
+
     private Criteria setCriteria(Criteria cri) {
         cri.setSortingColumn("advertisementId");
         cri.setRequestOrder("desc");
@@ -92,5 +110,12 @@ public class AdvertiseServiceImpl implements AdvertiseService {
             cri.setCurrentPage(1);
 
         return cri;
+    }
+
+    private AdvertiseInfoDto setAdvertiseDto(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) {
+
+        advertiseInfoDto.setAdImgUrl(fileResultInfoDto.getFileUrls());
+        advertiseInfoDto.setImgFileName(fileResultInfoDto.getFileNames());
+        return advertiseInfoDto;
     }
 }

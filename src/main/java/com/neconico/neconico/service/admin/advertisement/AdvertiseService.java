@@ -1,6 +1,6 @@
 package com.neconico.neconico.service.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
@@ -18,9 +18,16 @@ public interface AdvertiseService {
     AdvertiseReturnDto selectAd(Long noticeId);
 
     //insert
-    void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseDto advertiseDto) throws Exception;
+    void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) throws Exception;
+
 
     void deleteAd(Long noticeId);
+
+
+
+    void updateAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto);
+
+    void updateAdSamePicture(AdvertiseInfoDto advertiseInfoDto);
 
     void updateStatus(AdvertiseStatusDto advertiseStatusDto);
 

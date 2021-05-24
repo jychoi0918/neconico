@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @ToString
 @NoArgsConstructor
-@Alias("AdvertiseDto")
-public class AdvertiseDto{
+@Alias("AdvertiseInfoDto")
+public class AdvertiseInfoDto {
 
     private long advertisementId;
     private long userId;
     private String title;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private String startDate;
+    private String endDate;
     private String adImgUrl;
     private String url;
     private String imgFileName;

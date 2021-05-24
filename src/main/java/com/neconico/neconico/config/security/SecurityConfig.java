@@ -52,10 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/store/mystore").hasRole("USER")
                 .antMatchers("/item/new", "/item/**/edit", "/item/**/delete").hasAnyRole("USER", "ADMIN")
-                .antMatchers("/", "/login*", "/user/**", "/item/**", "/notice/**", "/store/**").permitAll()
+                .antMatchers("/admin/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //로그인

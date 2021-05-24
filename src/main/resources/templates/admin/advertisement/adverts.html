@@ -80,7 +80,7 @@
                                 <a href="./admin08.html">광고관리</a>
                             </li>
                             <li>
-                                <a th:href="@{/admin/ad/add}">광고등록</a>
+                                <a th:href="@{/admin/advert/add}">광고등록</a>
                             </li>
                         </ul>
                     </li>
@@ -99,7 +99,7 @@
                 <h3 class="h_fs_26">광고관리</h3>
                 <div class="table adm08_table">
                     <div class="adm08_reg_btn">
-                        <a th:href="@{/admin/ad/add}">등록</a>
+                        <a th:href="@{/admin/advert/add}">등록</a>
                     </div>
                     <table>
                         <colgroup>
@@ -121,12 +121,12 @@
                         
                         <tr th:each="ad:${adList}">
                             <td th:text="${ad.advertisementId}">1</td>
-                            <td><a th:href="@{/admin/ad/{advertiseId}(advertiseId=${ad.advertisementId})}" th:text="${ad.title}">광고제목이 나타납니다.</a></td>
+                            <td><a th:href="@{/admin/advert/{advertiseId}(advertiseId=${ad.advertisementId})}" th:text="${ad.title}">광고제목이 나타납니다.</a></td>
                             <td th:text="${ad.accountId}">홍길동</td>
                             <td th:text="${ad.startDate}">2021.05.01</td>
                             <td th:text="${ad.endDate}">2021.05.30</td>
                             <!--내가 다른 함수를 써서 사용하면 될까?-->
-                            <td><a style="cursor: pointer" onclick="updateAdStatus(this)">광고중</a></td>
+                            <td><a class="" th:class="${ad.adStatus.equals('광고중')} ? changeStatus: ''" id="status" th:text="${ad.adStatus}" style="cursor: pointer" onclick="updateAdStatus(this)">광고중</a></td>
                         </tr>
                     </table>
 
@@ -134,13 +134,13 @@
                     <div class="pagination" th:if="${pageMaker.totalContent}!=0">
                         <ul>
                             <li th:unless="${pageMaker.criteria.currentPage}==1">
-                                <a class="page_prev" th:href="@{/admin/ads(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
+                                <a class="page_prev" th:href="@{/admin/adverts(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
                             </li >
                             <li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                                <a class="" th:href="@{/admin/ads(currentPage=${idx})}" th:text="${idx}" th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
+                                <a class="" th:href="@{/admin/adverts(currentPage=${idx})}" th:text="${idx}" th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
                             </li>
                             <li th:if="${pageMaker.hasNext}">
-                                <a class="page_next" th:href="@{/admin/ads(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
+                                <a class="page_next" th:href="@{/admin/adverts(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
                             </li>
                         </ul>
                     </div>
@@ -149,14 +149,25 @@
         </div>
     </div>
 <script>
+    <!-- 광고 공개/숨김 표시    -->
     function updateAdStatus(obj) {
         let request = new XMLHttpRequest()
         let adId = obj.parentElement.parentElement.firstElementChild.innerHTML;
         let adStatus = obj.innerText;
 
+
         adStatus = (adStatus == "숨김" ? "광고중" : "숨김");
 
-        if (confirm(adStatus + "로 바꾸시겠습니까?") == true) {
+        if (confirm(adStatus +"상태를 바꾸시겠습니까?") == true) {
+
+            if(adStatus=="광고중"){
+                obj.classList.add('changeStatus');
+            }else{
+                obj.classList.remove('changeStatus');
+            }
+
+
+
             let content = new Object();
             content.advertisementId = adId;
             content.adStatus = adStatus;
@@ -171,9 +182,11 @@
                     obj.innerText = adStatus;
             }
 
-            request.open("put","/admin/ad/status");
+            request.open("put","/admin/advert/status");
             request.setRequestHeader("Content-type", "application/json");
             request.send(jsonContent);
+
+
         }else{
             return false;
         }

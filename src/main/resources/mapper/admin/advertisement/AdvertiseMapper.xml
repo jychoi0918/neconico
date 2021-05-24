@@ -54,7 +54,7 @@
         on u.user_id = a.user_id
             where advertisement_id = #{advertisement}
     </select>
-    <insert id="insertAd" parameterType="AdvertiseDto"  useGeneratedKeys="true" keyProperty="advertisementId">
+    <insert id="insertAd" parameterType="AdvertiseInfoDto" useGeneratedKeys="true" keyProperty="advertisementId">
         insert into advertisement(user_id,
                                   title,
                                   start_date,
@@ -76,15 +76,17 @@
         delete from advertisement
         where advertisement_id=#{advertisementId}
     </delete>
-    <update id="updateAd" parameterType="AdvertiseDto">
+    <update id="updateAd" parameterType="AdvertiseInfoDto">
         update advertisement
         set title = #{title},
             start_date = #{startDate},
             end_date = #{endDate},
-            ad_img_urls = #{adImgUrl},
-            url = #{url},
-            img_file_names = #{imgFileName},
-            ad_status = #{adStatus}
+            url = #{url}
+            <if test="adImgUrl != null">
+            , ad_img_urls = #{adImgUrl},
+            img_file_names = #{imgFileName}
+            </if>
+
         where advertisement_id = #{advertisementId}
     </update>
     <update id="updateStatus" parameterType="AdStatusDto">
@@ -94,5 +96,5 @@
     </update>
 
 
-    
+
 </mapper>

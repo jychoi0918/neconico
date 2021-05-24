@@ -128,7 +128,7 @@
                             <td th:text="${notice.accountId}">홍길동</td>
                             <td th:text="${notice.createdDate}">2021.05.01</td>
                             <td th:text="${notice.compareDate} ? '-' : ${notice.modifiedDate}">2021.05.30</td>
-                            <td><a style="cursor: pointer"  th:text="${notice.noticeStatus}" onclick="updateStatus(this)">숨김</a></td>
+                            <td><a style="cursor: pointer" th:class="${notice.noticeStatus.equals('공개')}? changeStatus:''" th:text="${notice.noticeStatus}" onclick="updateStatus(this)">숨김</a></td>
                         </tr>
 
                     </table>
@@ -159,8 +159,10 @@
 
         if(noticeStatus=="숨김"){
             noticeStatus="공개"
+            obj.classList.add('changeStatus');
         }else{
             noticeStatus="숨김"
+            obj.classList.remove('changeStatus');
         }
 
         let content = new Object();

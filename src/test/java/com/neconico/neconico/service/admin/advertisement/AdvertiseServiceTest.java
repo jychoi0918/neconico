@@ -1,16 +1,13 @@
 package com.neconico.neconico.service.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
-import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.paging.Criteria;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
