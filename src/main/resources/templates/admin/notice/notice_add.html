@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header :: header"/>
+<body>
+    <div class="wrap">
+    <header class="header" th:replace="fragment/admin_body_header::admin_body_header"/>
+        <div class="section_wrap">
+            <div class="admin_left" th:replace="fragment/admin_menu :: admin_menu"/>
+
+            <div class="admin_right">
+                <h3 class="h_fs_26">공지사항</h3>
+
+                <form th:action class="adm_notice_write" name="adm_notice_write" method="post">
+                    <input type="text" name="title" placeholder="제목">
+                    <textarea name="content" cols="30" rows="10" placeholder="공지사항 내용을 적어주세요."></textarea>
+
+                    <ul class="adm08_btn_box adm09_btn_box">
+                        <li class="on">
+                            <a href="#" class="confirm_btn" onclick="submit_form()">등록</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/admin/notices}" class="list_btn">목록</a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript">
+        function submit_form() {
+            let title = document.forms["adm_notice_write"]["title"].value;
+            let content = document.forms["adm_notice_write"]["content"].value;
+
+            if (title.trim() == "" || content.trim() == "") {
+                alert("빈칸을 채워 주세요");
+                return false;
+            } else {
+                let submit_btn = document.getElementsByName('adm_notice_write');
+                alert("등록완료!");
+
+                submit_btn[0].submit();
+                submit_btn[1].submit();
+
+            }
+        }
+    </script>
+</body>
+</html>

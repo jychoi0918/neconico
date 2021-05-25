@@ -2,7 +2,6 @@ package com.neconico.neconico.controller.admin.notice;
 
 
 import com.neconico.neconico.dto.admin.notice.NoticeDto;
-import com.neconico.neconico.dto.admin.notice.NoticeReturnDto;
 import com.neconico.neconico.dto.admin.notice.NoticeStatusDto;
 import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.paging.Criteria;
@@ -10,7 +9,6 @@ import com.neconico.neconico.paging.Pagination;
 import com.neconico.neconico.service.admin.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +25,13 @@ public class NoticeController {
 
 
 
-    @GetMapping("/notices")//리스트 가져오기
+    @GetMapping("/notice/list")//리스트 가져오기
     public String list(Model model, Criteria cri) {
 
         model.addAttribute("notices", noticeService.selectAllNotices(cri));
         model.addAttribute("pageMaker", new Pagination(cri, noticeService.countTable(), 3));
 
-        return "admin/notice/notices";
+        return "admin/notice/notice_list";
     }
 
 
@@ -48,7 +46,7 @@ public class NoticeController {
         model.addAttribute("notice", NoticeViewDto);
 
 
-        return "admin/notice/notice";
+        return "admin/notice/notice_detail";
 
     }
 
@@ -57,7 +55,7 @@ public class NoticeController {
     //등록보기
     @GetMapping("/notice/add")
     public String addForm() {
-        return "admin/notice/noticeAdd";
+        return "admin/notice/notice_add";
     }
 
 
@@ -75,7 +73,7 @@ public class NoticeController {
         notice.setUserId(sessionUserId);
         noticeService.insertNotice(notice);
         
-        return "redirect:/admin/notices";
+        return "redirect:/admin/notice/list";
     }
 
 
@@ -83,20 +81,20 @@ public class NoticeController {
 
 
     //수정하기 폼
-    @GetMapping("/notice/{noticeId}/edit")
+    @GetMapping("/notice/edit/{noticeId}")
     public String editNoticeForm(@PathVariable Long noticeId, Model model) {
 
         NoticeViewDto NoticeViewDto = noticeService.selectNotice(noticeId);
         model.addAttribute("notice", NoticeViewDto);
 
-        return "admin/notice/noticeEdit";
+        return "admin/notice/notice_edit";
     }
 
 
 
 
 
-    @PostMapping("/notice/{noticeId}/edit")
+    @PostMapping("/notice/edit/{noticeId}")
     public String editNotice(@PathVariable Long noticeId, @ModelAttribute NoticeDto noticeDto) {
 
         noticeService.updateNotice(noticeId,noticeDto);
@@ -108,12 +106,12 @@ public class NoticeController {
 
 
 
-    @PostMapping("/notice/{noticeId}/delete")
+    @PostMapping("/notice/delete/{noticeId}")
     public String delete(@PathVariable Long noticeId){
 
         noticeService.deleteNotice(noticeId);
 
-        return "redirect:/admin/notices";
+        return "redirect:/admin/notice/list";
     }
 
 

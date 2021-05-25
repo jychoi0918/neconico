@@ -33,6 +33,7 @@ public class AdvertiseController {
     private long SessionUser = 3L;
 
 
+    //광고 리스트 출력
     @GetMapping("/adverts")
     public String adList(@ModelAttribute("cri")Criteria cri, Model model){
 
@@ -49,6 +50,22 @@ public class AdvertiseController {
 
 
 
+
+    //상태 변경 : AJAX로 데이터 변경
+    @PutMapping("/advert/status")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void updateStatus(@RequestBody AdvertiseStatusDto advertiseStatusDto){
+        adService.updateStatus(advertiseStatusDto);
+
+    }
+
+
+
+
+
+
+    //상세 광고 출력
     @GetMapping("/advert/{advertiseId}")
     public String adDetail(@PathVariable long advertiseId,Model model){
 
@@ -63,60 +80,42 @@ public class AdvertiseController {
 
 
 
-    @PutMapping("/advert/status")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public void updateStatus(@RequestBody AdvertiseStatusDto advertiseStatusDto){
-        adService.updateStatus(advertiseStatusDto);
-        System.out.println("advertiseStatusDto.toString() = " + advertiseStatusDto.toString());
 
-    }
-
-
-
-
-    //등록 폼 가져오기
+    //등록 폼 출력
     @GetMapping("/advert/add")
     public String addAdForm(Model model){
 
-
         model.addAttribute("advertiseDto", new AdvertiseInfoDto());
-        return "admin/advertisement/advert_register";
+
+        return "advert_add";
     }
 
 
 
 
-    //등록
+    //등록 데이터 전송
     @PostMapping("/advert/add")
     public String addAd(@RequestParam("imgFile")MultipartFile multipartFile,
                         @ModelAttribute AdvertiseInfoDto advertiseInfoDto) throws Exception{
+
         advertiseInfoDto.setUserId(SessionUser);
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("multi="+multipartFile );
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
 
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
-
         FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFile);
-
         adService.insertAd(fileResultInfoDto, advertiseInfoDto);
-
-
 
 
         return "redirect:/admin/adverts";
     }
 
 
+
+
     //삭제하기
     @PostMapping("/advert/delete")
     public String deleteAd(@RequestParam(value = "advertisementId",required = false) String advertisementId,
                            @RequestParam(value = "imgFileName",required = false) String imgFileName) throws IllegalArgumentException{
-
-        System.out.println("=========================================================");
-        System.out.println("adID = "+advertisementId+"img="+ imgFileName);
-
 
 
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
@@ -128,8 +127,10 @@ public class AdvertiseController {
     }
 
 
-    //수정하기
 
+
+
+    //수정하기 폼 출력
     @GetMapping("/advert/edit/{advertisementId}")
     public String editAdForm(@PathVariable("advertisementId") Long advertisementId, Model model){
 
@@ -143,20 +144,21 @@ public class AdvertiseController {
         return "admin/advertisement/advert_edit";
     }
 
-    @PostMapping("/advert/edit/{advertisementId}")
+
+
+
+
+    //수정 데이터 전송
+    @PostMapping("/advert/edit/{advertisemntId}")
     public String editAdvert(@RequestParam("imgFile") MultipartFile multipartFile,
                              @PathVariable("advertisementId")Long advertisementId,
                              @ModelAttribute("advertiseInfoDto")AdvertiseInfoDto advertiseInfoDto) throws IOException, IllegalStateException, IllegalArgumentException{
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-        System.out.println("advertiseInfoDto.getImgFileName="+advertiseInfoDto.getImgFileName());
-        System.out.println("getOtherElement"+advertiseInfoDto.getEndDate());
-        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
 
         advertiseInfoDto.setAdvertisementId(advertisementId);
 
 
         if(advertiseInfoDto.getImgFileName().equals("same")){
-
             adService.updateAdSamePicture(advertiseInfoDto);
         }else {
 
