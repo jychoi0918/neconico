@@ -2,252 +2,173 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/header :: header"/>
 <body>
-    <div class="wrap">
-		<header class="header" th:replace="fragment/body_header :: body_header"/>
-		<!-- content -->
-        <div class="new_product_section_wrap h_con">
+<div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
+    <!-- content -->
+    <div class="new_product_section_wrap h_con">
 
-			<h3 class="h_fs_26">상품등록</h3>
+        <h3 class="h_fs_26">상품등록</h3>
 
-            <section class="new_product_box">
-				<form th:object="${itemFrom}" method="post">
-					<input type="hidden" name="subId" id="sub_id" th:name="subId" th:value="${categoryList.get(0).getCategorySubInfoDtoList().get(0).categorySubId}">
-					<div class="new01">
-						<span>카테고리</span>
+        <section class="new_product_box">
+            <input type="hidden" name="subId" id="sub_id"
+                   th:value="${categoryList.get(0).getCategorySubInfoDtoList().get(0).categorySubId}">
+            <div class="new01">
+                <span>카테고리</span>
 
-						<select onchange="changeSubCategory(this)" >
-							<option th:each="catagoryMain : ${categoryList}"
-								th:text="${catagoryMain.name}"
-								th:value="${catagoryMain.categoryMainId}">대분류 1</option>
-						</select>
+                <select onchange="changeSubCategory(this)">
+                    <option th:each="catagoryMain : ${categoryList}"
+                            th:text="${catagoryMain.name}"
+                            th:value="${catagoryMain.categoryMainId}">대분류 1
+                    </option>
+                </select>
 
-						<select id="sub_category" onchange="subIdChange(this)">
-							<option th:each=" categorySub : ${categoryList.get(0).categorySubInfoDtoList}"
-									th:text="${categorySub.name}" th:value="${categorySub.categorySubId}">소분류 1</option>
+                <select id="sub_category" onchange="subIdChange(this)">
+                    <option th:each=" categorySub : ${categoryList.get(0).categorySubInfoDtoList}"
+                            th:text="${categorySub.name}" th:value="${categorySub.categorySubId}">소분류 1
+                    </option>
 
-						</select>
+                </select>
 
-						<p>카테고리 <span id="span_category_main" th:text="${categoryList.get(0).name}">대분류 1</span> ▶ <span id="span_category_sub" th:text="${categoryList.get(0).categorySubInfoDtoList.get(0).name}">소분류 2</span></p>
-					</div>
+                <p>카테고리 <span id="span_category_main" th:text="${categoryList.get(0).name}">대분류 1</span> ▶ <span
+                        id="span_category_sub"
+                        th:text="${categoryList.get(0).categorySubInfoDtoList.get(0).name}">소분류 2</span>
+                </p>
+            </div>
 
-					<div class="new02">
-						<span>제목</span>
-						<input type="text" th:field="*{title}" maxlength="200">
-						<p>* 상품명을 2자 이상 적어주세요.</p>
-					</div>
+            <div class="new02">
+                <span>제목</span>
+                <input type="text" id="title" name="title" maxlength="200">
+                <p>* 상품명을 2자 이상 적어주세요.</p>
+            </div>
 
-					<div class="new03">
-						<span>내용</span>
-						<textarea th:field="*{content}" rows="3" style="resize: none;" maxlength="500" placeholder="내용을 입력하세요."
-								  onkeydown="countText()" onkeyup="countText()" onkeypress="countText()"></textarea>
-						<p>글자수 <span id="text_length">0/500</span></p>
-					</div>
+            <div class="new03">
+                <span>내용</span>
+                <textarea id="content" name="content" rows="3" style="resize: none;" maxlength="500"
+                          placeholder="내용을 입력하세요."
+                          onkeydown="countText()" onkeyup="countText()" onkeypress="countText()"></textarea>
+                <p>글자수 <span id="text_length">0/500</span></p>
+            </div>
 
-					<div class="new04">
-						<span>이미지 등록</span>
-						<div class="new04_right">
-							<div class="new04_right_img">
-								<div>
-									<input type="file" id="imageUpload1" class="new_imgup_btn">
-									<input type="file" id="imageUpload2" class="new_imgup_btn">
-									<input type="file" id="imageUpload3" class="new_imgup_btn">
-									<label for="imageUpload1" class="new_image_box_label">
-										<img src="/img/camera_icon.png" alt="">
-										<span>이미지 등록</span>
-									</label>
-								</div>
-								<figure>
-									<img src="" alt="">
-									<a href="#void" class="new_img_close_btn"></a>
-								</figure>
-								<figure>
-									<img src="" alt="">
-									<a href="#void" class="new_img_close_btn"></a>
-								</figure>
-								<figure>
-									<img src="" alt="">
-									<a href="#void" class="new_img_close_btn"></a>
-								</figure>
-							</div>
-						</div>
-					</div>
+            <div class="new04">
+                <span>이미지 등록</span>
+                <div class="new04_right">
+                    <div class="new04_right_img">
+                        <div>
+                            <input type="file" id="imageUpload1" class="new_imgup_btn">
+                            <label for="imageUpload1" class="new_image_box_label">
+                                <img src="/img/camera_icon.png" alt="">
+                                <span>이미지 등록</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <p>* 1개 이상의 이미지를 등록해주세요.<br/>
+                    jpg, gif, jpeg, png파일만 등록 가능합니다.</p>
+            </div>
 
-					<div class="new05">
-						<span>가격</span>
-						<input type="text" th:field="*{price}" onkeyup="inputNumberFormat(this)">
-						<label th:for="*{price}">원</label>
-					</div>
+            <div class="new05">
+                <span>가격</span>
+                <input type="text" id="price" name="price" onkeyup="inputNumberFormat(this)">
+                <label for="price">원</label>
+            </div>
 
-					<div class="new06">
-						<span>거래 지역</span>
-						<input type="button" value="내 주소" onclick="findMyAddress()">
-						<input type="button" value="주소 검색" onclick="executePostCode()">
-						<input type="text" readonly th:field="*{area}">
-					</div>
+            <div class="new06">
+                <span>거래 지역</span>
+                <input type="button" value="내 주소" onclick="findMyAddress()">
+                <input type="button" value="주소 검색" onclick="executePostCode()">
+                <input type="text" readonly id="area" name="area">
+            </div>
 
-					<div class="new07">
-						<span>상품 상태</span>
-						<div>
-							<input type="radio" th:field="*{itemStatus}" class="new_new" value="신품">
-							<label th:for="itemStatus1">신품</label>
-							<input type="radio" th:field="*{itemStatus}" class="new_use" value="중고">
-							<label th:for="itemStatus2">중고</label>
-						</div>
-					</div>
+            <div class="new07">
+                <span>상품 상태</span>
+                <div>
+                    <input type="radio" id="itemStatus1" name="itemStatus" class="new_new" value="신품"
+                           onchange="setItemStatus(this)">
+                    <label for="itemStatus1">신품</label>
+                    <input type="radio" id="itemStatus2" name="itemStatus" class="new_use" value="중고"
+                           onchange="setItemStatus(this)">
+                    <label for="itemStatus2">중고</label>
+                </div>
+            </div>
 
-					<div class="new08">
-						<span>배송 가격</span>
-						<div>
-							<input type="radio" th:field="*{shippingPrice}" class="new_inclu" value="포함">
-							<label th:for="shippingPrice1">포함</label>
-							<input type="radio" th:field="*{shippingPrice}" class="new_exclu" value="미포함">
-							<label th:for="shippingPrice2">미포함</label>
-						</div>
-					</div>
-				</form>
-            </section>
+            <div class="new08">
+                <span>배송 가격</span>
+                <div>
+                    <input type="radio" id="shippingPrice1" name="shippingPrice" class="new_inclu" value="포함"
+                           onchange="setShippingPrice(this)">
+                    <label for="shippingPrice1">포함</label>
+                    <input type="radio" id="shippingPrice2" name="shippingPrice" class="new_exclu" value="미포함"
+                           onchange="setShippingPrice(this)">
+                    <label for="shippingPrice2">미포함</label>
+                </div>
+            </div>
+        </section>
 
-			<div class="prod_btn_box">
-				<a href="#void" class="new_product_con_btn">등록하기</a>
-				<a href="#void" class="mod_product_con_btn">수정하기</a>
-			</div>
-
+        <div class="prod_btn_box">
+            <a href="javascript:submitForm()" style="cursor: pointer" class="new_product_con_btn">등록하기</a>
         </div>
-        <footer class="footer" th:replace="fragment/footer :: footer"/>
     </div>
-	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script type="text/javascript" th:inline="javascript">
-		const categoryList = [[${categoryList}]]
-		//내용 글자수 세기기
-		const content = document.getElementById("content");
-			const countText = () => {
-				let textLength = document.getElementById("text_length");
-				let inputTextLength = content.value.length;
+    <footer class="footer" th:replace="fragment/footer :: footer"/>
+</div>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/js/item/create_item_form.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    /**
+     * 카테고리 바 변경
+     */
+    const categoryList = [[${categoryList}]] // 카테코리 리스트
+    const subId = document.getElementById("sub_id");
+    const spanCategoryMain = document.getElementById("span_category_main");
+    const spanCategorySub = document.getElementById("span_category_sub");
 
-				textLength.style.color = "BLACK";
-
-				if(inputTextLength >= 500) {
-					textLength.style.color = "RED";
-					if(inputTextLength > 500) {
-						inputTextLength -= 1;
-					}
-				}
-
-				const maxLength = "500";
-				textLength.innerHTML = inputTextLength + "/" + maxLength;
-			}
-
-			/*
-			 * 주소 찾기
-			 */
-			const area = document.getElementById("area");
-
-			//내주소 찾기
-			const findMyAddress = () => {
-				const httpRequest = new XMLHttpRequest();
-				httpRequest.onreadystatechange = function () {
-					if(httpRequest.readyState === 4 && httpRequest.status === 200) {
-						const sessionUserInfo = JSON.parse(this.responseText);
-						const userAddress = sessionUserInfo.address;
-						if(userAddress === "OAUTH") {
-							alert('사용자 주소가 등록되어있지 않습니다.' + '\n' + '사용자 정보변경에서 변경해주세요.')
-							return;
-						}
-						area.value = userAddress;
-					}
-				}
-				httpRequest.open("GET", "/user/find/address");
-				httpRequest.setRequestHeader("Content-type", "text/plain");
-				httpRequest.send();
-			}
-			//주소 검색
-			const executePostCode = () => {
-				new daum.Postcode({
-					oncomplete: function(data) {
-						let address = '';
-
-						//사용자가 선택한 주소 타입에 따라 해당 주소 값
-						if(data.userSelectedType === 'R') {
-							address = data.roadAddress;
-						}else {
-							address = data.jibunAddress;
-						}
-						area.value = address;
-					}
-				}).open();
-			}
-
-			//카테고리 바 변경
-			const subId = document.getElementById("sub_id");
-			const spanCategoryMain = document.getElementById("span_category_main");
-			const spanCategorySub = document.getElementById("span_category_sub");
-
-			function subIdChange(subCategory) {
-				subId.value = subCategory.value
-				let targetSubText;
-				for(i=0; i<subCategory.options.length; i++) {
-					if(subCategory.options[i].value === subCategory.value) {
-						targetSubText = subCategory.options[i].innerText;
-					}
-				}
-				spanCategorySub.innerHTML = targetSubText;
-			}
+    function subIdChange(subCategory) {
+        subId.value = subCategory.value
+        let targetSubText;
+        for (i = 0; i < subCategory.options.length; i++) {
+            if (subCategory.options[i].value === subCategory.value) {
+                targetSubText = subCategory.options[i].innerText;
+            }
+        }
+        spanCategorySub.innerHTML = targetSubText;
+    }
 
 
+    function changeSubCategory(mainCategory) {
+        let subCategory = document.getElementById("sub_category");
 
-			function changeSubCategory(mainCategory) {
-				let subCategory = document.getElementById("sub_category");
+        const subCategoryList = categoryList[parseInt(mainCategory.value) - 1].categorySubInfoDtoList;
+        const options = [];
 
-				const subCategoryList = categoryList[parseInt(mainCategory.value) - 1].categorySubInfoDtoList;
-				const options = [];
+        while (subCategory.hasChildNodes()) {
+            subCategory.removeChild(subCategory.firstChild);
+        }
 
-				while(subCategory.hasChildNodes()) {
-					subCategory.removeChild(subCategory.firstChild);
-				}
+        for (i = 0; i < subCategoryList.length; i++) {
+            let option = document.createElement('option');
+            option.innerText = subCategoryList[i].name;
+            option.setAttribute('value', subCategoryList[i].categorySubId);
+            options[i] = option;
+        }
 
-				for(i=0; i<subCategoryList.length; i++) {
-					let option = document.createElement('option');
-					option.innerText = subCategoryList[i].name;
-					option.setAttribute('value', subCategoryList[i].categorySubId);
-					options[i] = option;
-				}
+        for (i = 0; i < options.length; i++) {
+            subCategory.appendChild(options[i]);
+        }
 
-				for(i=0; i<options.length; i++) {
-					subCategory.appendChild(options[i]);
-				}
+        //바뀐순간 첫번째 선택될 subCategory의 subid 셋팅
+        subId.value = options[0].value;
 
-				//바뀐순간 첫번째 선택될 subCategory의 subid 셋팅
-				subId.value = options[0].value;
+        //바뀌는 main category 이름 span_category_main에 셋팅
+        let targetMainText;
+        for (i = 0; i < mainCategory.options.length; i++) {
+            if (mainCategory.options[i].value === mainCategory.value) {
+                targetMainText = mainCategory.options[i].innerText;
+            }
+        }
+        spanCategoryMain.innerText = targetMainText;
 
-				//바뀌는 main category 이름 span_category_main에 셋팅
-				let targetMainText;
-				for(i=0; i<mainCategory.options.length; i++) {
-					if (mainCategory.options[i].value === mainCategory.value) {
-						targetMainText = mainCategory.options[i].innerText;
-					}
-				}
-				spanCategoryMain.innerText = targetMainText;
-
-				//바뀐순간 첫번째 subCategory 이름 해당 span_category_sub에 셋팅
-				spanCategorySub.innerText = options[0].innerText;
-			}
-
-			//가격 ',' 삽입
-			function inputNumberFormat(obj) {
-				obj.value = comma(uncomma(obj.value));
-			}
-
-			function comma(str) {
-				str = String(str);
-				return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-			}
-
-			function uncomma(str) {
-				str = String(str);
-				return str.replace(/[^\d]+/g, '');
-			}
-
-
-	</script>
+        //바뀐순간 첫번째 subCategory 이름 해당 span_category_sub에 셋팅
+        spanCategorySub.innerText = options[0].innerText;
+    }
+</script>
 </body>
 </html>

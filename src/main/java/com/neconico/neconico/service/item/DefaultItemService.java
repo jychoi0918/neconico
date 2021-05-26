@@ -36,12 +36,10 @@ public class DefaultItemService implements ItemService{
     public Long insertItem(FileResultInfoDto fileResultInfoDto,
                            Long subId,
                            ItemInfoDto itemInfoDto) {
-
+        setDateAndFile(fileResultInfoDto, itemInfoDto);
         itemInfoDto.setCategorySubId(subId);
-        itemInfoDto.setItemImgUrls(fileResultInfoDto.getFileUrls());
-        itemInfoDto.setImgFileNames(fileResultInfoDto.getFileNames());
-        itemInfoDto.setCreatedDate(LocalDateTime.now());
-        itemInfoDto.setModifiedDate(LocalDateTime.now());
+        itemInfoDto.setSaleStatus("판매 중");
+
         itemMapper.insertItems(itemInfoDto);
 
         return itemInfoDto.getItemId();
@@ -90,4 +88,12 @@ public class DefaultItemService implements ItemService{
 
         return criteria;
     }
+
+    private void setDateAndFile(FileResultInfoDto fileResultInfoDto, ItemInfoDto itemInfoDto) {
+        itemInfoDto.setItemImgUrls(fileResultInfoDto.getFileUrls());
+        itemInfoDto.setImgFileNames(fileResultInfoDto.getFileNames());
+        itemInfoDto.setCreatedDate(LocalDateTime.now());
+        itemInfoDto.setModifiedDate(LocalDateTime.now());
+    }
+
 }
