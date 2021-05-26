@@ -1,10 +1,12 @@
 package com.neconico.neconico.service.item;
 
+import com.neconico.neconico.Maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardViewDto;
 import com.neconico.neconico.mapper.item.ItemMapper;
 import com.neconico.neconico.paging.Criteria;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -64,11 +67,14 @@ public class DefaultItemService implements ItemService{
      * 상품 조건 검색
      */
     @Override
-    public List<ItemCardDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto) {
+    public List<ItemCardViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto) {
         if( searchInfoDto.getSearchText() == null) {
             searchInfoDto.setSearchText("");
         }
-        return itemMapper.selectItemBySearch(setCriteria(criteria), searchInfoDto);
+
+        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemBySearch(setCriteria(criteria), searchInfoDto);
+
+        return createItemCardViewDto(itemCardDtoList);
     }
 
     @Override
@@ -94,6 +100,22 @@ public class DefaultItemService implements ItemService{
         itemInfoDto.setImgFileNames(fileResultInfoDto.getFileNames());
         itemInfoDto.setCreatedDate(LocalDateTime.now());
         itemInfoDto.setModifiedDate(LocalDateTime.now());
+    }
+
+    private List<ItemCardViewDto> createItemCardViewDto(List<ItemCardDto> itemCardDtoList) {
+        List<ItemCardViewDto> itemCardViewDtoList = itemCardDtoList.stream()
+                .map(ItemCardViewDto::new)
+                .collect(Collectors.toList());
+
+        itemCardViewDtoList.stream()
+                .forEach(i -> i.setBetweenDate(ItemDateDifferenceMaker.between(i.getCreatedTime())));
+
+        itemCardViewDtoList.stream()
+                .filter(i -> i.getTitle().length() > 14)
+                .forEach(i -> i.setTitle(i.getTitle().substring(0, 11) + "..."));
+
+
+        return itemCardViewDtoList;
     }
 
 }

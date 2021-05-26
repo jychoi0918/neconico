@@ -4,7 +4,7 @@ import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
-import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardViewDto;
 import com.neconico.neconico.paging.Criteria;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public interface ItemService {
      * main페이지 추천 상품 리스트
      * 상품 조건 검색
      */
-    List<ItemCardDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto);
+    List<ItemCardViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto);
 
     Long countTotalItems();
 }
