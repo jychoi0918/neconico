@@ -34,5 +34,11 @@ public interface ItemMapper {
     List<ItemCardDto> selectItemBySearch(@Param("criteria") Criteria criteria,  //main 검색바 검색
                                          @Param("search") SearchInfoDto searchInfoDto);
 
-    Long selectTotalItemCount(); //item 총 개수 count
+    Long selectTotalItemCount(@Param("search") SearchInfoDto searchInfoDto); //item 총 개수 count
+
+    //sub카테고리 조회
+    List<ItemCardDto> selectItemsBySubCategoryId(@Param("criteria") Criteria criteria,
+                                                 @Param("subId") Long subId);
+
+    Long selectTotalItemCountBySubCategoryId(@Param("subId") Long subId);
 }

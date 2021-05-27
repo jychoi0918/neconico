@@ -27,9 +27,10 @@
                 class="h_fs_14"
                 type="text"
                 id="header_search"
+                name="searchText"
                 placeholder="상품명,지역명 검색"
         />
-        <a href="#"><img src="/img/search_p.png"  alt="" /></a>
+        <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
       <ul class="user">
         <li class="h_fs_14">
@@ -59,7 +60,7 @@
             <a href="#void" th:text="${categoryMain.name}">대분류 1</a>
             <ul class="sub_menu">
               <li th:each="categorySub : ${categoryMain.categorySubInfoDtoList}">
-                <a href="#void" th:text="${categorySub.name}">중분류 1</a>
+                <a th:href="@{/item/search/category(sub=${categorySub.categorySubId}, name=${categorySub.name}, currentPage=1)}" th:text="${categorySub.name}">중분류 1</a>
               </li>
             </ul>
           </li>
@@ -87,11 +88,30 @@
                 class="h_fs_14"
                 type="text"
                 id="mo_schbox_btn"
+                name="searchText"
                 placeholder="상품명,지역명 검색"
         />
-        <a href="#"><img src="/img/search_p.png" alt="" /></a>
+        <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
     </div>
   </div>
+  <script>
+    function submitSearch() {
+      const search = document.getElementById("header_search");
+      const miniSearch = document.getElementById("mo_schbox_btn");
+      let form = document.createElement('form');
+      if(search.value !== '') {
+        form.append(search);
+        form.setAttribute('action', '/item/search');
+      }
+      if(miniSearch.value !== '') {
+        form.append(miniSearch);
+        form.setAttribute('action', '/item/search');
+      }
+      form.setAttribute('method', 'get');
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
 </header>
 </html>

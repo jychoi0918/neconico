@@ -4,9 +4,13 @@ import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.category.CategoryInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
+import com.neconico.neconico.dto.item.SearchInfoDto;
+import com.neconico.neconico.dto.item.card.ItemCardViewDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.process.S3FileProcess;
+import com.neconico.neconico.paging.Criteria;
+import com.neconico.neconico.paging.Pagination;
 import com.neconico.neconico.service.category.CategoryService;
 import com.neconico.neconico.service.file.FileService;
 import com.neconico.neconico.service.item.ItemService;
@@ -52,5 +56,36 @@ public class ItemController {
         itemService.insertItem(fileResultInfoDto, subId, itemInfoDto);
 
         return new ResponseEntity<>(itemInfoDto, HttpStatus.CREATED);
+    }
+
+    /**
+     * 검색
+     */
+    @GetMapping("/item/search")
+    public String searchItems(@ModelAttribute("searchText")SearchInfoDto searchInfoDto,
+                               @ModelAttribute("currentPage") Criteria criteria,
+                               Model model) {
+        List<ItemCardViewDto> itemCardViewDtoList = itemService.searchItems(criteria, searchInfoDto);
+        int totalContent = itemService.countTotalItems(searchInfoDto).intValue();
+
+        model.addAttribute("search", searchInfoDto.getSearchText());
+        model.addAttribute("itemCardList", itemCardViewDtoList);
+        model.addAttribute("pagination", new Pagination(criteria, totalContent,5));
+        return "item/sch_result";
+    }
+
+    @GetMapping("/item/search/category")
+    public String searchItemsByCategoryId(@RequestParam("sub") Long subId,
+                                          @RequestParam("name") String subName,
+                                          @ModelAttribute("currentPage") Criteria criteria,
+                                          Model model) {
+
+        List<ItemCardViewDto> itemCardViewDtoList = itemService.searchItemsBySubCategoryId(criteria, subId);
+        int totalContent = itemService.countTotalItemsBySubCategoryId(subId).intValue();
+        model.addAttribute("subId", subId);
+        model.addAttribute("subName", subName);
+        model.addAttribute("itemCardList", itemCardViewDtoList);
+        model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
+        return "item/sch_category_result";
     }
 }

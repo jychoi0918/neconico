@@ -35,5 +35,9 @@ public interface ItemService {
      */
     List<ItemCardViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto);
 
-    Long countTotalItems();
+    Long countTotalItems(SearchInfoDto searchInfoDto);
+
+    List<ItemCardViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId);
+
+    Long countTotalItemsBySubCategoryId(Long subId);
 }

@@ -224,7 +224,9 @@ class ItemMapperTest {
     @Test
     @DisplayName("DB에 저장된 item의 총 수를 계산한다.")
     void count_the_total_number_of_items_stored_in_the_DB() throws Exception {
-        Long totalItemCount = itemMapper.selectTotalItemCount();
+        SearchInfoDto searchInfoDto = new SearchInfoDto();
+        searchInfoDto.setSearchText("");
+        Long totalItemCount = itemMapper.selectTotalItemCount(searchInfoDto);
 
         assertThat(totalItemCount).isEqualTo(itemIds.size());
     }

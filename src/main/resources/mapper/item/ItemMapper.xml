@@ -144,6 +144,30 @@
 
     <select id="selectTotalItemCount" resultType="long">
         select count(item_id) from item
+        where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
+    </select>
+
+    <select id="selectItemsBySubCategoryId" resultType="itemcarddto">
+        select
+            item_id,
+            title,
+            price,
+            item_img_urls as itemImg,
+            created_date as createdTime,
+            item_status as status,
+            hits as views
+        from item
+        where category_sub_id = #{subId}
+        <trim prefix="order by">
+            ${criteria.sortingColumn} ${criteria.requestOrder}
+        </trim>
+        limit #{criteria.contentPerPage} offset #{criteria.pageStart}
+    </select>
+
+    <select id="selectTotalItemCountBySubCategoryId" resultType="long">
+        select count(item_id)
+        from item
+        where category_sub_id = #{subId}
     </select>
 
     <insert id="insertItems" useGeneratedKeys="true" keyProperty="itemId" parameterType="itemInfoDto">

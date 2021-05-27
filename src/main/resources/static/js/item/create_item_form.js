@@ -94,6 +94,12 @@ document.getElementById("imageUpload1").addEventListener('change', function () {
         storedFiles.push(fileList[i]);
     }
 
+    if(storedFiles.length > 3) {
+        alert('이미지는 최대 3개까지 등록가능합니다.');
+        storedFiles.pop();
+        return;
+    }
+
     readImage(storedFiles.length - 1);
 });
 

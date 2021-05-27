@@ -78,8 +78,8 @@ public class DefaultItemService implements ItemService{
     }
 
     @Override
-    public Long countTotalItems() {
-        return itemMapper.selectTotalItemCount();
+    public Long countTotalItems(SearchInfoDto searchInfoDto) {
+        return itemMapper.selectTotalItemCount(searchInfoDto);
     }
 
     private Criteria setCriteria(Criteria criteria) {
@@ -118,4 +118,15 @@ public class DefaultItemService implements ItemService{
         return itemCardViewDtoList;
     }
 
+    @Override
+    public List<ItemCardViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
+        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
+
+        return createItemCardViewDto(itemCardDtoList);
+    }
+
+    @Override
+    public Long countTotalItemsBySubCategoryId(Long subId) {
+        return itemMapper.selectTotalItemCountBySubCategoryId(subId);
+    }
 }
