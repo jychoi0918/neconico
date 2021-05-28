@@ -1,7 +1,9 @@
 package com.neconico.neconico.restcontroller.item;
 
+import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
 import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
+import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.service.item.ItemQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,9 @@ public class ItemQuestionRestController {
     //Question
     @PostMapping("/question/{itemId}/new")
     public ItemQuestionResponseDto createItemQuestion(@PathVariable(name = "itemId") Long itemId,
-                                                      @RequestParam(name = "userId") Long userId,
+                                                      @LoginUser SessionUser user,
                                                       @RequestParam("content") String content) {
-        return itemQuestionService.createItemQuestion(itemId, userId, content);
+        return itemQuestionService.createItemQuestion(itemId, user.getUserId(), content);
 
     }
 
@@ -37,9 +39,9 @@ public class ItemQuestionRestController {
     //QuestionReply
     @PostMapping("/questionComment/{questionId}/new")
     public QuestionCommentResponseDto createQuestionComment(@PathVariable(name = "questionId") Long itemId,
-                                                            @RequestParam(name = "userId") Long userId,
+                                                            @LoginUser SessionUser user,
                                                             @RequestParam("content") String content) {
-        return itemQuestionService.createQuestionCommentId(itemId, userId, content);
+        return itemQuestionService.createQuestionCommentId(itemId, user.getUserId(), content);
 
     }
 

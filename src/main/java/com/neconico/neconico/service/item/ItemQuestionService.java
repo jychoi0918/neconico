@@ -22,8 +22,7 @@ public class ItemQuestionService {
     public ItemQuestionResponseDto createItemQuestion(Long itemId, Long userId, String content) {
         ItemQuestionDto itemQuestionDto = new ItemQuestionDto(itemId, userId, content);
         itemQuestionMapper.insertItemQuestion(itemQuestionDto);
-        Long id = itemQuestionDto.getId();
-        return getItemQuestion(id);
+        return getItemQuestion(itemQuestionDto.getId());
     }
 
 
@@ -46,8 +45,7 @@ public class ItemQuestionService {
     public QuestionCommentResponseDto createQuestionCommentId(Long itemId,Long userId, String content) {
         ItemQuestionDto itemQuestionDto = new ItemQuestionDto(itemId, userId, content);
         itemQuestionMapper.insertQuestionComment(itemQuestionDto);
-        Long questionCommentId = itemQuestionDto.getId();
-        return getQuestionComment(questionCommentId);
+        return getQuestionComment(itemQuestionDto.getId());
     }
 
     @Transactional
