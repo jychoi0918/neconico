@@ -53,12 +53,8 @@
 .my_sotre_info li span { display: inline-block; margin: 0 10px; color: #999; vertical-align: bottom; }
 .my_sotre_info li b { font-weight: bold; }
 
-<<<<<<< HEAD
-.my_store_intro .my_store_intro_txt { width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; box-sizing: border-box; overflow-y: scroll; }
-=======
 .my_store_intro .my_store_intro_txt { width: 100%; height: 100px; padding: 10px;}
 .my_store_intro .my_store_intro_txt textarea { width: 100%; height: 100px; padding: 10px;}
->>>>>>> Add StoreControllerNPage
 
 .my_store_box02 { width: 100%; }
 .my_store_box02_tab { width: 100%; display: flex; }

@@ -1,5 +1,6 @@
 package com.neconico.neconico.restcontroller.store;
 
+import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.service.store.StoreInfoService;
@@ -13,17 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreInfoRestController {
 
     private final StoreInfoService storeInfoService;
-    private final SessionUser user = new SessionUser();
 
     @PostMapping("/mystore/name")
-    public void modifyStoreName(@RequestParam(name = "name") String name) {
-        user.setUserId(7L);
+    public void modifyStoreName(@RequestParam(name = "name") String name, @LoginUser SessionUser user) {
         storeInfoService.updateStoreInfo(new StoreInfoDto(user.getUserId(), name, null, null, null));
     }
 
     @PostMapping("/mystore/content")
-    public void modfiyStoreContent(@RequestParam(name = "content") String content) {
-        user.setUserId(7L);
+    public void modfiyStoreContent(@RequestParam(name = "content") String content, @LoginUser SessionUser user) {
         storeInfoService.updateStoreInfo(new StoreInfoDto(user.getUserId(), null, null, content, null));
     }
 

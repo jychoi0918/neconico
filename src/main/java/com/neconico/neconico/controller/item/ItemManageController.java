@@ -1,5 +1,7 @@
 package com.neconico.neconico.controller.item;
 
+import com.neconico.neconico.config.web.LoginUser;
+import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.paging.Pagination;
 import com.neconico.neconico.service.item.ItemManageService;
@@ -15,21 +17,19 @@ public class ItemManageController {
 
     private final ItemManageService itemManageService;
 
-    private Long sessionUserId = 7L;
-
     @GetMapping("/item/manage")
     public String itemManage(Model model,
                              @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
                              @RequestParam(value = "sortingColumn", defaultValue = "created") String sortingColumn,
-                             @RequestParam(value = "requestOrder", defaultValue = "DESC") String requestOrder) {
+                             @RequestParam(value = "requestOrder", defaultValue = "DESC") String requestOrder,
+                             @LoginUser SessionUser user) {
 
         Criteria cri = itemManageService.setCriteria(currentPage, sortingColumn, requestOrder);
-        Pagination pagenation = itemManageService.setPagiantion(sessionUserId, cri);
+        Pagination pagenation = itemManageService.setPagiantion(user.getUserId(), cri);
 
-        model.addAttribute("itemList", itemManageService.getStoreMyItemList(sessionUserId, cri));
+        model.addAttribute("itemList", itemManageService.getStoreMyItemList(user.getUserId(), cri));
         model.addAttribute("pagenation", pagenation);
 
-        System.out.println(pagenation.getCriteria().toString());
 
         return "item/item_manage";
     }

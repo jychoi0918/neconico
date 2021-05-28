@@ -1,10 +1,9 @@
 package com.neconico.neconico.controller.store;
 
+import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.users.SessionUser;
-import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.service.store.StoreInfoService;
 import com.neconico.neconico.service.store.StoreItemListService;
-import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,10 +36,7 @@ public class StoreController {
 
 
     @GetMapping("/store/mystore")
-    public String myStore(Model model, SessionUser user) {
-
-        user.setUserId(7L);
-        user.setAccountId("id1");
+    public String myStore(Model model, @LoginUser SessionUser user) {
 
         model.addAttribute("storeInfo", infoService.findStoreInfo(user));
 
