@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내꼬니꼬</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/xeicon.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/h_reset.css">
+    <link rel="stylesheet" type="text/css" href="/css/h_style.css">
+    <link rel="stylesheet" type="text/css" href="/css/h_sub.css">
+    <link rel="stylesheet" type="text/css" href="/css/h_store.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="my_store_section_wrap h_con">
+        <section class="my_store_box">
+            <div class="my_store_img_box">
+                <figure>
+                    <img th:src="${storeInfo.storeImgUrl}" alt="">
+                </figure>
+                <a href="#void">이미지 변경</a>
+            </div>
+
+            <div class="my_store_info_box">
+                <h3 id="storeName">
+                    <span th:text="${storeInfo.storeName}"/>
+                    <a href="javascript:clickStoreName(0)">상점명 변경</a>
+                </h3>
+                <ul class="my_sotre_info">
+                    <li>
+                        <i><img src="/img/my_store_img02.png" alt=""></i>
+                        <span>상점오픈일</span>
+                        <b th:text="${storeInfo.created}"></b>
+                    </li>
+                    <li>
+                        <i><img src="/img/my_store_img04.png" alt=""></i>
+                        <span>상품판매</span>
+                        <b th:text="${storeInfo.soldCount}"></b>
+                    </li>
+                </ul>
+
+                <div class="my_store_intro clearfix">
+                    <div class="my_store_intro_txt" id="storeContentBox">
+                        <p th:text="${storeInfo.storeInfo}"/>
+                    </div>
+                    <a href="javascript:clickStoreContent(0)" id="storeContentButton">소개글 변경</a>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="my_store_box02">
+            <ul class="my_store_box02_tab">
+                <li class="on">
+                    <a onclick="selectMenu('myItem')" href="#myItem">내 상품<span
+                            th:text="'('+${myItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('purchasedItem')" href="#purchasedItem">구매한 상품 <span
+                            th:text="'('+${purchaseItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('favoriteItem')" href="#favoriteItem">찜한 상품 <span
+                            th:text="'('+${favoriteItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('tradeItem')" href="#tradeItem">거래 요청 <span
+                            th:text="'('+${tradeCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('questionItem')" href="#questionItem">상품 문의 <span
+                            th:text="'('+${questionCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('storeReview')" href="#storeReview">상점 후기 <span
+                            th:text="'('+${storeReviewCount}+')'"></span></a>
+                </li>
+            </ul>
+
+            <div class="my_store_list_box">
+                <ul class="my_store_list_tab">
+                    <li>
+                        <a href="#created" onclick="selectSortingColumn('CREATED')">등록일 순</a>
+                    </li>
+                    <li>
+                        <a href="#views" onclick="selectSortingColumn('VIEWS')">조회수 순</a>
+                    </li>
+                    <li>
+                        <a href="#price" onclick="selectSortingColumn('PRICE')">가격 순</a>
+                    </li>
+                </ul>
+                <div class="my_store_list">
+                    <!-- 상품 리스트 -->
+                    <div class="my_store_list00 active" id="itemListDiv">
+                        <!-- DOM 박기 -->
+                    </div>
+
+                    <script>
+                        $(function () {
+                            $('.my_store_box02_tab li').click(function () {
+                                var i = $(this).index();
+                                $('.my_store_box02_tab li').removeClass('on');
+                                $(this).addClass('on');
+                            });
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let currentMenu = 'myItem';
+            let currentPage = 1;
+            let sortingColumn = 'CREATED';
+            let requestOrder = 'DESC';
+
+            window.onload = function () {
+                ajax();
+            }
+
+            function logVar() {
+                console.log(currentMenu + "," + currentPage + "," + sortingColumn + "," + requestOrder);
+            }
+
+            function selectMenu(menu) {
+                setVariable(menu, 1, 'CREATED', 'DESC');
+                logVar();
+                ajax();
+            }
+
+            function selectSortingColumn(column) {
+                if (column == sortingColumn) {
+                    if (requestOrder == 'DESC') {
+                        setVariable(currentMenu, 1, column, 'ASC');
+                    } else {
+                        setVariable(currentMenu, 1, column, 'DESC');
+                    }
+
+                } else {
+                    setVariable(currentMenu, 1, column, 'DESC');
+                }
+                logVar();
+                ajax();
+            }
+
+            function selectPageButton(page) {
+                setVariable(currentMenu, page, sortingColumn, requestOrder);
+                logVar();
+                ajax();
+            }
+
+            function setVariable(menu, page, column, order) {
+                currentMenu = menu;
+                currentPage = page;
+                sortingColumn = column;
+                requestOrder = order;
+            }
+
+            function createRequestDto() {
+                let requestDto = new Object();
+                requestDto.currentPage = currentPage;
+                requestDto.sortingColumn = sortingColumn;
+                requestDto.requestOrder = requestOrder;
+                return requestDto;
+            }
+
+            //ajax 통신
+            function ajax() {
+                let requestDto = createRequestDto();
+                let reqData = JSON.stringify(requestDto);
+                let httpRequest = new XMLHttpRequest();
+
+                httpRequest.open("POST", "/mystore/list/" + currentMenu);
+                httpRequest.setRequestHeader("Content-Type", "application/json");
+                httpRequest.send(reqData);
+
+                httpRequest.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        let resp = JSON.parse(this.responseText);
+                        if ((resp.pagination.totalContent + 0) !== 0) {
+                            createItemCard(resp.itemList);
+                            createPageButton(resp.pagination);
+                        }
+                    }
+                };
+
+            }
+
+            function removeChildNode(parent){
+                while (parent.hasChildNodes()) {
+                    parent.removeChild(parent.firstChild);
+                }
+            }
+
+            function createItemCard(itemList) {
+                let parent = document.getElementById('itemListDiv');
+                removeChildNode(parent);
+
+                switch (currentMenu) {
+                    case "tradeItem":
+                        createTradeList(parent, itemList);
+                        break;
+                    case "questionItem":
+                        createQuestionList(parent, itemList);
+                        break;
+                    case "storeReview":
+                        createStoreReviewList(parent, itemList);
+                        break;
+                    default :
+                        createItemCardList(parent, itemList);
+                        break;
+                }
+
+
+                function createTradeList(parent, itemList) {
+                    let table = document.createElement("table");
+
+                    let colgroup = document.createElement("colgroup");
+
+                    let col1 = document.createElement("col");
+                    col1.setAttribute("width", "30%");
+                    let col2 = document.createElement("col");
+                    col2.setAttribute("width", "20%");
+                    let col3 = document.createElement("col");
+                    col3.setAttribute("width", "20%");
+                    let col4 = document.createElement("col");
+                    col4.setAttribute("width", "19%");
+                    let col5 = document.createElement("col");
+                    col5.setAttribute("width", "11%");
+                    colgroup.append(col1, col2, col3, col4, col5);
+
+                    let tr = document.createElement("tr");
+                    let th1 = document.createElement("th");
+                    th1.innerText = '상품 이미지';
+                    let th2 = document.createElement("th");
+                    th2.innerText = '상품 이름';
+                    let th3 = document.createElement("th");
+                    th3.innerText = '상품 가격';
+                    let th4 = document.createElement("th");
+                    th4.innerText = '상품 정보';
+                    let th5 = document.createElement("th");
+                    th5.innerText = '거래 상태';
+                    tr.append(th1, th2, th3, th4, th5);
+                    table.append(colgroup, tr);
+
+                    itemList.forEach(function (item) {
+                        let item_tr = document.createElement("tr");
+                        let item_td1 = document.createElement("td");
+                        let img = document.createElement("img");
+                        img.setAttribute("src", item.itemImg);
+                        img.setAttribute("alt", "");
+                        item_td1.append(img);
+
+                        let item_td2 = document.createElement("td");
+                        let a = document.createElement("a");
+                        a.setAttribute("href", "/item/" + item.itemId);
+                        item_td2.append(a);
+
+                        let item_td3 = document.createElement("td");
+                        item_td3.innerText = transPrice(item.price);
+
+                        let item_td4 = document.createElement("td");
+                        let span1 = document.createElement("span");
+                        span1.innerText = item.buyerName;
+                        let br = document.createElement("br");
+                        let span2 = document.createElement("span");
+                        span2.innerText = calculateDay(item.createdTime);
+                        item_td4.append(span1, br, span2);
+
+                        let item_td5 = document.createElement("td");
+                        let div = document.createElement("div");
+                        div.setAttribute("className", "deal_btn");
+                        item_td5.append(div);
+
+                        item_tr.append(item_td1, item_td2, item_td3, item_td4, item_td5);
+
+                        if (item.tradeStatus == "요청") {
+                            let select = document.createElement("select");
+                            select.setAttribute("id", item.tradeId);
+                            let option1 = document.createElement("option");
+                            option1.innerText = '선택하세요';
+                            let option2 = document.createElement("option");
+                            option2.innerText = '거래 완료';
+                            option2.setAttribute("value", "success");
+                            let option3 = document.createElement("option");
+                            option3.innerText = '거래 취소';
+                            option3.setAttribute("value", "cancel");
+                            select.append(option1, option2, option3);
+
+                            let anchor = document.createElement("a");
+                            anchor.setAttribute("href", "javascript:" + "tradeSubmit(" + item.tradeId + ")");
+                            anchor.innerText = '확인';
+                            div.append(select, anchor);
+
+                        } else {
+                            let span = document.createElement("span");
+                            span.innerText = item.tradeStatus;
+                            div.append(span);
+                        }
+                        table.append(item_tr);
+                    });
+
+                    parent.append(table);
+                }
+
+                function createQuestionList(parent, itemList) {
+                    let table = document.createElement("table");
+
+                    let colgroup = document.createElement("colgroup");
+
+                    let col1 = document.createElement("col");
+                    col1.setAttribute("width", "20%");
+                    let col2 = document.createElement("col");
+                    col2.setAttribute("width", "15%");
+                    let col3 = document.createElement("col");
+                    col3.setAttribute("width", "10%");
+                    let col4 = document.createElement("col");
+                    col4.setAttribute("width", "12%");
+                    let col5 = document.createElement("col");
+                    col4.setAttribute("width", "33%");
+                    let col6 = document.createElement("col");
+                    col4.setAttribute("width", "10%");
+                    colgroup.append(col1, col2, col3, col4, col5, col6);
+
+                    let tr = document.createElement("tr");
+                    let th1 = document.createElement("th");
+                    th1.innerText = '상품 이미지';
+                    let th2 = document.createElement("th");
+                    th2.innerText = '상품 이름';
+                    let th3 = document.createElement("th");
+                    th3.innerText = '상품 가격';
+                    let th4 = document.createElement("th");
+                    th4.innerText = '작성자 닉네임';
+                    let th5 = document.createElement("th");
+                    th4.innerText = '작성 내용';
+                    let th6 = document.createElement("th");
+                    th4.innerText = '등록 시간';
+                    tr.append(th1, th2, th3, th4, th5, th6);
+                    table.append(colgroup, tr);
+
+                    itemList.forEach(function (item) {
+                        let itr = document.createElement("tr");
+                        table.append(itr);
+                        let itd1 = document.createElement("td");
+                        let img = document.createElement("img");
+                        img.setAttribute("src", item.itemImg);
+                        img.setAttribute("alt", "");
+                        itd1.append(img);
+
+                        let itd2 = document.createElement("td");
+                        let a = document.createElement("a");
+                        a.setAttribute("href", "/item/" + item.itemId);
+                        a.innerText = item.title;
+                        itd2.append(a);
+                        let itd3 = document.createElement("td");
+                        itd.innerText = transPrice(item.price);
+                        let itd4 = document.createElement("td");
+                        itd4.innerText = item.wirterName;
+                        let itd5 = document.createElement("td");
+                        itd5.innerText = item.content;
+                        let itd6 = document.createElement("td");
+                        let span1 = document.createElement("span");
+                        span1.innerText = item.buyerName;
+                        let br = document.createElement("br")
+                        let span2 = document.createElement("span");
+                        span2.innerText = calculateDay(item.replyCreateTime);
+                        itd6.append(span1, br, span2);
+
+                        itr.append(itd1, itd2, itd3, itd4, itd5, itd6);
+
+                        table.append(itr);
+                    });
+                    parent.append(table);
+                }
+
+                function createItemCardList(parent, itemList) {
+                    let ul = document.createElement("ul");
+                    ul.setAttribute("class", "my_store_prod_list");
+
+                    itemList.forEach(function (item) {
+                        //li 노드 생성
+                        let li = document.createElement("li");
+
+                        //a 노드 생성
+                        let anchor = document.createElement("a");
+                        anchor.setAttribute("href", "/item/" + item.itemId);
+
+
+                        let fig = document.createElement("figure");
+                        let img = document.createElement("img");
+                        img.setAttribute("src", item.itemImg);
+                        img.setAttribute("alt", "");
+                        fig.append(img);
+
+                        let div = document.createElement("div");
+                        let h4 = document.createElement("h4");
+                        h4.innerText = item.title;
+                        let p = document.createElement("p");
+                        p.innerText = transPrice(item.price);
+                        let span = document.createElement("span");
+                        span.innerText = calculateDay(item.createdTime);
+                        div.append(h4, p, span);
+                        anchor.append(fig, div);
+
+                        li.append(anchor);
+                        ul.append(li);
+                    });
+                    parent.append(ul);
+                }
+
+                function createStoreReviewList(parent, itemList) {
+                    let table = document.createElement("table");
+                    parent.append(table);
+
+                    let colgroup = document.createElement("colgroup");
+
+                    let col1 = document.createElement("col");
+                    col1.setAttribute("width", "20%");
+                    let col2 = document.createElement("col");
+                    col2.setAttribute("width", "15%");
+                    let col3 = document.createElement("col");
+                    col3.setAttribute("width", "10%");
+                    let col4 = document.createElement("col");
+                    col4.setAttribute("width", "12%");
+                    let col5 = document.createElement("col");
+                    col4.setAttribute("width", "33%");
+                    let col6 = document.createElement("col");
+                    col4.setAttribute("width", "10%");
+                    colgroup.append(col1, col2, col3, col4, col5, col6);
+
+                    let tr = document.createElement("tr");
+                    let th1 = document.createElement("th");
+                    th1.innerText = '상품 이미지';
+                    let th2 = document.createElement("th");
+                    th2.innerText = '상품 이름';
+                    let th3 = document.createElement("th");
+                    th3.innerText = '상품 가격';
+                    let th4 = document.createElement("th");
+                    th4.innerText = '작성자 닉네임';
+                    let th5 = document.createElement("th");
+                    th5.innerText = '작성 내용';
+                    let th6 = document.createElement("th");
+                    th6.innerText = '등록 시간';
+                    tr.append(th1, th2, th3, th4, th5, th6);
+                    table.append(colgroup, tr);
+
+                    itemList.forEach(function (item) {
+                        let itr = document.createElement("tr");
+
+                        let itd1 = document.createElement("td");
+                        let img = document.createElement("img");
+                        img.setAttribute("src", item.itemImg);
+                        img.setAttribute("alt", "");
+                        itd1.append(img);
+                        let itd2 = document.createElement("td");
+                        let a = document.createElement("a");
+                        a.setAttribute("href", "/item/" + item.itemId);
+                        a.innerText = item.title;
+                        itd2.append(a);
+                        let itd3 = document.createElement("td");
+                        itd3.innerText = transPrice(item.price);
+                        let itd4 = document.createElement("td");
+                        itd4.innerText = item.writerName;
+                        let itd5 = document.createElement("td");
+                        itd5.innerText = item.content;
+                        let itd6 = document.createElement("td");
+                        itd6.innerText = calculateDay(item.replyCreatedTime);
+                        itr.append(itd1, itd2, itd3, itd4, itd5, itd6);
+
+                        table.append(itr);
+                    })
+                    ;
+                    parent.append(table);
+                }
+            }
+
+            function createPageButton(pagination) {
+                let parent = document.getElementById('itemListDiv');
+                let div = document.createElement("div");
+                div.setAttribute("class", "pagination");
+                let ul = document.createElement('ul');
+
+                //앞으로 가기
+                let pli = document.createElement("li");
+                let pa = document.createElement("a");
+                pa.setAttribute("class", "page_prev");
+                if (pagination.criteria.currentPage !== 1) {
+                    pa.setAttribute("href", "javascript:selectPageButton(" + (currentPage - 1) + ")");
+                } else {
+                    pa.setAttribute("href", "#prev");
+                }
+                pli.append(pa);
+                ul.append(pli);
+
+                // 페이지 버튼
+                for (let idx = pagination.startPage; idx < pagination.endPage + 1; idx++) {
+                    let li = document.createElement("li");
+                    let a = document.createElement("a");
+                    if (idx == currentPage) {
+                        a.setAttribute("class", "active");
+                    }
+                    a.innerText = idx + "";
+                    a.setAttribute("href", "javascript:selectPageButton(" + idx + ")");
+                    li.append(a);
+                    ul.append(li);
+                }
+
+                // 뒤로가기
+                let nli = document.createElement("li");
+                let na = document.createElement("a");
+                na.setAttribute("class", "page_next");
+                if (pagination.hasNext) {
+                    na.setAttribute("href", "javascript:selectPageButton(" + (currentPage + 1) + ")");
+                } else {
+                    na.setAttribute("href", "#next");
+                }
+                nli.append(na);
+                ul.append(nli);
+
+                div.append(ul);
+                parent.append(div);
+            }
+
+            function transPrice(price) {
+                let text = price + "";
+                return text.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원';
+            }
+
+            //가져오는 날짜 형식 2021-04-29T10:13:18
+            function calculateDay(input) {
+                let dateArr = (input + "").substring(0, 10).split('-');
+                let createTime = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+                let nowTime = new Date();
+                let cDay = Math.floor((nowTime.getTime() - createTime.getTime()) / 1000 / 60 / 60 / 24);
+                if (cDay == 0) {
+                    return '오늘';
+                } else {
+                    return cDay + '일 전';
+                }
+            }
+
+            function tradeSubmit(tradeId) {
+                let select = document.getElementById(tradeId);
+                let status = select.options[select.selectedIndex].value;
+
+
+                if (status == 'success' || status == 'cancel') {
+                    let httpRequest = new XMLHttpRequest();
+                    console.log(status);
+                    httpRequest.open('POST', "/trade/" + tradeId+"/response/");
+                    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    httpRequest.onreadystatechange = function () {
+                        if (this.status === 200) {
+                            ajax();
+                        }
+                    }
+                    httpRequest.send('status=' + status);
+                } else {
+                    alert('거래상태를 선택한 후 클릭 해주세요');
+                }
+            }
+
+            function clickStoreName(kind) {
+                let parent = document.getElementById('storeName');
+                if(kind == 0){
+                    let storeName = parent.innerText.replace('상점명 변경','').trim();
+                    removeChildNode(parent);
+                    let input = document.createElement("input");
+                    input.setAttribute("value", storeName);
+                    let a = document.createElement("a");
+                    a.setAttribute("href", "javascript:clickStoreName(1)")
+                    a.innerText = '제출';
+
+                    parent.append(input, a);
+
+                }else if(kind == 1){
+                    let storeName = parent.firstChild.value;
+
+                    <!-- 요청 추가 -->
+                    let httpRequest = new XMLHttpRequest();
+                    httpRequest.open('POST', "/mystore/name");
+                    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    httpRequest.onreadystatechange = function () {
+                        if (this.status === 200) {
+                            alert('처리가 되었습니다.')
+
+                            removeChildNode(parent);
+                            let span = document.createElement("span");
+                            span.innerText = storeName;
+                            let a = document.createElement("a");
+                            a.innerText = '상점명 변경';
+                            a.setAttribute("href", "javascript:clickStoreName(0)")
+                            span.append(a);
+                            parent.append(span);
+                        }
+                    }
+                    httpRequest.send('name=' + storeName);
+
+                }
+            }
+
+            function clickStoreContent(kind) {
+                let div = document.getElementById("storeContentBox");
+
+                let a = document.getElementById("storeContentButton");
+
+                if(kind == 0){
+                    let storeContent = div.innerText;
+                    removeChildNode(div);
+
+                    let textarea = document.createElement("textarea");
+                    textarea.innerText = storeContent;
+                    div.append(textarea);
+
+                    a.setAttribute("href","javascript:clickStoreContent(1)");
+
+                }else if(kind == 1){
+                    let storeContent = div.firstChild.value;
+                    <!-- 요청 추가 -->
+                    let httpRequest = new XMLHttpRequest();
+                    httpRequest.open('POST', "/mystore/content");
+                    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    httpRequest.onreadystatechange = function () {
+                        if (this.status === 200) {
+                            alert('처리가 되었습니다.')
+
+                            removeChildNode(div);
+
+                            let p = document.createElement("p");
+                            p.innerText = storeContent;
+                            div.append(p);
+
+                            a.setAttribute("href","javascript:clickStoreContent(0)");
+                        }
+                    }
+                    httpRequest.send('content=' + storeContent);
+
+
+                }
+            }
+        </script>
+
+    </div>
+</div>
+</body>
+</html>

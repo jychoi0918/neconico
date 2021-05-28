@@ -1,6 +1,5 @@
 package com.neconico.neconico.dto.store;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;

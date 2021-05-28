@@ -46,11 +46,11 @@ public class ItemTradeService {
 
         //상태에 따라 분기 나눠줌
         switch (status) {
-            case "취소":
+            case "cancel":
                 itemTradeMapper.updateItemTradeResponseByTradeAndItem(tradeId, "취소");
                 itemStatusMapper.updateItemStatus(tradeInfo.getItemId(),  "판매 중");
                 break;
-            case "완료":
+            case "success":
                 itemTradeMapper.updateItemTradeResponseByTradeAndItem(tradeId, "완료");
                 itemStatusMapper.insertSaleItem(tradeInfo.getItemId(), tradeInfo.getSellerId());
                 itemStatusMapper.insertPurchaseItem(tradeInfo.getItemId(), tradeInfo.getBuyerId());
