@@ -4,7 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.neconico.neconico.mapper.item.ItemQuestionMapper">
-
     <sql id="choosewhere">
         <where>
             <choose>
@@ -55,13 +54,13 @@
     <select id="selectItemQuestionListByItemID" resultMap="questionlist">
         select q.item_question_id AS questionid,
                q.user_id          AS qid,
-               u.account_name    AS qname,
+               u.account_name     AS qname,
                q.content          AS qcontent,
                q.created_date     AS qcreated
         from item_question q
                      inner join users u
                 on q.user_id = u.user_id
-        where q.item_id = #{itemId};
+        where q.item_id = #{itemId}
     </select>
 
     <select id="selectCommentListById" resultMap="commentlist">
@@ -73,28 +72,67 @@
         from question_comment c
                      inner join users u
                 on c.user_id = u.user_id
-        where c.question_id = #{questionId};
+        where c.question_id = #{questionId}
     </select>
 
-    <insert id="insertItemQuestion" keyProperty="item_question_id" parameterType="itemquestiondto">
-        insert into item_question(item_id, user_id, created_date, content)
-        values (#{objectId}, #{userId}, SYSDATE(), #{content})
-    </insert>
+    <select id="selectItemQuestionResponseById" resultType="itemquestionresponse">
+        select q.item_id          AS itemId,
+               q.item_question_id AS itemQuestionId,
+               s.store_name       AS storeName,
+               s.store_img_path   AS storeImgPath,
+               q.content          AS content,
+               q.created_date     AS createdDate
+        from item_question q
+                     inner join store s
+                on q.user_id = s.user_id
+        where q.item_question_id = #{itemQuestionId}
+    </select>
 
-    <insert id="insertItemQuestionComment" keyProperty="question_comment_id" parameterType="itemquestiondto">
-        insert into question_comment(question_id, user_id, created_date, content)
+    <insert id="insertItemQuestion" parameterType="itemquestiondto" useGeneratedKeys="true" keyColumn="item_question_id"
+            keyProperty="id">
+        insert into item_question (item_id, user_id, created_date, content)
         values (#{objectId}, #{userId}, SYSDATE(), #{content})
     </insert>
 
     <update id="updateItemQuestion">
-        update ${kind}
+        update item_question
         set content = #{content}
-        <include refid="choosewhere"/>
+        where item_question_id = #{itemQuestionId}
     </update>
 
     <delete id="deleteItemQuestion">
-        delete from ${kind}
-        <include refid="choosewhere"/>
+        delete from item_question
+        where item_question_id = #{itemQuestionId}
+    </delete>
+
+    <select id="selectQuestionCommentById" resultType="questioncommentresponse">
+        select q.question_id          AS itemQuestionId,
+               q.question_comment_id AS questionCommentId,
+               s.store_name       AS storeName,
+               s.store_img_path   AS storeImgPath,
+               q.content          AS content,
+               q.created_date     AS createdDate
+        from question_comment q
+                     inner join store s
+                on q.user_id = s.user_id
+        where q.question_comment_id = #{questionCommentId}
+    </select>
+
+    <insert id="insertQuestionComment" parameterType="itemquestiondto" useGeneratedKeys="true" keyColumn="question_comment_id"
+            keyProperty="id">
+        insert into question_comment (question_id, user_id, created_date, content)
+        values (#{objectId}, #{userId}, SYSDATE(), #{content})
+    </insert>
+
+    <update id="updateQuestionComment">
+        update question_comment
+        set content = #{content}
+        where question_comment_id = #{questionCommentId}
+    </update>
+
+    <delete id="deleteQuestionComment">
+        delete from question_comment
+        where question_comment_id = #{questionCommentId}
     </delete>
 </mapper>
 

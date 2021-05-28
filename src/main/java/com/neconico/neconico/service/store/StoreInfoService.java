@@ -8,15 +8,10 @@ import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.store.StoreItemListMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.Days;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.Session;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -34,7 +29,7 @@ public class StoreInfoService {
 
         StoreInfoDto storeDto = storeInfoMapper.selectStoreInfoByUser(user.getUserId());
         storeInfo.setStoreInfo(storeDto.getStoreInfo());
-        storeInfo.setStoreName(storeDto.getStoreInfo());
+        storeInfo.setStoreName(storeDto.getStoreName());
         storeInfo.setStoreImgUrl(storeDto.getStoreImgUrl());
 
         storeInfo.setCreated(

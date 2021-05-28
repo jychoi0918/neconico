@@ -1,6 +1,8 @@
 package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
+import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
+import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -18,12 +20,20 @@ public interface ItemQuestionMapper {
 
     List<ItemQuestionCardDto> selectItemQuestionListByItemID(@Param("itemId") Long itemId);
 
+    ItemQuestionResponseDto selectItemQuestionResponseById(@Param("itemQuestionId") Long itemQuestionId);
+
     void insertItemQuestion(ItemQuestionDto itemQuestionDto);
 
-    void insertItemQuestionComment(ItemQuestionDto itemQuestionDto);
+    void updateItemQuestion(@Param("itemQuestionId") Long itemQuestionId, @Param("content") String content);
 
-    void updateItemQuestion(@Param("objectId") Long objectId, @Param("content") String content, @Param("kind") String kind);
+    void deleteItemQuestion(@Param("itemQuestionId") Long itemQuestionId);
 
-    void deleteItemQuestion(@Param("objectId") Long objectId, @Param("kind") String kind);
+    QuestionCommentResponseDto selectQuestionCommentById(@Param("questionCommentId") Long itemQuestionId);
+
+    void insertQuestionComment(ItemQuestionDto itemQuestionDto);
+
+    void updateQuestionComment(@Param("questionCommentId") Long questionCommentId, @Param("content") String content);
+
+    void deleteQuestionComment(@Param("questionCommentId") Long questionCommentId);
 
 }
