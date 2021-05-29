@@ -37,6 +37,20 @@
         select count(notice_id)
         from notice
     </select>
+    <select id="selectNoticing" resultType="NoticeReturnDto">
+        select notice_id    as noticeId,
+               title,
+               created_date as createdDate
+        from notice
+        where notice_status = #{noticeStatus}
+        order by ${cri.sortingColumn} ${cri.requestOrder}
+        limit #{cri.contentPerPage} offset #{cri.pageStart};
+
+
+    </select>
+
+
+
     <delete id="deleteNotice">
         delete from NOTICE
         where notice_id=#{noticeId}

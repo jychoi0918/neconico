@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class AdvertiseReturnDto {
 
     private long advertisementId;
+    private long userId;
     private String accountId;
     private String title;
     private String startDate;

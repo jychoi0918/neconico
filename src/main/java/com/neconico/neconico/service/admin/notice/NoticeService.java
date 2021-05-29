@@ -32,4 +32,6 @@ public interface NoticeService {
 
     //update noticeStatus
     void updateNoticeStatus(NoticeStatusDto noticeStatusDto);
+
+    List<NoticeViewDto> selectNoticing(Criteria criteria);
 }

@@ -26,7 +26,9 @@ public interface AdvertiseMapper {
 
     void deleteAd(long advertiseId);
 
-    void updateAd(AdvertiseInfoDto advertiseInfoDto);
+    void updateAd(AdvertiseReturnDto advertiseReturnDto);
 
     void updateStatus(AdvertiseStatusDto advertiseStatusDto);
+
+    List<AdvertiseReturnDto> selectAdvertising(String adStatus);
 }

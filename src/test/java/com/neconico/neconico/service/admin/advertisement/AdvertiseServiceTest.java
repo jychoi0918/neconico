@@ -1,10 +1,13 @@
 package com.neconico.neconico.service.admin.advertisement;
 
+import com.fasterxml.jackson.databind.deser.std.StdKeyDeserializer;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
 import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
 import com.neconico.neconico.paging.Criteria;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class AdvertiseServiceTest {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     AdvertiseService advertiseService;
@@ -95,6 +100,33 @@ class AdvertiseServiceTest {
 
 
     }
+
+
+    @Test
+    @DisplayName("selectAdvertising")
+    public void selectAdvertising() {
+
+        //given
+
+
+        //when
+        List<AdvertiseReturnDto> adList = advertiseService.selectAdvertising();
+
+        for (AdvertiseReturnDto advertiseReturnDto : adList) {
+            log.info("advertise="+advertiseReturnDto);
+        }
+
+    /*    //then
+        assertThat(adList).filteredOn(advertiseReturnDto->advertiseReturnDto.getAdStatus().contains("http"))*/
+
+
+    }
+
+
+
+
+
+
 
 
 

@@ -42,6 +42,7 @@ public class NoticeServiceImpl implements NoticeService {
         noticeMapper.insertNotice(noticeDto);
     }
 
+
     @Override
     @Transactional
     public void updateNotice(Long noticeId, NoticeDto noticeDto) {
@@ -60,6 +61,18 @@ public class NoticeServiceImpl implements NoticeService {
                 .collect(Collectors.toList());
     }
 
+
+    @Override
+    public List<NoticeViewDto> selectNoticing(Criteria cri) {
+        setCriteria(cri);
+        String noticeStatus = "공개";
+
+
+        return noticeMapper.selectByPaging(cri)
+                .stream()
+                .map(NoticeViewDto::new)
+                .collect(Collectors.toList());
+    }
 
     @Override
     @Transactional
@@ -96,5 +109,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         return cri;
     }
+
+
 
 }

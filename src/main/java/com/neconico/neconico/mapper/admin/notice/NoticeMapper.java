@@ -3,6 +3,7 @@ package com.neconico.neconico.mapper.admin.notice;
 import com.neconico.neconico.dto.admin.notice.NoticeDto;
 import com.neconico.neconico.dto.admin.notice.NoticeReturnDto;
 import com.neconico.neconico.dto.admin.notice.NoticeStatusDto;
+import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,6 +15,8 @@ public interface NoticeMapper {
 
     //select
     List<NoticeReturnDto> selectByPaging(@Param("cri")Criteria criteria);
+
+    List<NoticeReturnDto> selectNoticing(@Param("cri")Criteria criteria, @Param("noticeStatus")String noticeStatus);
 
     //count
     public long countTable();
@@ -32,4 +35,6 @@ public interface NoticeMapper {
 
     //statusUpdate
     public void updateStatus(NoticeStatusDto noticeStatusDto);
+
+
 }

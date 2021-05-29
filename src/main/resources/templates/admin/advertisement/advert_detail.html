@@ -10,10 +10,9 @@
                 <h3 class="h_fs_26">광고관리</h3>
 
                 <div class="adm08_list">
-                    <span style="visibility: hidden" id="advertisementId"  th:text="${ad.advertisementId}"></span>
+                    <span  hidden id="advertisementId" th:text="${ad.advertisementId}"></span>
                     <ul>
                         <li>
-
                             <span class="adm08_l">제목</span>
                             <span th:text="${ad.title}" class="adm08_r">퍼피랜드-royal 강아지 사료</span>
                         </li>
@@ -32,21 +31,21 @@
                         </li>
                         <li>
                             <span class="adm08_l">광고 연결 주소</span>
-                            <span th:text="${ad.url}" class="adm08_r">http://www.naver.com</span>
+                            <span class="adm08_r"><a th:href="${ad.url}" th:text="${ad.url}">http://www.naver.com</a></span>
                         </li>
                         <li>
                             <span class="adm08_l">광고 개시/종료 일자</span>
-                            <span class="adm08_r"><i th:text="${ad.startDate}">2021.05.01</i>  -  <i th:text="${ad.endDate}">2021.05.30</i></span>
+                            <span class="adm08_r"><i id="startDate" th:text="${ad.startDate}">2021.05.01</i>  -  <i id="endDate" th:text="${ad.endDate}">2021.05.30</i></span>
                         </li>
                     </ul>
                 </div>
 
                 <ul class="adm08_btn_box">
-                    <li>
+                    <li th:if="${ad.accountId}==${session.sessionUser.accountId}">
                         <a th:href="@{/admin/advert/edit/{advertisementId}(advertisementId=${ad.advertisementId})}" class="modify_btn">수정</a>
                     </li>
                     <li>
-                        <a th:href="@{/admin/adverts}" class="list_btn">목록으로</a>
+                        <a th:href="@{/admin/advert/list}" class="list_btn">목록으로</a>
                     </li>
                     <li>
                         <a style="cursor: pointer" th:onclick="deleteAdvert()" class="del_btn">삭제</a>
@@ -60,7 +59,14 @@
   const advertId = document.getElementById("advertisementId").innerText;
   const fileName = document.getElementById("imgFileName").innerText;
 
-         console.log(advertId,fileName);
+  let startDate = document.getElementById("startDate").innerText;
+  let endDate = document.getElementById("endDate").innerText;
+
+  document.getElementById("startDate").innerHTML=(startDate.substr(0,10));
+  document.getElementById("endDate").innerHTML=(endDate.substr(0,10));
+
+
+
 
 
     function deleteAdvert(){
@@ -81,9 +87,7 @@
             data2.setAttribute("name","imgFileName");
             data2.setAttribute("value", fileName);
 
-
-            form.appendChild(data1);
-            form.appendChild(data2);
+            form.append(data1, data2);
             document.body.appendChild(form);
             form.submit();
 

@@ -129,7 +129,7 @@ class AdvertiseMapperTest {
 
           //given
         Long advertiseId = 3L;
-        AdvertiseInfoDto ad = new AdvertiseInfoDto();
+        AdvertiseReturnDto ad = new AdvertiseReturnDto();
         ad.setAdvertisementId(advertiseId);
         ad.setTitle("광고 수정");
         ad.setUrl("www.gg.is.love");
@@ -166,6 +166,25 @@ class AdvertiseMapperTest {
         assertThat(advertiseMapper.selectAd(4l).getAdStatus()).isEqualTo("공개");
 
 
+    }
+
+    @Test
+    @DisplayName("selectMainAdvert Test")
+    void selectMainAdvertTest(){
+
+          //given
+         String adStatus = "광고중";
+
+          //when
+          List<AdvertiseReturnDto> adlist = advertiseMapper.selectAdvertising(adStatus);
+
+        for (AdvertiseReturnDto advertiseReturnDto : adlist) {
+            log.info("advertiseReturnDto= "+advertiseReturnDto.getAdImgUrl());
+            log.info("advertiseReturnDto= "+advertiseReturnDto.getUrl());
+        }
+
+
+          //then
     }
 
 

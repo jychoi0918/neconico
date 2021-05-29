@@ -4,129 +4,127 @@
 <body>
 <div class="wrap">
     <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
-    <div class="sub_header sub_header_admin h_con">
-        <div class="section_wrap">
-            <div class="admin_left" th:replace="fragment/admin_menu :: admin_menu"/>
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu :: admin_menu"/>
 
-            <div class="admin_right">
-                <h3 class="h_fs_26">광고등록</h3>
-                <form th:action name="register" id="register" class="admin09_register" method="post"
-                      enctype="multipart/form-data">
+        <div class="admin_right">
+            <h3 class="h_fs_26">광고등록</h3>
+            <form th:action name="register" id="register" class="admin09_register" method="post"
+                  enctype="multipart/form-data">
+                <div>
+                    <span>제목</span>
+                    <input name="title" th:value="${ad.title}" type="text" placeholder="제목을 입력하세요.">
+                </div>
+                <div class="admin09_register_file">
+                    <span>광고이미지 사진 등록</span>
+                    <input type="text" hidden name="imgFileName" th:value="${ad.imgFileName}">
+                    <input type="text" hidden name="adImgUrl" th:value="${ad.adImgUrl}">
+
+                    <input type="text" th:value="${ad.imgFileName}"
+                           class="file_name_only">
+
+                    <input name="imgFile" id="file_upload" class="admin09_fileupload" type="file"
+                           onchange="previewPic(event)" placeholder="이미지 이름이 나타납니다.">
+                    <label for="file_upload" class="admin09_fileupload_label">파일 불러오기</label>
+                </div>
+                <div id="preview" style=" width:100% ;height: 10%">
+                    <img th:src="${ad.adImgUrl}">
+
+                </div>
+                <div>
+                    <span>광고 연결 주소</span>
+                    <input name="url" th:value="${ad.url}" type="url" placeholder="URL을 입력해주세요.">
+                </div>
+
+
+                <div class="admin09_register_date">
                     <div>
-                        <span>제목</span>
-                        <input name="title" th:value="${ad.title}" type="text" placeholder="제목을 입력하세요.">
+                        <span>시작 일자</span>
+                        <input name="startDate" th:value="${ad.startDate}" type="date">
                     </div>
-                    <div class="admin09_register_file">
-                        <span>광고이미지 사진 등록</span>
-                        <!-- <span style="display: none" name="originFile" th:value="${ad.imgFileName}"></span>-->
-                        <input type="text" id="imgFileName" name="imgFileName" th:value="${ad.imgFileName}"
-                               class="file_name_only">
-                        <input name="imgFile" id="file_upload" class="admin09_fileupload" type="file"
-                               onchange="previewPic(event)" placeholder="이미지 이름이 나타납니다.">
-                        <label for="file_upload" class="admin09_fileupload_label">파일 불러오기</label>
-                    </div>
-                    <div id="preview" style=" width:100% ;height: 10%">
-                        <img th:src="${ad.adImgUrl}">
 
-                    </div>
                     <div>
-                        <span>광고 연결 주소</span>
-                        <input name="url" th:value="${ad.url}" type="url" placeholder="URL을 입력해주세요.">
+                        <span>종료 일자</span>
+                        <input name="endDate" th:value="${ad.endDate}" type="date">
                     </div>
+                </div>
+
+                <ul class="adm08_btn_box adm09_btn_box">
+                    <li class="on">
+                        <a style="cursor: pointer" onclick="submitAdvert()" class="confrim_btn">수정완료</a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/advert/{advertisementId}(advertisementId=${ad.advertisementId})}" class="list_btn">취소</a>
+                    </li>
+                </ul>
+            </form>
 
 
-                    <div class="admin09_register_date">
-                        <div>
-                            <span>시작 일자</span>
-                            <input name="startDate" th:value="${ad.startDate}" type="date">
-                        </div>
-
-                        <div>
-                            <span>종료 일자</span>
-                            <input name="endDate" th:value="${ad.endDate}" type="date">
-                        </div>
-                    </div>
-
-                    <ul class="adm08_btn_box adm09_btn_box">
-                        <li class="on">
-                            <a style="cursor: pointer" onclick="submitAdvert()" class="confrim_btn">수정완료</a>
-                        </li>
-                        <li>
-                            <a th:href="@{/admin/adverts}" class="list_btn">취소</a>
-                        </li>
-                    </ul>
-                </form>
+            <script type="text/javascript" th:inline="javascript">
 
 
-                <script type="text/javascript">
+                function previewPic(event) {
 
-                    function previewPic(event) {
+                    let reader = new FileReader();
+                    let previewDiv = document.getElementById("preview");
 
-                        let reader = new FileReader();
-                        let previewDiv = document.getElementById("preview");
+                    while (previewDiv.hasChildNodes())
+                        previewDiv.removeChild(previewDiv.firstChild);
 
-                        while (previewDiv.hasChildNodes())
-                            previewDiv.removeChild(previewDiv.firstChild);
+                    reader.onload = function (event) {
+                        let img = document.createElement("img");
+                        img.setAttribute("src", event.target.result);
+                        previewDiv.appendChild(img);
+                    };
+                    reader.readAsDataURL(event.target.files[0]);
 
-                        reader.onload = function (event) {
-                            let img = document.createElement("img");
-                            img.setAttribute("src", event.target.result);
-                            previewDiv.appendChild(img);
-                        };
-                        reader.readAsDataURL(event.target.files[0]);
+                }
 
+
+
+                function submitAdvert() {
+                    let title = document.forms["register"]["title"].value;
+                    let url = document.forms["register"]["url"].value;
+                    let startDate = document.forms["register"]["startDate"].value;
+                    let endDate = document.forms["register"]["endDate"].value;
+
+
+
+                    if (title.trim() == "" || url.trim() == "" || startDate.trim() == "" || endDate.trim() == "") {
+                        alert("빈칸을 채워주세요");
+                        return;
+                    } else if ((startDate < endDate) == false) {
+                        alert("시간 설정이 잘못되었습니다 확인해 주세요");
+                        return;
+                    } else {
+                        startDate = new Date(startDate);
+                        endDate = new Date(endDate);
+                        (confirm("등록하시겠습니까?")) ? finalSend() : false;
                     }
+                }
 
+                function finalSend() {
+                    const submitAd = document.getElementById('register');
+                    alert("등록완료!");
+                    console.log(submitAd);
+                    submitAd.submit();
+                }
 
-                    let originFile = document.forms["register"]["imgFileName"].value;
-
-                    function submitAdvert() {
-                        let title = document.forms["register"]["title"].value;
-                        let url = document.forms["register"]["url"].value;
-                        let startDate = document.forms["register"]["startDate"].value;
-                        let endDate = document.forms["register"]["endDate"].value;
-                        let imgFileName = document.forms["register"]["imgFileName"].value;
-
-
-                        if (title.trim() == "" || url.trim() == "" || startDate.trim() == "" || endDate.trim() == "") {
-                            alert("빈칸을 채워주세요");
-                            return;
-                        } else if ((startDate < endDate) == false) {
-                            alert("시간 설정이 잘못되었습니다 확인해 주세요");
-                            return;
-                        } else {
-                            if (imgFileName == originFile) {
-                                document.getElementById("imgFileName").setAttribute('value', 'same');
-                            }
-                            console.log("origin = " + originFile);
-                            console.log("img File Name = " + imgFileName);
-                            (confirm("등록하시겠습니까?")) ? finalSend() : false;
+            </script>
+            <script>
+                $(function () {
+                    var fileTarget = $('.admin09_fileupload');
+                    fileTarget.on('change', function () { // 값이 변경되면
+                        if (window.FileReader) { // modern browser
+                            var filename = $(this)[0].files[0].name;
+                        } else { // old IE
+                            var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
                         }
-                    }
-
-                    function finalSend() {
-                        const submitAd = document.getElementById('register');
-                        alert("등록완료!");
-                        console.log(submitAd);
-                        submitAd.submit();
-                    }
-
-                </script>
-                <script>
-                    $(function () {
-                        var fileTarget = $('.admin09_fileupload');
-                        fileTarget.on('change', function () { // 값이 변경되면
-                            if (window.FileReader) { // modern browser
-                                var filename = $(this)[0].files[0].name;
-                            } else { // old IE
-                                var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
-                            }
-                            // 추출한 파일명 삽입
-                            $(this).siblings('.file_name_only').val(filename);
-                        });
+                        // 추출한 파일명 삽입
+                        $(this).siblings('.file_name_only').val(filename);
                     });
-                </script>
-            </div>
+                });
+            </script>
         </div>
     </div>
 </div>

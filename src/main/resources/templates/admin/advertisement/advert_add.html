@@ -89,6 +89,13 @@
                     } else if ((startDate < endDate) == false) {
                         alert("시간 설정이 잘못되었습니다 확인해 주세요");
                     } else {
+                        startDate = new Date(startDate);
+                        endDate = new Date(endDate);
+                        console.log(startDate);
+                        console.log(endDate);
+
+
+
                         const submitAd = document.getElementById('register');
                         alert("등록완료!");
                         submitAd.submit();

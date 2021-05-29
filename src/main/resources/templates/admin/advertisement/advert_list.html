@@ -36,14 +36,23 @@
                             <td><a th:href="@{/admin/advert/{advertiseId}(advertiseId=${ad.advertisementId})}"
                                    th:text="${ad.title}">광고제목이 나타납니다.</a></td>
                             <td th:text="${ad.accountId}">홍길동</td>
-                            <td th:text="${ad.startDate}">2021.05.01</td>
-                            <td th:text="${ad.endDate}">2021.05.30</td>
+                            <td name="startDate" th:text="${ad.startDate}">2021.05.01</td>
+                            <td name="endDate" th:text="${ad.endDate}">2021.05.30</td>
                             <!--내가 다른 함수를 써서 사용하면 될까?-->
                             <td><a class="" th:class="${ad.adStatus.equals('광고중')} ? changeStatus: ''" id="status"
                                    th:text="${ad.adStatus}" style="cursor: pointer"
                                    onclick="updateAdStatus(this)">광고중</a></td>
                         </tr>
                     </table>
+                    <div class="sch_box">
+                        <select name="" id="">
+                            <option value="">아이디</option>
+                            <option value="">이름</option>
+                            <option value="">이메일</option>
+                        </select>
+                        <input type="text" placeholder="검색어를 입력하세요.">
+                        <input type="button" value="검색">
+                    </div>
 
                     <!--    페이징      -->
                     <div class="pagination" th:if="${pageMaker.totalContent}!=0">
@@ -67,12 +76,25 @@
         </div>
     </div>
     <script>
+
+         /* 날짜 형식 바꾸기 */
+        window.onload = function(){
+            let startDate = document.getElementsByName("startDate");
+            let endDate = document.getElementsByName("endDate");
+
+            for (let i = 0; i < startDate.length; i++) {
+                startDate[i].innerHTML =(startDate[i].innerHTML.substring(0,10));
+                endDate[i].innerHTML =(endDate[i].innerHTML.substring(0,10));
+
+            }
+
+        }
+
         <!-- 광고 공개/숨김 표시    -->
         function updateAdStatus(obj) {
             let request = new XMLHttpRequest()
             let adId = obj.parentElement.parentElement.firstElementChild.innerHTML;
             let adStatus = obj.innerText;
-
 
             adStatus = (adStatus == "숨김" ? "광고중" : "숨김");
 
@@ -83,7 +105,6 @@
                 } else {
                     obj.classList.remove('changeStatus');
                 }
-
 
                 let content = new Object();
                 content.advertisementId = adId;
@@ -103,11 +124,11 @@
                 request.setRequestHeader("Content-type", "application/json");
                 request.send(jsonContent);
 
-
             } else {
                 return false;
             }
         }
+
 
     </script>
 </body>

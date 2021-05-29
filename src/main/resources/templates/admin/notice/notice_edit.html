@@ -20,7 +20,7 @@
                         <a href="#" class="confirm_btn" onclick="submit_form()">등록</a>
                     </li>
                     <li>
-                        <a th:href="@{/admin/notice}" class="list_btn">목록</a>
+                        <a th:href="@{/admin/notice/list}" class="list_btn">목록</a>
                     </li>
                 </ul>
             </form>
@@ -38,10 +38,9 @@
             return false;
         } else {
             let submit_btn = document.getElementsByName('adm_notice_write');
+            alert("등록완료!");
             submit_btn[0].submit();
             submit_btn[1].submit();
-            /*왜 안뜨지?*/
-            alert("등록완료!");
 
         }
     }

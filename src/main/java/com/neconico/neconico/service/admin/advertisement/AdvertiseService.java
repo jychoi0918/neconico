@@ -10,24 +10,38 @@ import java.util.List;
 
 public interface AdvertiseService {
 
+
     //select
+
+    //'광고중' 광고글 가져오기
+    List<AdvertiseReturnDto> selectAdvertising();
+
+
+    //광고 리스트 가져오기
     List<AdvertiseReturnDto> selectAllAd(Criteria cri);
 
     long countTable();
 
-    AdvertiseReturnDto selectAd(Long noticeId);
+    AdvertiseReturnDto selectAd(Long advertisementId);
+
+
 
     //insert
     void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) throws Exception;
 
 
-    void deleteAd(Long noticeId);
+
+    //delete
+    void deleteAd(Long advertisementId);
 
 
 
-    void updateAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto);
+    //update
+    void updateAd(FileResultInfoDto fileResultInfoDto, AdvertiseReturnDto advertiseReturnDto);
 
-    void updateAdSamePicture(AdvertiseInfoDto advertiseInfoDto);
+
+/*    void updateAdSamePicture(AdvertiseInfoDto advertiseInfoDto);*/
+
 
     void updateStatus(AdvertiseStatusDto advertiseStatusDto);
 
