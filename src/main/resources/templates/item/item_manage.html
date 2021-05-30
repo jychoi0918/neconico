@@ -46,8 +46,8 @@
                     <td th:text="${#temporals.format(item.createdTime, 'yyyy년MM월dd일 HH:mm:ss')}"></td>
                     <td>
                         <div class="list_btn">
-                            <a th:href="@{/item/{id}/modify(id=${item.itemId})}">수정</a>
-                            <a th:href="@{/item/{id}/delete(id=${item.itemId})}">삭제</a>
+                            <a th:href="@{/item/{id}/edit(id=${item.itemId})}">수정</a>
+                            <a th:onclick="|javascript:deleteItem('${item.itemId}')|">삭제</a>
                         </div>
                     </td>
                 </tr>
@@ -69,6 +69,26 @@
                 </ul>
             </div>
         </section>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            let currentPage = [[${pagenation.criteria.currentPage}]];
+            /*]]*/
+            function deleteItem(itemId){
+                let result = confirm("삭제하시겠습니까?")
+                if(result){
+                const httpRequest = new XMLHttpRequest();
+                httpRequest.open("delete", "/item/"+itemId+"/delete");
+                httpRequest.onreadystatechange = function () {
+                    if (this.readyState === 4 && this.status === 200) {
+                        alert('상품이 삭제 되었습니다.');
+                        location.href="/item/manage?currentPage="+currentPage;
+                    }
+                }
+                httpRequest.send();
+                }
+            }
+        </script>
 
 
     </div>

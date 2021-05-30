@@ -4,12 +4,9 @@ import com.neconico.neconico.dto.item.ItemQuestionDto;
 import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
 import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.mapper.item.ItemQuestionMapper;
-import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)

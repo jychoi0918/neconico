@@ -1,16 +1,21 @@
 package com.neconico.neconico.service.store;
 
+import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.store.card.StoreInfoCardDto;
 import com.neconico.neconico.dto.users.SessionUser;
-import com.neconico.neconico.dto.users.UserInfoDto;
+import com.neconico.neconico.file.policy.FilePolicy;
+import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.store.StoreItemListMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
+import com.neconico.neconico.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -22,6 +27,7 @@ public class StoreInfoService {
     private final StoreInfoMapper storeInfoMapper;
     private final StoreItemListMapper storeItemListMapper;
     private final UserMapper userMapper;
+    private final FileService fileService;
 
     public StoreInfoCardDto findStoreInfo(SessionUser user) {
 
@@ -41,7 +47,6 @@ public class StoreInfoService {
         return storeInfo;
     }
 
-
     @Transactional
     public void createStoreInfo(StoreInfoDto storeInfoDto) {
         storeInfoMapper.insertStoreInfo(storeInfoDto);
@@ -57,7 +62,6 @@ public class StoreInfoService {
         storeInfoMapper.updateStoreInfo(storeInfoDto);
     }
 
-
     public String calculateCreatedDate(String accountId) {
         LocalDate created = userMapper.selectUserByAccountId(accountId).getCreatedDate().toLocalDate();
         LocalDate now = LocalDate.now();
@@ -71,5 +75,14 @@ public class StoreInfoService {
         return userMapper.selectSessionUserInfoByAccountId(accountId);
     }
 
-
+    @Transactional
+    public void updateStoreImg(MultipartFile multipartFiles, Long userId) throws IOException {
+        StoreInfoDto initInfo = storeInfoMapper.selectStoreInfoByUser(userId);
+        fileService.setFileProcess(new S3FileProcess(FilePolicy.STORE));
+        FileResultInfoDto result = fileService.uploadFiles(multipartFiles);
+        updateStoreInfo(new StoreInfoDto(userId, null, result.getFileUrls(), null, result.getFileNames()));
+        if(!(initInfo.getStoreImgUrl().equals(""))) {
+            fileService.deleteFiles(initInfo.getStoreImgName());
+        }
+    }
 }
