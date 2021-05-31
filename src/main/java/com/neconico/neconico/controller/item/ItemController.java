@@ -82,10 +82,49 @@ public class ItemController {
 
         List<ItemCardViewDto> itemCardViewDtoList = itemService.searchItemsBySubCategoryId(criteria, subId);
         int totalContent = itemService.countTotalItemsBySubCategoryId(subId).intValue();
+
         model.addAttribute("subId", subId);
         model.addAttribute("subName", subName);
         model.addAttribute("itemCardList", itemCardViewDtoList);
         model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
         return "item/sch_category_result";
+    }
+
+    /**
+     * 아이템 수정
+     * 아이템 삭제
+     */
+    @GetMapping("/item/{itemId}/edit")
+    public String updateItemPage(@PathVariable("itemId") Long itemId, Model model) {
+        ItemInfoDto itemInfoDto = itemService.findItemByItemIdForUpdate(itemId);
+        List<CategoryInfoDto> categoryInfoAll = categoryService.findCategoryInfoAll();
+
+        model.addAttribute("itemForm", itemInfoDto);
+        model.addAttribute("categoryList", categoryInfoAll);
+        return "item/edit_item";
+    }
+
+    @PostMapping("/item/{itemId}/edit")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateItemResult(@RequestParam(value = "files", required = false) MultipartFile[] multipartFiles,
+                                 @ModelAttribute("itemFrom") ItemInfoDto itemInfoDto,
+                                 @RequestParam("subId") Long subId,
+                                 @RequestParam("currentFiles") String[] currentFiles) throws Exception {
+
+
+        for(String fileName : currentFiles) {
+            System.out.println("fileName = " + fileName);
+        }
+    }
+
+
+    @DeleteMapping("/item/{itemId}/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteItem(@PathVariable("itemId") Long itemId) {
+        ItemInfoDto itemInfoDto = itemService.findItemByItemIdForUpdate(itemId);
+
+        fileService.setFileProcess(new S3FileProcess(FilePolicy.ITEM));
+        fileService.deleteFiles(itemInfoDto.getImgFileNames());
+        itemService.removeItem(itemId);
     }
 }
