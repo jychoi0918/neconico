@@ -467,7 +467,7 @@ function clickStoreName(kind) {
 
         <!-- 요청 추가 -->
         let httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', "/mystore/name");
+        httpRequest.open('POST', "/mystore/name/edit");
         httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
@@ -507,7 +507,7 @@ function clickStoreContent(kind) {
         let storeContent = div.firstChild.value;
         <!-- 요청 추가 -->
         let httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', "/mystore/content");
+        httpRequest.open('POST', "/mystore/content/edit");
         httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
@@ -555,7 +555,7 @@ function storeImgUpload() {
 
     const httpRequest = new XMLHttpRequest();
 
-    httpRequest.open("post", "/mystore/img");
+    httpRequest.open("post", "/mystore/img/edit");
     httpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             alert('처리가 되었습니다.')

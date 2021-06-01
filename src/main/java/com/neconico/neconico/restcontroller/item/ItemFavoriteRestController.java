@@ -15,12 +15,12 @@ public class ItemFavoriteRestController {
 
     private final ItemFavoriteService itemFavoriteService;
 
-    @PostMapping("/favorite/{itemId}/add")
+    @PostMapping("/favorite/{itemId}/new")
     public void itemFavoriteAdd(@PathVariable("itemId") Long itemId, @LoginUser SessionUser user){
         itemFavoriteService.addFavorite(itemId, user.getUserId());
     }
 
-    @PostMapping("/favorite/{itemId}/cancel")
+    @PostMapping("/favorite/{itemId}/delete")
     public void itemFavoriteCancel(@PathVariable("itemId") Long itemId, @LoginUser SessionUser user){
         itemFavoriteService.cancelFavorite(itemId, user.getUserId());
     }

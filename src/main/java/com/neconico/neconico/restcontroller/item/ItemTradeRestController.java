@@ -12,17 +12,16 @@ public class ItemTradeRestController {
 
     private final ItemTradeService tradeService;
 
-
     @PostMapping("/trade/{itemId}/request")
-    public void tradeRequest(@PathVariable("itemId")Long itemId, @LoginUser SessionUser user){
-        tradeService.tradeRequest(user.getUserId(), itemId);
+    public void requestTrade(@PathVariable("itemId") Long itemId, @LoginUser SessionUser user){
+        tradeService.requestTrade(user.getUserId(), itemId);
     }
 
     @PostMapping("/trade/{tradeId}/response")
-    public void tradeResponse(@PathVariable("tradeId")Long tradeId,
+    public void responseTrade(@PathVariable("tradeId")Long tradeId,
                               @RequestParam(name = "status") String status,
                               @LoginUser SessionUser user) {
-        tradeService.tradeResponse(user.getUserId(), tradeId, status);
+        tradeService.responseTrade(user.getUserId(), tradeId, status);
     }
 
 

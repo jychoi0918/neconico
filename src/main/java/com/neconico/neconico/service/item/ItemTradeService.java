@@ -16,7 +16,7 @@ public class ItemTradeService {
 
     private final ItemTradeMapper itemTradeMapper;
 
-    public void tradeRequest(Long buyerId, Long itemId) {
+    public void requestTrade(Long buyerId, Long itemId) {
         //상품 판매자 = 구매자 인 경우
         if(itemTradeMapper.selectItemSellerByItemId(itemId) == buyerId){
             throw new IllegalArgumentException("Buyer equal Seller");
@@ -36,7 +36,7 @@ public class ItemTradeService {
         itemStatusMapper.updateItemStatus(itemId, "거래 중");
     }
 
-    public void tradeResponse(Long sellerId, Long tradeId, String status) {
+    public void responseTrade(Long sellerId, Long tradeId, String status) {
         ItemTradeDto tradeInfo = itemTradeMapper.selectItemTradeOneByTrade(tradeId);
 
         //만약 sellerId가 거래의 판매자와 다를경우

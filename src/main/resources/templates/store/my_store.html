@@ -1,23 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내꼬니꼬</title>
-
-    <link rel="stylesheet" type="text/css" href="/css/xeicon.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_reset.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_style.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_sub.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_store.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="/js/main.js"></script>
-</head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
 <body>
 <div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
     <script src="/js/store/my_store.js"></script>
 
     <div class="my_store_section_wrap h_con">
@@ -126,6 +112,7 @@
         </div>
 
     </div>
+<footer th:replace="fragment/footer :: footer"/>
 </div>
 </body>
 </html>

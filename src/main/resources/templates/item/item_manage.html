@@ -1,23 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>내꼬니꼬</title>
-
-    <link rel="stylesheet" type="text/css" href="/css/xeicon.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_reset.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_style.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_sub.css">
-    <link rel="stylesheet" type="text/css" href="/css/h_store.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"/>
-
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="/js/main.js"></script>
-</head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
 <body>
 <div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
     <div class="list_section_wrap h_con">
 
         <h3 class="h_fs_26">상품관리</h3>
@@ -46,14 +32,14 @@
                     <td th:text="${#temporals.format(item.createdTime, 'yyyy년MM월dd일 HH:mm:ss')}"></td>
                     <td>
                         <div class="list_btn">
-                            <a th:href="@{/item/{id}/edit(id=${item.itemId})}">수정</a>
-                            <a th:onclick="|javascript:deleteItem('${item.itemId}')|">삭제</a>
+                            <a th:onclick="|javascript:modifyItem('${item.itemId}','${item.status}')|">수정</a>
+                            <a th:onclick="|javascript:deleteItem('${item.itemId}','${item.status}')|">삭제</a>
                         </div>
                     </td>
                 </tr>
             </table>
 
-            <div class="pagination">
+        <div class="pagination" th:if="${pagenation.totalContent} != '0'">
                 <ul>
                     <li th:unless="${pagenation.criteria.currentPage}==1">
                         <a class="page_prev"
@@ -64,7 +50,8 @@
                            th:classappend="${idx == pagenation.criteria.currentPage} ? active : ''">1</a>
                     </li>
                     <li th:if="${pagenation.hasNext}">
-                        <a class="page_next" th:href="@{/item/manage(currentPage=${pagenation.criteria.currentPage}+1)}"></a>
+                        <a class="page_next"
+                           th:href="@{/item/manage(currentPage=${pagenation.criteria.currentPage}+1)}"></a>
                     </li>
                 </ul>
             </div>
@@ -73,19 +60,32 @@
         <script th:inline="javascript">
             /*<![CDATA[*/
             let currentPage = [[${pagenation.criteria.currentPage}]];
+
             /*]]*/
-            function deleteItem(itemId){
-                let result = confirm("삭제하시겠습니까?")
-                if(result){
-                const httpRequest = new XMLHttpRequest();
-                httpRequest.open("delete", "/item/"+itemId+"/delete");
-                httpRequest.onreadystatechange = function () {
-                    if (this.readyState === 4 && this.status === 200) {
-                        alert('상품이 삭제 되었습니다.');
-                        location.href="/item/manage?currentPage="+currentPage;
-                    }
+            function modifyItem(itemId, status) {
+                if (status == "판매 중") {
+                    location.href = "/item/itemId/edit";
+                } else {
+                    alert("현재 제품의 상태가 " + status + "라 수정할 수 없습니다.");
                 }
-                httpRequest.send();
+            }
+
+            function deleteItem(itemId, status) {
+                if (status == "판매 중") {
+                    let result = confirm("삭제하시겠습니까?")
+                    if (result) {
+                        const httpRequest = new XMLHttpRequest();
+                        httpRequest.open("delete", "/item/" + itemId + "/delete");
+                        httpRequest.onreadystatechange = function () {
+                            if (this.readyState === 4 && this.status === 200) {
+                                alert('상품이 삭제 되었습니다.');
+                                location.href = "/item/manage?currentPage=" + currentPage;
+                            }
+                        }
+                        httpRequest.send();
+                    }
+                } else {
+                    alert("현재 제품의 상태가 " + status + "라 삭제할 수 없습니다.");
                 }
             }
         </script>
@@ -93,7 +93,7 @@
 
     </div>
 
-
+    <footer th:replace="fragment/footer :: footer"/>
 </div>
 </body>
 </html>

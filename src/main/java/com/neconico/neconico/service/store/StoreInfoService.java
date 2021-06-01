@@ -62,6 +62,20 @@ public class StoreInfoService {
         storeInfoMapper.updateStoreInfo(storeInfoDto);
     }
 
+    @Transactional
+    public void updateStoreImg(MultipartFile multipartFiles, Long userId) throws IOException {
+        StoreInfoDto initInfo = storeInfoMapper.selectStoreInfoByUser(userId);
+
+        fileService.setFileProcess(new S3FileProcess(FilePolicy.STORE));
+        FileResultInfoDto result = fileService.uploadFiles(multipartFiles);
+
+        updateStoreInfo(new StoreInfoDto(userId, null, result.getFileUrls(), null, result.getFileNames()));
+
+        if(!(initInfo.getStoreImgUrl().equals(""))) {
+            fileService.deleteFiles(initInfo.getStoreImgName());
+        }
+    }
+
     public String calculateCreatedDate(String accountId) {
         LocalDate created = userMapper.selectUserByAccountId(accountId).getCreatedDate().toLocalDate();
         LocalDate now = LocalDate.now();
@@ -75,14 +89,5 @@ public class StoreInfoService {
         return userMapper.selectSessionUserInfoByAccountId(accountId);
     }
 
-    @Transactional
-    public void updateStoreImg(MultipartFile multipartFiles, Long userId) throws IOException {
-        StoreInfoDto initInfo = storeInfoMapper.selectStoreInfoByUser(userId);
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.STORE));
-        FileResultInfoDto result = fileService.uploadFiles(multipartFiles);
-        updateStoreInfo(new StoreInfoDto(userId, null, result.getFileUrls(), null, result.getFileNames()));
-        if(!(initInfo.getStoreImgUrl().equals(""))) {
-            fileService.deleteFiles(initInfo.getStoreImgName());
-        }
-    }
+
 }

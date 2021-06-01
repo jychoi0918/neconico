@@ -5,6 +5,7 @@ import com.neconico.neconico.dto.store.StoreItemSortingDto;
 import com.neconico.neconico.mapper.store.StoreItemListMapper;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.paging.Pagination;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ItemManageService {
 
-    @Autowired
-    StoreItemListMapper storeItemListMapper;
+    private final StoreItemListMapper storeItemListMapper;
 
     private final int pageSize = 10;
 

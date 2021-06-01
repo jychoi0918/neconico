@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,54 +37,54 @@ public class StoreItemListService {
         return itemCountMap;
     }
 
-    public HashMap<String, Object> createMyItemList(Long userId, StoreItemRequestDto request){
+    public Map<String, Object> createMyItemList(Long userId, StoreItemRequestDto request){
         Criteria cri = createCri(request, cardPerPage);
-        HashMap itemListMap = new HashMap<>();
+        Map<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStoreMyItem(userId).intValue(), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreMyItemList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
 
-    public HashMap<String, Object> createPurchaseItemList(Long userId, StoreItemRequestDto request){
+    public Map<String, Object> createPurchaseItemList(Long userId, StoreItemRequestDto request){
         Criteria cri = createCri(request, cardPerPage);
-        HashMap itemListMap = new HashMap<>();
+        Map<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStorePurchasedItem(userId).intValue(), pageSize));
         itemListMap.put("itemList", listMapper.selectStorePurchasedItemList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
 
-    public HashMap<String, Object> createFavoriteItemList(Long userId, StoreItemRequestDto request){
+    public Map<String, Object> createFavoriteItemList(Long userId, StoreItemRequestDto request){
         Criteria cri = createCri(request, cardPerPage);
-        HashMap itemListMap = new HashMap<>();
+        Map<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStoreFavoriteItem(userId).intValue(), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreFavoriteList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
 
-    public HashMap<String, Object> createTradeList(Long userId, StoreItemRequestDto request){
+    public Map<String, Object> createTradeList(Long userId, StoreItemRequestDto request){
         Criteria cri = createCri(request, otherCardPerPage);
-        HashMap itemListMap = new HashMap<>();
+        Map<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStoreTrade(userId).intValue(), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreTradeList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
 
-    public HashMap<String, Object> createQuestionList(Long userId, StoreItemRequestDto request){
+    public Map<String, Object> createQuestionList(Long userId, StoreItemRequestDto request){
         Criteria cri = createCri(request, otherCardPerPage);
-        HashMap itemListMap = new HashMap<>();
+        Map<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStoreQuestion(userId).intValue(), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreQuestionList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
 
-    public HashMap<String, Object> createReviewList(Long userId, StoreItemRequestDto request){
+    public Map<String, Object> createReviewList(Long userId, StoreItemRequestDto request){
         Criteria cri = createCri(request, otherCardPerPage);
-        HashMap itemListMap = new HashMap<>();
+        Map<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStoreReview(userId).intValue(), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreReviewList(adaptSortingDto(userId, cri)));
