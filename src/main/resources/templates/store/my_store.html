@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
+    <script src="/js/store/my_store.js"></script>
+
+    <div class="my_store_section_wrap h_con">
+        <section class="my_store_box">
+            <div class="my_store_img_box">
+                <figure id="preview">
+                    <img th:src="${storeInfo.storeImgUrl}" id="uploadImg" alt="">
+                </figure>
+
+                <form id="storeImgForm" enctype="multipart/form-data">
+                    <label id="inputImgLabel" for="inputImgBtn">이미지 선택</label>
+                    <input type="file" name="storeImg" id="inputImgBtn" accept="image/*" style="display: none"
+                           onchange="previewImage(this)"/>
+                    <label id="submitImgLabel" for="submitImgBtn" style="display: none">이미지 업로드</label>
+                    <input type="button" style="display: none" id="submitImgBtn" onclick="storeImgUpload()">
+                </form>
+            </div>
+
+
+            <div class="my_store_info_box">
+                <h3 id="storeName">
+                    <span th:text="${storeInfo.storeName}"/>
+                    <a href="javascript:clickStoreName(0)">상점명 변경</a>
+                </h3>
+                <ul class="my_sotre_info">
+                    <li>
+                        <i><img src="/img/my_store_img02.png" alt=""></i>
+                        <span>상점오픈일</span>
+                        <b th:text="${storeInfo.created}"></b>
+                    </li>
+                    <li>
+                        <i><img src="/img/my_store_img04.png" alt=""></i>
+                        <span>상품판매</span>
+                        <b th:text="${storeInfo.soldCount}"></b>
+                    </li>
+                </ul>
+
+                <div class="my_store_intro clearfix">
+                    <div class="my_store_intro_txt" id="storeContentBox">
+                        <p th:text="${storeInfo.storeInfo}"/>
+                    </div>
+                    <a href="javascript:clickStoreContent(0)" id="storeContentButton">소개글 변경</a>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="my_store_box02">
+            <ul class="my_store_box02_tab">
+                <li class="on">
+                    <a onclick="selectMenu('myItem')" href="#myItem">내 상품<span
+                            th:text="'('+${myItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('purchasedItem')" href="#purchasedItem">구매한 상품 <span
+                            th:text="'('+${purchaseItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('favoriteItem')" href="#favoriteItem">찜한 상품 <span
+                            th:text="'('+${favoriteItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('tradeItem')" href="#tradeItem">거래 요청 <span
+                            th:text="'('+${tradeCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('questionItem')" href="#questionItem">상품 문의 <span
+                            th:text="'('+${questionCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('storeReview')" href="#storeReview">상점 후기 <span
+                            th:text="'('+${storeReviewCount}+')'"></span></a>
+                </li>
+            </ul>
+
+            <div class="my_store_list_box">
+                <ul class="my_store_list_tab">
+                    <li>
+                        <a href="#created" onclick="selectSortingColumn('CREATED')">등록일 순</a>
+                    </li>
+                    <li>
+                        <a href="#views" onclick="selectSortingColumn('VIEWS')">조회수 순</a>
+                    </li>
+                    <li>
+                        <a href="#price" onclick="selectSortingColumn('PRICE')">가격 순</a>
+                    </li>
+                </ul>
+                <div class="my_store_list">
+                    <!-- 상품 리스트 -->
+                    <div class="my_store_list00 active" id="itemListDiv">
+                        <!-- DOM 박기 -->
+                    </div>
+
+                    <script>
+                        $(function () {
+                            $('.my_store_box02_tab li').click(function () {
+                                var i = $(this).index();
+                                $('.my_store_box02_tab li').removeClass('on');
+                                $(this).addClass('on');
+                            });
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+<footer th:replace="fragment/footer :: footer"/>
+</div>
+</body>
+</html>

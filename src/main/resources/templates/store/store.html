@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
+    <script src="/js/store/store/js" th:inline="javascript"></script>
+
+    <div class="my_store_section_wrap h_con">
+        <section class="my_store_box">
+            <div class="my_store_img_box">
+                <figure>
+                    <img th:src="${storeInfo.storeImgUrl}" alt="">
+                </figure>
+            </div>
+
+            <div class="my_store_info_box">
+                <h3 id="storeName">
+                    <span th:text="${storeInfo.storeName}"/>
+                </h3>
+                <ul class="my_sotre_info">
+                    <li>
+                        <i><img src="/img/my_store_img02.png" alt=""></i>
+                        <span>상점오픈일</span>
+                        <b th:text="${storeInfo.created}"></b>
+                    </li>
+                    <li>
+                        <i><img src="/img/my_store_img04.png" alt=""></i>
+                        <span>상품판매</span>
+                        <b th:text="${storeInfo.soldCount}"></b>
+                    </li>
+                </ul>
+
+                <div class="my_store_intro clearfix">
+                    <div class="my_store_intro_txt" id="storeContentBox">
+                        <p th:text="${storeInfo.storeInfo}"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="my_store_box02">
+            <ul class="my_store_box02_tab">
+                <li class="on">
+                    <a onclick="selectMenu('myItem')" href="#myItem">내 상품<span
+                            th:text="'('+${myItemCount}+')'"></span></a>
+                </li>
+                <li>
+                    <a onclick="selectMenu('storeReview')" href="#storeReview">상점 후기 <span
+                            th:text="'('+${storeReviewCount}+')'"></span></a>
+                </li>
+            </ul>
+
+            <div class="my_store_list_box">
+                <ul class="my_store_list_tab">
+                    <li>
+                        <a href="#created" onclick="selectSortingColumn('CREATED')">등록일 순</a>
+                    </li>
+                    <li>
+                        <a href="#views" onclick="selectSortingColumn('VIEWS')">조회수 순</a>
+                    </li>
+                    <li>
+                        <a href="#price" onclick="selectSortingColumn('PRICE')">가격 순</a>
+                    </li>
+                </ul>
+                <div class="my_store_list">
+                    <!-- 상품 리스트 -->
+                    <div class="my_store_list00 active" id="itemListDiv">
+                        <!-- DOM 박기 -->
+                    </div>
+
+                    <script>
+                        $(function () {
+                            $('.my_store_box02_tab li').click(function () {
+                                var i = $(this).index();
+                                $('.my_store_box02_tab li').removeClass('on');
+                                $(this).addClass('on');
+                            });
+                        });
+                    </script>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <footer th:replace="fragment/footer :: footer"/>
+</div>
+</body>
+</html>

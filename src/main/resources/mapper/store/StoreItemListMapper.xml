@@ -84,6 +84,13 @@
         <include refid="sorting"/>
     </select>
 
+    <select id="countStoreMyItem" resultType="Long">
+        select count(*)
+        from item
+        where user_id = #{userId}
+    </select>
+
+
     <select id="selectStoreFavoriteList" parameterType="storeitemsortingdto" resultMap="itemcard">
         <include refid="selectItem"/>
         inner join favorite f
@@ -91,6 +98,13 @@
         where f.user_id = #{userId}
         <include refid="sorting"/>
     </select>
+
+    <select id="countStoreFavoriteItem" resultType="Long">
+        select count(*)
+        from favorite
+        where user_id = #{userId}
+    </select>
+
 
     <select id="selectStoreSoldItemList" parameterType="storeitemsortingdto" resultMap="itemcard">
         <include refid="selectItem"/>
@@ -100,6 +114,12 @@
         <include refid="sorting"/>
     </select>
 
+    <select id="countStoreSoldItem" resultType="Long">
+        select count(*)
+        from sale_item
+        where user_id = #{userId}
+    </select>
+
     <select id="selectStorePurchasedItemList" parameterType="storeitemsortingdto" resultMap="itemcard">
         <include refid="selectItem"/>
         inner join purchase_item p
@@ -107,6 +127,13 @@
         where p.user_id = #{userId}
         <include refid="sorting"/>
     </select>
+
+    <select id="countStorePurchasedItem" resultType="Long">
+        select count(*)
+        from purchase_item
+        where user_id = #{userId}
+    </select>
+
 
     <select id="selectStoreQuestionList" parameterType="storeitemsortingdto" resultMap="questioncard">
         select q.item_question_id questionid,
@@ -124,6 +151,13 @@
         <include refid="sorting"/>
     </select>
 
+    <select id="countStoreQuestion" resultType="Long">
+        select count(*)
+        from item i
+            inner join item_question q
+            on i.item_id = q.item_id
+        where i.user_id = #{userId}
+    </select>
 
     <select id="selectStoreReviewList" parameterType="storeitemsortingdto" resultMap="reviewcard">
         select sr.store_review_id reviewid,
@@ -143,6 +177,16 @@
         <include refid="sorting"/>
     </select>
 
+    <select id="countStoreReview" resultType="Long">
+        select count(*)
+        from item i
+            inner join purchase_item p
+            on i.item_id = p.item_id
+            inner join store_review sr
+            on sr.purchase_item_id = p.purchase_item_id
+        where i.user_id = #{userId}
+    </select>
+
     <select id="selectStoreTradeList" parameterType="storeitemsortingdto" resultMap="tradecard">
         select t.trade_id tradeid,
         u.account_name buyername,
@@ -157,5 +201,13 @@
         inner join users u
         on t.user_id = u.user_id
         <include refid="sorting"/>
+    </select>
+
+    <select id="countStoreTrade" resultType="Long">
+        select count(*)
+        from item i
+                     inner join trade t
+                on i.item_id = t.item_id
+        where i.user_id = #{userId}
     </select>
 </mapper>
