@@ -66,6 +66,7 @@ function ajax() {
     httpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let resp = JSON.parse(this.responseText);
+            removeChildNode();
             if ((resp.pagination.totalContent + 0) !== 0) {
                 createItemCard(resp.itemList);
                 createPageButton(resp.pagination);
@@ -75,7 +76,8 @@ function ajax() {
 
 }
 
-function removeChildNode(parent) {
+function removeChildNode() {
+    let parent = document.getElementById('itemListDiv');
     while (parent.hasChildNodes()) {
         parent.removeChild(parent.firstChild);
     }
@@ -83,7 +85,6 @@ function removeChildNode(parent) {
 
 function createItemCard(itemList) {
     let parent = document.getElementById('itemListDiv');
-    removeChildNode(parent);
 
     switch (currentMenu) {
         case "tradeItem":

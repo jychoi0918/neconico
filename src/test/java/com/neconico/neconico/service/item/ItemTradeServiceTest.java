@@ -35,7 +35,7 @@ class ItemTradeServiceTest {
             Long buyerId = 1L;
             Long itemId = 171L;
 
-            assertThatThrownBy(() -> serviceT.tradeRequest(buyerId, itemId)).isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(() -> serviceT.requestTrade(buyerId, itemId)).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Not item Status is not Sale");
 
         }
@@ -47,7 +47,7 @@ class ItemTradeServiceTest {
             Long buyerId = 1L;
             Long itemId = 1L;
 
-            assertThatThrownBy(() -> serviceT.tradeRequest(buyerId, itemId)).isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(() -> serviceT.requestTrade(buyerId, itemId)).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Buyer equal Seller");
         }
 
@@ -59,7 +59,7 @@ class ItemTradeServiceTest {
             Long itemId = 6L;
 
             //then
-            assertThatThrownBy(() -> serviceT.tradeRequest(buyerId, itemId)).isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(() -> serviceT.requestTrade(buyerId, itemId)).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Now this item is trading");
         }
 
@@ -72,7 +72,7 @@ class ItemTradeServiceTest {
             assertThat(itemTradeMapper.selectItemTradeOneByBuyerAndItem(buyerId, itemId)).isFalse();
 
             //when
-            serviceT.tradeRequest(buyerId, itemId);
+            serviceT.requestTrade(buyerId, itemId);
 
             //then
             assertThat(itemTradeMapper.selectItemTradeOneByBuyerAndItem(buyerId, itemId)).isTrue();
@@ -100,7 +100,7 @@ class ItemTradeServiceTest {
             Long tradeId = 3L;
             String status = "완료";
 
-            assertThatThrownBy(() -> serviceT.tradeResponse(sellerId, tradeId, status)).isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(() -> serviceT.responseTrade(sellerId, tradeId, status)).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Not Matching YourId And SellerId");
 
         }
@@ -112,7 +112,7 @@ class ItemTradeServiceTest {
             Long tradeId = 3L;
             String status = "응가";
 
-            assertThatThrownBy(() -> serviceT.tradeResponse(sellerId, tradeId, status)).isInstanceOf(IllegalArgumentException.class)
+            assertThatThrownBy(() -> serviceT.responseTrade(sellerId, tradeId, status)).isInstanceOf(IllegalArgumentException.class)
                     .hasMessageContaining("Input Invalid Status");
         }
 
@@ -127,7 +127,7 @@ class ItemTradeServiceTest {
             String init = itemTradeMapper.selectItemTradeOneByTrade(tradeId).getTradeStatus();
 
             //when
-            serviceT.tradeResponse(sellerId, tradeId, status);
+            serviceT.responseTrade(sellerId, tradeId, status);
             String result = itemTradeMapper.selectItemTradeOneByTrade(tradeId).getTradeStatus();
             //then
             assertThat(init).isEqualTo("요청");

@@ -28,12 +28,12 @@
                 <tr th:each="item: ${itemList}">
                     <td><img th:src="${item.itemImg}"></td>
                     <td><a th:href="@{/item/{id}(id=${item.itemId})}" th:text="${item.title}"></a></td>
-                    <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}+'원'"></td>
+                    <td th:text="${item.price}+'원'"></td>
                     <td th:text="${#temporals.format(item.createdTime, 'yyyy년MM월dd일 HH:mm:ss')}"></td>
                     <td>
                         <div class="list_btn">
-                            <a th:onclick="|javascript:modifyItem('${item.itemId}','${item.status}')|">수정</a>
-                            <a th:onclick="|javascript:deleteItem('${item.itemId}','${item.status}')|">삭제</a>
+                            <a th:onclick="modifyItem([[${item.itemId}]] , [[${item.status}]])">수정</a>
+                            <a th:onclick="deleteItem([[${item.itemId}]] , [[${item.status}]])">삭제</a>
                         </div>
                     </td>
                 </tr>
@@ -64,9 +64,9 @@
             /*]]*/
             function modifyItem(itemId, status) {
                 if (status == "판매 중") {
-                    location.href = "/item/itemId/edit";
+                    location.href = "/item/"+itemId+"/edit";
                 } else {
-                    alert("현재 제품의 상태가 " + status + "라 수정할 수 없습니다.");
+                    alert("현재 제품의 상태가 " + status + "입니다.");
                 }
             }
 
@@ -85,7 +85,7 @@
                         httpRequest.send();
                     }
                 } else {
-                    alert("현재 제품의 상태가 " + status + "라 삭제할 수 없습니다.");
+                    alert("현재 제품의 상태가 " + status + "입니다.");
                 }
             }
         </script>
