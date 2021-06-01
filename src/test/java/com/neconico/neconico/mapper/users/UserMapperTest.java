@@ -108,7 +108,6 @@ class UserMapperTest {
     void select_user_by_account_id_in_database(String accountId) {
 
         UserInfoDto userInfoDto = userMapper.selectUserByAccountId(accountId);
-
         assertThat(userInfoDto).extracting("accountId").isEqualTo(accountId);
 
     }

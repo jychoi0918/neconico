@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
+    <div class="list_section_wrap h_con">
+
+        <h3 class="h_fs_26">상품관리</h3>
+
+        <section class="list_box">
+            <table>
+                <colgroup>
+                    <col width="20%">
+                    <col width="30%">
+                    <col width="20%">
+                    <col width="20%">
+                    <col width="10%">
+                </colgroup>
+
+                <tr>
+                    <th>상품 이미지</th>
+                    <th>상품 이름</th>
+                    <th>상품 가격</th>
+                    <th>등록시간</th>
+                    <th></th>
+                </tr>
+                <tr th:each="item: ${itemList}">
+                    <td><img th:src="${item.itemImg}"></td>
+                    <td><a th:href="@{/item/{id}(id=${item.itemId})}" th:text="${item.title}"></a></td>
+                    <td th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}+'원'"></td>
+                    <td th:text="${#temporals.format(item.createdTime, 'yyyy년MM월dd일 HH:mm:ss')}"></td>
+                    <td>
+                        <div class="list_btn">
+                            <a th:onclick="|javascript:modifyItem('${item.itemId}','${item.status}')|">수정</a>
+                            <a th:onclick="|javascript:deleteItem('${item.itemId}','${item.status}')|">삭제</a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        <div class="pagination" th:if="${pagenation.totalContent} != '0'">
+                <ul>
+                    <li th:unless="${pagenation.criteria.currentPage}==1">
+                        <a class="page_prev"
+                           th:href="@{/item/manage(currentPage=${pagenation.criteria.currentPage}-1)}"></a>
+                    </li>
+                    <li th:each="idx : ${#numbers.sequence(pagenation.startPage, pagenation.endPage)}">
+                        <a class="" th:href="@{/item/manage(currentPage=${idx})}" th:text="${idx}"
+                           th:classappend="${idx == pagenation.criteria.currentPage} ? active : ''">1</a>
+                    </li>
+                    <li th:if="${pagenation.hasNext}">
+                        <a class="page_next"
+                           th:href="@{/item/manage(currentPage=${pagenation.criteria.currentPage}+1)}"></a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            let currentPage = [[${pagenation.criteria.currentPage}]];
+
+            /*]]*/
+            function modifyItem(itemId, status) {
+                if (status == "판매 중") {
+                    location.href = "/item/itemId/edit";
+                } else {
+                    alert("현재 제품의 상태가 " + status + "라 수정할 수 없습니다.");
+                }
+            }
+
+            function deleteItem(itemId, status) {
+                if (status == "판매 중") {
+                    let result = confirm("삭제하시겠습니까?")
+                    if (result) {
+                        const httpRequest = new XMLHttpRequest();
+                        httpRequest.open("delete", "/item/" + itemId + "/delete");
+                        httpRequest.onreadystatechange = function () {
+                            if (this.readyState === 4 && this.status === 200) {
+                                alert('상품이 삭제 되었습니다.');
+                                location.href = "/item/manage?currentPage=" + currentPage;
+                            }
+                        }
+                        httpRequest.send();
+                    }
+                } else {
+                    alert("현재 제품의 상태가 " + status + "라 삭제할 수 없습니다.");
+                }
+            }
+        </script>
+
+
+    </div>
+
+    <footer th:replace="fragment/footer :: footer"/>
+</div>
+</body>
+</html>

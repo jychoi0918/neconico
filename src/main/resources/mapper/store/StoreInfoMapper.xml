@@ -36,16 +36,16 @@
         update STORE
         <trim prefix="set" suffixOverrides=",">
             <if test="storeName != null">
-                STORE_NAME =#{storeName},
+                STORE_NAME = #{storeName},
             </if>
             <if test="storeImgUrl != null and storeImgName != null">
-                STORE_IMG_PATH =#{storeImgUrl},
-                IMG_FILE_NAMES =#{storeImgName},
+                STORE_IMG_PATH = #{storeImgUrl},
+                IMG_FILE_NAMES = #{storeImgName},
             </if>
             <if test="storeInfo != null">
-                STORE_INFO =#{storeInfo}
+                STORE_INFO = #{storeInfo},
             </if>
         </trim>
-        where USER_ID =#{userId}
+        where USER_ID = #{userId}
     </update>
 </mapper>

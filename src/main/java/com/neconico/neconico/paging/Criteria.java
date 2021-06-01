@@ -2,7 +2,6 @@ package com.neconico.neconico.paging;
 
 import lombok.*;
 
-@ToString
 @Setter
 @Getter
 @NoArgsConstructor
@@ -13,9 +12,7 @@ public class Criteria {
     private String sortingColumn;  //정렬할 열
     private String requestOrder;   //정렬
 
-
     public int getPageStart() {
-
         return (this.currentPage - 1) * contentPerPage;
     }
 }

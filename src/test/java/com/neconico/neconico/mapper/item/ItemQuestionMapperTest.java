@@ -1,6 +1,8 @@
 package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
+import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
+import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,56 +69,103 @@ class ItemQuestionMapperTest {
         assertThat(result - init).isEqualTo(1);
     }
 
-    @Test
-    @DisplayName("상품문의 댓글 삽입")
-    void insertItemQuestionCommentTest() {
-        //given
-        int init = itemQuestionMapper.selectItemQuestionListByItemID(itemId).get(0).getCommentList().size();
-        //when
-        itemQuestionMapper.insertItemQuestionComment(testQuestionComment);
-        int result = itemQuestionMapper.selectItemQuestionListByItemID(itemId).get(0).getCommentList().size();
-
-        //then
-        assertThat(result - init).isEqualTo(1);
-    }
-
-    Long existId = 1L;
 
     @Test
-    @DisplayName("업데이트")
-    void updateTest() {
-        //given
-        com.neconico.neconico.dto.item.ItemQuestionDto questionInit = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
-        com.neconico.neconico.dto.item.ItemQuestionDto commentInit = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
-        //when
-        itemQuestionMapper.updateItemQuestion(existId, "changeQuestion", "ITEM_QUESTION");
-        itemQuestionMapper.updateItemQuestion(existId, "changeComment", "QUESTION_COMMENT");
-        //then
-        com.neconico.neconico.dto.item.ItemQuestionDto questionResult = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
-        com.neconico.neconico.dto.item.ItemQuestionDto commentResult = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
+    @DisplayName("문의 선택")
+    void selectItemQuestionResponseById() {
+        ItemQuestionResponseDto result = itemQuestionMapper.selectItemQuestionResponseById(6L);
 
-        assertThat(questionResult).usingRecursiveComparison().isNotEqualTo(questionInit);
-        assertThat(commentResult).usingRecursiveComparison().isNotEqualTo(commentInit);
+        assertThat(result.getContent()).isEqualTo("content6");
     }
 
     @Test
-    @DisplayName("삭제")
-    void deleteTest() {
-        //given
-        ItemQuestionDto questionInit = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
-        ItemQuestionDto commentInit = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
-        //when
-        itemQuestionMapper.deleteItemQuestion(existId, "ITEM_QUESTION");
-        itemQuestionMapper.deleteItemQuestion(existId, "QUESTION_COMMENT");
+    @DisplayName("문의 삽입")
+    void insertItemQuestion() {
+        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(1L,7L,"test");
+        itemQuestionMapper.insertItemQuestion(itemQuestionDto);
+        Long id = itemQuestionDto.getId();
 
-        ItemQuestionDto questionResult = itemQuestionMapper.selectItemQuestionById(existId, "ITEM_QUESTION");
-        ItemQuestionDto commentResult = itemQuestionMapper.selectItemQuestionById(existId, "QUESTION_COMMENT");
+        ItemQuestionResponseDto result = itemQuestionMapper.selectItemQuestionResponseById(id);
 
-        //then
-        assertThat(questionInit).isNotNull();
-        assertThat(commentInit).isNotNull();
-        assertThat(questionResult).isNull();
-        assertThat(commentResult).isNull();
+        assertThat(result.getContent()).isEqualTo("test");
+    }
+
+    @Test
+    @DisplayName("문의 수정")
+    void updateItemQuestion() {
+        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(1L,7L,"test");
+        itemQuestionMapper.insertItemQuestion(itemQuestionDto);
+        Long id = itemQuestionDto.getId();
+
+        itemQuestionMapper.updateItemQuestion(id, "update");
+
+        ItemQuestionResponseDto result = itemQuestionMapper.selectItemQuestionResponseById(id);
+
+        assertThat(result.getContent()).isEqualTo("update");
+
+    }
+
+    @Test
+    @DisplayName("문의 삭제")
+    void deleteItemQuestion() {
+        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(1L,7L,"test");
+        itemQuestionMapper.insertItemQuestion(itemQuestionDto);
+        Long id = itemQuestionDto.getId();
+
+        itemQuestionMapper.deleteItemQuestion(id);
+
+        ItemQuestionResponseDto result = itemQuestionMapper.selectItemQuestionResponseById(id);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    @DisplayName("문의 댓글 선택")
+    void selectQuestionCommentIdById() {
+        QuestionCommentResponseDto result = itemQuestionMapper.selectQuestionCommentById(15L);
+
+        assertThat(result.getContent()).isEqualTo("content115");
+    }
+
+    @Test
+    @DisplayName("문의 댓글 삽입")
+    void insertQuestionComment() {
+        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(1L,7L,"test");
+        itemQuestionMapper.insertQuestionComment(itemQuestionDto);
+        Long id = itemQuestionDto.getId();
+
+        QuestionCommentResponseDto result = itemQuestionMapper.selectQuestionCommentById(id);
+
+        assertThat(result.getContent()).isEqualTo("test");
+
+    }
+
+    @Test
+    @DisplayName("문의 댓글 수정")
+    void updateQuestionComment() {
+        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(1L,7L,"test");
+        itemQuestionMapper.insertQuestionComment(itemQuestionDto);
+        Long id = itemQuestionDto.getId();
+
+        itemQuestionMapper.updateQuestionComment(id, "update");
+
+        QuestionCommentResponseDto result = itemQuestionMapper.selectQuestionCommentById(id);
+
+        assertThat(result.getContent()).isEqualTo("update");
+    }
+
+    @Test
+    @DisplayName("문의 댓글 삭제")
+    void deleteQuestionComment() {
+        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(1L,7L,"test");
+        itemQuestionMapper.insertQuestionComment(itemQuestionDto);
+        Long id = itemQuestionDto.getId();
+
+        itemQuestionMapper.deleteQuestionComment(id);
+
+        QuestionCommentResponseDto result = itemQuestionMapper.selectQuestionCommentById(id);
+
+        assertThat(result).isNull();
     }
 
 

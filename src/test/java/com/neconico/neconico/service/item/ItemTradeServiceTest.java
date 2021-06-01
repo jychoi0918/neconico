@@ -122,7 +122,7 @@ class ItemTradeServiceTest {
             //given
             Long sellerId = 2L;
             Long tradeId = 1L;
-            String status = "완료";
+            String status = "success";
 
             String init = itemTradeMapper.selectItemTradeOneByTrade(tradeId).getTradeStatus();
 
