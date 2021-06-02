@@ -26,14 +26,14 @@
                     <th></th>
                 </tr>
                 <tr th:each="item: ${itemList}">
-                    <td><img th:src="${item.itemImg}"></td>
+                    <td><img th:src="${item.itemImg.split('>')[0]}"></td>
                     <td><a th:href="@{/item/{id}(id=${item.itemId})}" th:text="${item.title}"></a></td>
                     <td th:text="${item.price}+'원'"></td>
                     <td th:text="${#temporals.format(item.createdTime, 'yyyy년MM월dd일 HH:mm:ss')}"></td>
                     <td>
                         <div class="list_btn">
-                            <a th:onclick="modifyItem([[${item.itemId}]] , [[${item.status}]])">수정</a>
-                            <a th:onclick="deleteItem([[${item.itemId}]] , [[${item.status}]])">삭제</a>
+                            <a style="cursor: pointer" th:onclick="modifyItem([[${item.itemId}]] , [[${item.status}]])">수정</a>
+                            <a style="cursor: pointer" th:onclick="deleteItem([[${item.itemId}]] , [[${item.status}]])">삭제</a>
                         </div>
                     </td>
                 </tr>

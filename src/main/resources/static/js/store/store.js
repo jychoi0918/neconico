@@ -114,7 +114,7 @@ function createItemCard(itemList) {
 
             let fig = document.createElement("figure");
             let img = document.createElement("img");
-            img.setAttribute("src", item.itemImg);
+            img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             fig.append(img);
 
@@ -175,7 +175,7 @@ function createItemCard(itemList) {
 
             let itd1 = document.createElement("td");
             let img = document.createElement("img");
-            img.setAttribute("src", item.itemImg);
+            img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             itd1.append(img);
             let itd2 = document.createElement("td");
@@ -254,13 +254,23 @@ function transPrice(price) {
 
 //가져오는 날짜 형식 2021-04-29T10:13:18
 function calculateDay(input) {
-    let dateArr = (input + "").substring(0, 10).split('-');
-    let createTime = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+    let createTime = new Date(input);
     let nowTime = new Date();
-    let cDay = Math.floor((nowTime.getTime() - createTime.getTime()) / 1000 / 60 / 60 / 24);
-    if (cDay == 0) {
-        return '오늘';
+    let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
+    if (time < 60) {
+        return time + '초 전';
     } else {
-        return cDay + '일 전';
+        time = Math.floor(time / 60);
+        if (time < 60) {
+            return time + '분 전';
+        } else {
+            time = Math.floor(time / 60);
+            if (time < 24) {
+                return time + '시간 전';
+            } else {
+                time = Math.floor(time / 24);
+                return time + '일 전';
+            }
+        }
     }
 }
