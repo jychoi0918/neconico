@@ -214,7 +214,6 @@
             area = #{area},
             item_status = #{itemStatus},
             modified_date = #{modifiedDate},
-            sale_status = #{saleStatus},
             shipping_price = #{shippingPrice},
             img_file_names = #{imgFileNames}
         where item_id = #{itemId}

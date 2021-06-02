@@ -50,10 +50,50 @@ public class DefaultItemService implements ItemService{
 
     @Override
     @Transactional
-    public void changeItemInfo(FileResultInfoDto fileResultInfoDto, ItemInfoDto itemInfoDto) {
-        itemInfoDto.setItemImgUrls(fileResultInfoDto.getFileUrls());
-        itemInfoDto.setImgFileNames(fileResultInfoDto.getFileNames());
+    public String changeItemInfo(FileResultInfoDto fileResultInfoDto, String[] currentImgUrls, ItemInfoDto itemInfoDto) {
+        StringBuffer resultItemUrls = new StringBuffer();
+        StringBuffer resultItemFileNames = new StringBuffer();
+        StringBuffer deleteFileNames = new StringBuffer();
+
+        String[] itemFileNames = itemInfoDto.getImgFileNames().split(">");
+
+        itemInfoDto.setModifiedDate(LocalDateTime.now()); //변경시간 설정
+
+        //새로 등록한 파일이 있을경우
+        if(fileResultInfoDto != null) {
+            setChangeFileAndUrlResult(
+                    resultItemUrls, resultItemFileNames,
+                    deleteFileNames, itemFileNames, currentImgUrls);
+
+            //새로 등록한 파일 urls, names 추가
+            resultItemUrls.append(fileResultInfoDto.getFileUrls());
+            resultItemFileNames.append(fileResultInfoDto.getFileNames());
+
+            itemInfoDto.setItemImgUrls(resultItemUrls.toString());
+            itemInfoDto.setImgFileNames(resultItemFileNames.toString());
+
+            itemMapper.updateItemInfo(itemInfoDto);
+
+            return deleteFileNames.toString();
+        }
+
+        setChangeFileAndUrlResult(
+                resultItemUrls, resultItemFileNames,
+                deleteFileNames, itemFileNames, currentImgUrls);
+
+        itemInfoDto.setItemImgUrls(
+                resultItemUrls
+                        .deleteCharAt(resultItemUrls.length() - 1) //마지막 '>' 제거
+                        .toString());
+
+        itemInfoDto.setImgFileNames(
+                resultItemFileNames
+                        .deleteCharAt(resultItemFileNames.length() - 1) //마지막 '>' 제거
+                        .toString());
+
         itemMapper.updateItemInfo(itemInfoDto);
+
+        return deleteFileNames.toString();
     }
 
     @Override
@@ -80,6 +120,18 @@ public class DefaultItemService implements ItemService{
     @Override
     public Long countTotalItems(SearchInfoDto searchInfoDto) {
         return itemMapper.selectTotalItemCount(searchInfoDto);
+    }
+
+    @Override
+    public List<ItemCardViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
+        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
+
+        return createItemCardViewDto(itemCardDtoList);
+    }
+
+    @Override
+    public Long countTotalItemsBySubCategoryId(Long subId) {
+        return itemMapper.selectTotalItemCountBySubCategoryId(subId);
     }
 
     private Criteria setCriteria(Criteria criteria) {
@@ -118,15 +170,19 @@ public class DefaultItemService implements ItemService{
         return itemCardViewDtoList;
     }
 
-    @Override
-    public List<ItemCardViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
-        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
+    private void setChangeFileAndUrlResult(StringBuffer resultItemUrls, StringBuffer resultItemFileNames, StringBuffer deleteFileNames,
+                                           String[] itemFileNames, String[] currentImgUrls) {
 
-        return createItemCardViewDto(itemCardDtoList);
-    }
-
-    @Override
-    public Long countTotalItemsBySubCategoryId(Long subId) {
-        return itemMapper.selectTotalItemCountBySubCategoryId(subId);
+        for (int i = 0; i < currentImgUrls.length; i++) {
+            if ("".equals(currentImgUrls[i])) {
+                deleteFileNames.append(itemFileNames[i]);
+                deleteFileNames.append(">");
+            } else {
+                resultItemUrls.append(currentImgUrls[i]);
+                resultItemUrls.append(">");
+                resultItemFileNames.append(itemFileNames[i]);
+                resultItemFileNames.append(">");
+            }
+        }
     }
 }

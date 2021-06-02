@@ -108,12 +108,26 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public void updateItemResult(@RequestParam(value = "files", required = false) MultipartFile[] multipartFiles,
                                  @ModelAttribute("itemFrom") ItemInfoDto itemInfoDto,
-                                 @RequestParam("subId") Long subId,
+                                 @RequestParam("subId") Long categorySubId,
                                  @RequestParam("currentFiles") String[] currentFiles) throws Exception {
 
+        fileService.setFileProcess(new S3FileProcess(FilePolicy.ITEM));
 
-        for(String fileName : currentFiles) {
-            System.out.println("fileName = " + fileName);
+        itemInfoDto.setCategorySubId(categorySubId); // 카테고리 변경사항 적용
+
+        //새로 등록한 파일이 있을경우
+        if(multipartFiles != null) {
+            FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFiles);
+            String deleteFileNames = itemService.changeItemInfo(fileResultInfoDto, currentFiles, itemInfoDto);
+            if(!deleteFileNames.isEmpty()) {
+                fileService.deleteFiles(deleteFileNames);
+            }
+        }else { // 새로 등록한 파일이 없을경우
+            String deleteFileNames = itemService.changeItemInfo(null, currentFiles, itemInfoDto);
+
+            if(!deleteFileNames.isEmpty()) {
+                fileService.deleteFiles(deleteFileNames);
+            }
         }
     }
 

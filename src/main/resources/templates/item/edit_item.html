@@ -10,9 +10,14 @@
         <h3 class="h_fs_26">상품등록</h3>
 
         <section class="new_product_box">
+
+            <!-- ##########hidden value ############# -->
             <input type="hidden" name="subId" id="sub_id"
                    th:value="${itemForm.categorySubId}">
             <input type="hidden" name="itemId" id="item_id" th:value="${itemForm.itemId}">
+            <input type="hidden" id="imgFileNames" name="imgFileNames" th:value="${itemForm.imgFileNames}">
+            <!-- ############## hidden value 끝################-->
+
             <div class="new01">
                 <span>카테고리</span>
 
@@ -64,7 +69,7 @@
                         <figure th:each="curImage : ${itemForm.itemImgUrls.split('>')}">
                             <input hidden th:value="${curImage}">
                             <img style="width: 100%; height: 100%;" th:src="${curImage}" alt="">
-                            <a class="new_img_close_btn" onclick="removeCurrentFile(this)"></a>
+                            <a style="cursor: pointer" class="new_img_close_btn" onclick="removeCurrentFile(this)"></a>
                         </figure>
                     </div>
                 </div>
@@ -112,7 +117,7 @@
         </section>
 
         <div class="prod_btn_box">
-            <a href="javascript:submitForm()" style="cursor: pointer" class="new_product_con_btn">등록하기</a>
+            <a href="javascript:submitForm()" style="cursor: pointer" class="new_product_con_btn">수정하기</a>
         </div>
     </div>
     <footer class="footer" th:replace="fragment/footer :: footer"/>
@@ -476,6 +481,7 @@
         formData.append("itemStatus", checkItemStatus);
         formData.append("shippingPrice", checkShippingPrice);
         formData.append("currentFiles", currentFiles);
+        formData.append("imgFileNames", document.getElementById('imgFileNames').value);
     }
 
     const submitFormDataToAjax = (formData) => {

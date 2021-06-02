@@ -24,8 +24,8 @@ public interface ItemService {
                     Long subId,
                     ItemInfoDto itemInfoDto);
 
-    void changeItemInfo(FileResultInfoDto fileResultInfoDto,
-                        ItemInfoDto itemInfoDto);
+    String changeItemInfo(FileResultInfoDto fileResultInfoDto, String[] currentFiles,
+                          ItemInfoDto itemInfoDto);
 
     void removeItem(Long itemId);
 

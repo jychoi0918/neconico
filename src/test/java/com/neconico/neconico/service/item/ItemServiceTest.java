@@ -139,11 +139,13 @@ class ItemServiceTest {
                 "https//fdd",
                 "2f23f-f3fd-fdn이미지.png"); // 변경된 파일
 
+        String[] currentFiles = itemInfoDto.getItemImgUrls().split(">");
+
         //when
         itemInfoDto.setTitle("바뀐제목");
         itemInfoDto.setContent("바뀐 내용");
 
-        itemService.changeItemInfo(fileResultInfoDto, itemInfoDto);
+        itemService.changeItemInfo(fileResultInfoDto, currentFiles, itemInfoDto);
         ItemInquireInfoDto changeItemInfo = itemService.findItemByItemId(itemId);
 
         //then
