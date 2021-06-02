@@ -2,9 +2,9 @@ package com.neconico.neconico.mapper.admin.advertisement;
 
 
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertInfoDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertReturnDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,22 +13,21 @@ import java.util.List;
 @Mapper
 public interface AdvertiseMapper {
 
-    //select
-    List<AdvertiseReturnDto> selectByPaging(Criteria cri);
+    List<AdvertReturnDto> selectAdverts(Criteria cri);
 
-    List<AdvertiseReturnDto> selectAll();
+    List<AdvertReturnDto> selectPublicAdverts(String advertStatus);
 
-    AdvertiseReturnDto selectAd(long advertiseId);
+    AdvertReturnDto selectAdvertByAdvertId(Long advertisementId);
 
-    Long countTable();
+    Long countTotalAdverts();
 
-    void insertAd(AdvertiseInfoDto adDto);
+    void insertAdvert(AdvertInfoDto advertInfoDto);
 
-    void deleteAd(long advertiseId);
+    void deleteAdvert(Long advertisementId);
 
-    void updateAd(AdvertiseReturnDto advertiseReturnDto);
+    void updateAdvert(AdvertReturnDto advertReturnDto);
 
-    void updateStatus(AdvertiseStatusDto advertiseStatusDto);
+    void updateStatus(AdvertStatusDto advertStatusDto);
 
-    List<AdvertiseReturnDto> selectAdvertising(String adStatus);
+
 }

@@ -42,7 +42,7 @@
 
             <ul class="adm08_btn_box">
                 <li th:if="${notice.accountId}==${session.sessionUser.accountId}">
-                    <a th:href="@{/admin/notice/edit/{noticeId}(noticeId=${notice.noticeId})}" class="modify_btn">수정</a>
+                    <a th:href="@{/admin/{noticeId}/notice/edit(noticeId=${notice.noticeId})}" class="modify_btn">수정</a>
                 </li>
                 <li>
                     <a href="#" th:href="@{/admin/notice/list}" class="list_btn">목록으로</a>

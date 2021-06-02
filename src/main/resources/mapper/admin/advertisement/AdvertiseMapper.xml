@@ -23,32 +23,32 @@
     </sql>
 
 
-    <select id="selectByPaging" resultType="AdvertiseReturnDto">
+    <select id="selectAdverts" resultType="AdvertReturnDto">
         <include refid="select"/>
         order by ${sortingColumn} ${requestOrder}
             limit ${contentPerPage} offset ${pageStart}
 
     </select>
-    <select id="selectAll" resultType="AdvertiseReturnDto">
+    <select id="selectAll" resultType="AdvertReturnDto">
         <include refid="select"/>
 
     </select>
-    <select id="countTable" resultType="long">
+    <select id="countTotalAdverts" resultType="long">
         select count(advertisement_id)
         from advertisement
     </select>
-    <select id="selectAd" resultType="AdvertiseReturnDto">
+    <select id="selectAdvertByAdvertId" resultType="AdvertReturnDto">
         <include refid="select"/>
         where advertisement_id = #{advertisement}
     </select>
-    <select id="selectAdvertising" resultType="AdvertiseReturnDto">
+    <select id="selectPublicAdverts" resultType="AdvertReturnDto">
         select ad_img_urls as adImgUrl,
                url,
                ad_status as adStatus
         from advertisement
         where ad_status = #{adStatus}
     </select>
-    <insert id="insertAd" parameterType="AdvertiseInfoDto" useGeneratedKeys="true" keyProperty="advertisementId">
+    <insert id="insertAdvert" parameterType="AdvertInfoDto" useGeneratedKeys="true" keyProperty="advertisementId">
         insert into advertisement(user_id,
                                   title,
                                   start_date,
@@ -66,11 +66,11 @@
                 #{imgFileName},
                 #{adStatus})
     </insert>
-    <delete id="deleteAd" parameterType="long">
+    <delete id="deleteAdvert" parameterType="long">
         delete from advertisement
         where advertisement_id=#{advertisementId}
     </delete>
-    <update id="updateAd" parameterType="AdvertiseReturnDto">
+    <update id="updateAdvert" parameterType="AdvertReturnDto">
         update advertisement
         set title = #{title},
             start_date = #{startDate},
@@ -80,7 +80,7 @@
             img_file_names = #{imgFileName}
         where advertisement_id = #{advertisementId}
     </update>
-    <update id="updateStatus" parameterType="AdStatusDto">
+    <update id="updateStatus" parameterType="AdvertStatusDto">
         update advertisement
         set ad_status = #{adStatus}
         where advertisement_id = #{advertisementId}

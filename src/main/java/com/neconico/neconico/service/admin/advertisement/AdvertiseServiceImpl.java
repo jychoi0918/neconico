@@ -1,11 +1,12 @@
 package com.neconico.neconico.service.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertInfoDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertReturnDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.mapper.admin.advertisement.AdvertiseMapper;
 import com.neconico.neconico.paging.Criteria;
+import com.neconico.neconico.service.admin.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,117 +19,67 @@ import java.util.List;
 public class AdvertiseServiceImpl implements AdvertiseService {
 
 
+    private final AdvertiseMapper advertMapper;
 
 
-    private final AdvertiseMapper adMapper;
-
-    final long sessionUserId = 40L;
-
-
-
-
-
-
-    //(메인페이지)목록 보기
     @Override
-    public List<AdvertiseReturnDto> selectAllAd(Criteria cri) {
+    public List<AdvertReturnDto> selectAllAdverts(Criteria cri) {
 
-        return adMapper.selectByPaging(setCriteria(cri));
+        return advertMapper.selectAdverts(setCriteria(cri));
     }
 
 
-
-
-
-    //광고중인 광고만 가져오기
     @Override
-    public List<AdvertiseReturnDto> selectAdvertising() {
-        String adStatus = "광고중";
-        return adMapper.selectAdvertising(adStatus);
+    public List<AdvertReturnDto> selectPublicAdverts() {
+        return advertMapper.selectPublicAdverts(Status.ADVERTISING.getStatus());
     }
 
 
-
-
-
-
-    //하나의 광고글 보기 상세보기
     @Override
-    public AdvertiseReturnDto selectAd(Long noticeId) {
-        return adMapper.selectAd(noticeId);
+    public AdvertReturnDto selectAdvertByAdvertId(Long noticeId) {
+        return advertMapper.selectAdvertByAdvertId(noticeId);
 
     }
 
 
-
-
-    //전체 광고글 세기
     @Override
-    public long countTable() {
-        adMapper.countTable();
-        return adMapper.countTable();
+    public Long countAllAdverts() {
+        return advertMapper.countTotalAdverts();
     }
-
-
-
 
 
     @Override
     @Transactional
-    public void updateStatus(AdvertiseStatusDto advertiseStatusDto) {
-        adMapper.updateStatus(advertiseStatusDto);
+    public void updateStatus(AdvertStatusDto advertStatusDto) {
+        advertMapper.updateStatus(advertStatusDto);
     }
 
 
-
-
-
-    //광고 등록
     @Override
     @Transactional
-    public void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) {
-
-        advertiseInfoDto.setAdStatus("숨김");
-        adMapper.insertAd(setAdvertiseDto(fileResultInfoDto, advertiseInfoDto));
+    public void insertAdvert(FileResultInfoDto fileResultInfoDto, AdvertInfoDto advertInfoDto) {
+        advertInfoDto.setAdStatus(Status.HIDDEN.getStatus());
+        advertMapper.insertAdvert(setAdvertiseDto(fileResultInfoDto, advertInfoDto));
     }
 
 
-
-    //만일 같은 사진일때
-  /*  @Override
-    @Transactional
-    public void updateAdSamePicture(AdvertiseInfoDto advertiseInfoDto) {
-        adMapper.updateAd(advertiseInfoDto);
-
-    }*/
-
-
-    //새로운 사진일 때
     @Override
     @Transactional
-    public void updateAd(FileResultInfoDto fileResultInfoDto, AdvertiseReturnDto advertiseReturnDto) {
+    public void updateAdvert(FileResultInfoDto fileResultInfoDto, AdvertReturnDto advertReturnDto) {
 
-        if(fileResultInfoDto.getFileNames() == null && fileResultInfoDto.getFileUrls() == null){
-            adMapper.updateAd(advertiseReturnDto);
-        }else {
-
-            adMapper.updateAd(setAdvertiseRTDto(fileResultInfoDto, advertiseReturnDto));
+        if (fileResultInfoDto.getFileNames() == null && fileResultInfoDto.getFileUrls() == null) {
+            advertMapper.updateAdvert(advertReturnDto);
+        } else {
+            advertMapper.updateAdvert(setAdvertiseRTDto(fileResultInfoDto, advertReturnDto));
         }
     }
 
 
-
-
-
-    //삭제하기
     @Override
     @Transactional
-    public void deleteAd(Long noticeId) {
-        adMapper.deleteAd(noticeId);
+    public void deleteAdvert(Long noticeId) {
+        advertMapper.deleteAdvert(noticeId);
     }
-
-
-
 
 
     //criteria 초기화
@@ -143,20 +94,23 @@ public class AdvertiseServiceImpl implements AdvertiseService {
         return cri;
     }
 
-    //파일
 
-    private AdvertiseInfoDto setAdvertiseDto(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) {
+    //insert 할 때 사용하는 setter
+    private AdvertInfoDto setAdvertiseDto(FileResultInfoDto fileResultInfoDto, AdvertInfoDto advertInfoDto) {
 
-        advertiseInfoDto.setAdImgUrl(fileResultInfoDto.getFileUrls());
-        advertiseInfoDto.setImgFileName(fileResultInfoDto.getFileNames());
-        return advertiseInfoDto;
+        advertInfoDto.setAdImgUrl(fileResultInfoDto.getFileUrls());
+        advertInfoDto.setImgFileName(fileResultInfoDto.getFileNames());
+
+        return advertInfoDto;
     }
 
-    private AdvertiseReturnDto setAdvertiseRTDto(FileResultInfoDto fileResultInfoDto, AdvertiseReturnDto advertiseReturnDto) {
+    //update 할 때 사용하는 setter
+    private AdvertReturnDto setAdvertiseRTDto(FileResultInfoDto fileResultInfoDto, AdvertReturnDto advertReturnDto) {
 
-        advertiseReturnDto.setAdImgUrl(fileResultInfoDto.getFileUrls());
-        advertiseReturnDto.setImgFileName(fileResultInfoDto.getFileNames());
-        return advertiseReturnDto;
+        advertReturnDto.setAdImgUrl(fileResultInfoDto.getFileUrls());
+        advertReturnDto.setImgFileName(fileResultInfoDto.getFileNames());
+
+        return advertReturnDto;
     }
 
 

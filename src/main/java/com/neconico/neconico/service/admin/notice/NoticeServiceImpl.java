@@ -1,11 +1,11 @@
 package com.neconico.neconico.service.admin.notice;
 
 import com.neconico.neconico.dto.admin.notice.NoticeDto;
-import com.neconico.neconico.dto.admin.notice.NoticeReturnDto;
 import com.neconico.neconico.dto.admin.notice.NoticeStatusDto;
 import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.mapper.admin.notice.NoticeMapper;
 import com.neconico.neconico.paging.Criteria;
+import com.neconico.neconico.service.admin.Status;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,21 +22,44 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class NoticeServiceImpl implements NoticeService {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final NoticeMapper noticeMapper;
 
     @Override
+    public List<NoticeViewDto> selectAllNotices(Criteria cri) {
+        setCriteria(cri);
+        return noticeMapper.selectNotices(cri)
+                .stream()
+                .map(NoticeViewDto::new)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<NoticeViewDto> selectPublicNotices(Criteria cri) {
+        setCriteria(cri);
+
+        return noticeMapper.selectPublicNotices(cri, Status.PUBLIC.getStatus())
+                .stream()
+                .map(NoticeViewDto::new)
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public NoticeViewDto selectNoticeByNoticeId(Long noticeId) {
+
+        return new NoticeViewDto(noticeMapper.selectNoticeByNoticeId(noticeId));
+    }
+    
+
+    @Override
     @Transactional
     public void insertNotice(NoticeDto noticeDto) {
-        if (noticeDto.getTitle().replaceAll(" ", "") == null
-                || noticeDto.getContent().replaceAll(" ", "") == null)
-            throw new NullPointerException("Please fill up the blank");
-
 
         noticeDto.setCreatedDate(LocalDateTime.now());
         noticeDto.setModifiedDate(LocalDateTime.now());
-        noticeDto.setNoticeStatus("숨김");
+        noticeDto.setNoticeStatus(Status.HIDDEN.getStatus());
 
         noticeMapper.insertNotice(noticeDto);
     }
@@ -52,27 +74,6 @@ public class NoticeServiceImpl implements NoticeService {
         noticeMapper.updateNotice(noticeDto);
     }
 
-    @Override
-    public List<NoticeViewDto> selectAllNotices(Criteria cri) {
-        setCriteria(cri);
-        return noticeMapper.selectByPaging(cri)
-                .stream()
-                .map(NoticeViewDto::new)
-                .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public List<NoticeViewDto> selectNoticing(Criteria cri) {
-        setCriteria(cri);
-        String noticeStatus = "공개";
-
-
-        return noticeMapper.selectByPaging(cri)
-                .stream()
-                .map(NoticeViewDto::new)
-                .collect(Collectors.toList());
-    }
 
     @Override
     @Transactional
@@ -82,20 +83,14 @@ public class NoticeServiceImpl implements NoticeService {
 
 
     @Override
-    public NoticeViewDto selectNotice(Long noticeId) {
-
-        return new NoticeViewDto(noticeMapper.selectNotice(noticeId));
-    }
-
-    @Override
     @Transactional
     public void updateNoticeStatus(NoticeStatusDto noticeStatusDto) {
         noticeMapper.updateStatus(noticeStatusDto);
     }
 
     @Override
-    public long countTable() {
-        return noticeMapper.countTable();
+    public Long countAllNotices() {
+        return noticeMapper.countTotalNotices();
     }
 
 
@@ -109,7 +104,6 @@ public class NoticeServiceImpl implements NoticeService {
 
         return cri;
     }
-
 
 
 }

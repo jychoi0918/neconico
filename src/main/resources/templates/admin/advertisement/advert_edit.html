@@ -40,12 +40,12 @@
                 <div class="admin09_register_date">
                     <div>
                         <span>시작 일자</span>
-                        <input name="startDate" th:value="${ad.startDate}" type="date">
+                        <input id="startDate" name="startDate" type="date">
                     </div>
 
                     <div>
                         <span>종료 일자</span>
-                        <input name="endDate" th:value="${ad.endDate}" type="date">
+                        <input id="endDate" name="endDate" type="date">
                     </div>
                 </div>
 
@@ -54,7 +54,8 @@
                         <a style="cursor: pointer" onclick="submitAdvert()" class="confrim_btn">수정완료</a>
                     </li>
                     <li>
-                        <a th:href="@{/admin/advert/{advertisementId}(advertisementId=${ad.advertisementId})}" class="list_btn">취소</a>
+                        <a th:href="@{/admin/advert/{advertisementId}(advertisementId=${ad.advertisementId})}"
+                           class="list_btn">취소</a>
                     </li>
                 </ul>
             </form>
@@ -62,7 +63,12 @@
 
             <script type="text/javascript" th:inline="javascript">
 
+                //localdatetime으로 저장된 날짜=>string으로 바꿔 넣어주기
+                document.getElementById("startDate").value = [[${ad.startDate}]].substring(0, 10);
+                document.getElementById("endDate").value = [[${ad.endDate}]].substring(0, 10);
 
+
+                //사진 미리보기
                 function previewPic(event) {
 
                     let reader = new FileReader();
@@ -81,13 +87,13 @@
                 }
 
 
-
+                //광고 전송
                 function submitAdvert() {
+                    //form안의 element들을 name으로 value구하기
                     let title = document.forms["register"]["title"].value;
                     let url = document.forms["register"]["url"].value;
                     let startDate = document.forms["register"]["startDate"].value;
                     let endDate = document.forms["register"]["endDate"].value;
-
 
 
                     if (title.trim() == "" || url.trim() == "" || startDate.trim() == "" || endDate.trim() == "") {
@@ -97,21 +103,25 @@
                         alert("시간 설정이 잘못되었습니다 확인해 주세요");
                         return;
                     } else {
-                        startDate = new Date(startDate);
-                        endDate = new Date(endDate);
+                        startDate=Date.parse(startDate);
+                        endDate=Date.parse(endDate);
+                        console.log(startDate, endDate);
                         (confirm("등록하시겠습니까?")) ? finalSend() : false;
                     }
                 }
 
                 function finalSend() {
+
                     const submitAd = document.getElementById('register');
                     alert("등록완료!");
                     console.log(submitAd);
                     submitAd.submit();
                 }
 
+
             </script>
             <script>
+                //파일 이름만 나오게 추출
                 $(function () {
                     var fileTarget = $('.admin09_fileupload');
                     fileTarget.on('change', function () { // 값이 변경되면

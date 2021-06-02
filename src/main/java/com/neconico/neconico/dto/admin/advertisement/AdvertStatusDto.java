@@ -7,9 +7,9 @@ import org.apache.ibatis.type.Alias;
 
 @Getter @Setter
 @NoArgsConstructor
-@Alias("AdStatusDto")
+@Alias("AdvertStatusDto")
 public class
-AdvertiseStatusDto {
+AdvertStatusDto {
     private long advertisementId;
     private String adStatus;
 }

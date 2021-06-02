@@ -11,7 +11,7 @@
                 <h3 class="h_fs_26">광고관리</h3>
                 <div class="table adm08_table">
                     <div class="adm08_reg_btn">
-                        <a th:href="@{/admin/advert/add}">등록</a>
+                        <a th:href="@{/admin/advert/new}">등록</a>
                     </div>
                     <table>
                         <colgroup>
@@ -44,14 +44,9 @@
                                    onclick="updateAdStatus(this)">광고중</a></td>
                         </tr>
                     </table>
-                    <div class="sch_box">
-                        <select name="" id="">
-                            <option value="">아이디</option>
-                            <option value="">이름</option>
-                            <option value="">이메일</option>
-                        </select>
-                        <input type="text" placeholder="검색어를 입력하세요.">
-                        <input type="button" value="검색">
+                    <div th:if="${pageMaker.totalContent}==0"
+                         style="height: 100px; text-align: center; vertical-align: middle">
+                        <a>아직 게시물이 없습니다</a>
                     </div>
 
                     <!--    페이징      -->
@@ -93,12 +88,12 @@
         <!-- 광고 공개/숨김 표시    -->
         function updateAdStatus(obj) {
             let request = new XMLHttpRequest()
-            let adId = obj.parentElement.parentElement.firstElementChild.innerHTML;
+            let adId = obj.parentElement.parentElement.firstElementChild.innerText;
             let adStatus = obj.innerText;
 
-            adStatus = (adStatus == "숨김" ? "광고중" : "숨김");
+            adStatus = (adStatus === "숨김" ? "광고중" : "숨김");
 
-            if (confirm(adStatus + "상태를 바꾸시겠습니까?") == true) {
+            if (confirm(adStatus + " 으로 상태를 바꾸시겠습니까?") == true) {
 
                 if (adStatus == "광고중") {
                     obj.classList.add('changeStatus');

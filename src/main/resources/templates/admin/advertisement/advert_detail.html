@@ -31,7 +31,7 @@
                         </li>
                         <li>
                             <span class="adm08_l">광고 연결 주소</span>
-                            <span class="adm08_r"><a th:href="${ad.url}" th:text="${ad.url}">http://www.naver.com</a></span>
+                            <span class="adm08_r"><a style="color: #353f97 ; font-weight:bold" th:href="${ad.url}" target="_blank" th:text="${ad.url}">http://www.naver.com</a></span>
                         </li>
                         <li>
                             <span class="adm08_l">광고 개시/종료 일자</span>
@@ -42,7 +42,7 @@
 
                 <ul class="adm08_btn_box">
                     <li th:if="${ad.accountId}==${session.sessionUser.accountId}">
-                        <a th:href="@{/admin/advert/edit/{advertisementId}(advertisementId=${ad.advertisementId})}" class="modify_btn">수정</a>
+                        <a th:href="@{/admin/advert/{advertisementId}/edit(advertisementId=${ad.advertisementId})}" class="modify_btn">수정</a>
                     </li>
                     <li>
                         <a th:href="@{/admin/advert/list}" class="list_btn">목록으로</a>

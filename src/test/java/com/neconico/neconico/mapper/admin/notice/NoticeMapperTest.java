@@ -41,7 +41,7 @@ class NoticeMapperTest {
         cri.setSortingColumn("noticeId");
         cri.setRequestOrder("desc");
         //when
-        notices =  noticeMapper.selectByPaging(cri);
+        notices =  noticeMapper.selectNotices(cri);
         for (NoticeReturnDto notice : notices) {
             log.info("notice={}",notice);
             
@@ -68,7 +68,7 @@ class NoticeMapperTest {
             noticeMapper.insertNotice(noticeDto);
         }
         //then
-        assertThat(noticeMapper.countTable()).isEqualTo(20);
+        assertThat(noticeMapper.countTotalNotices()).isEqualTo(20);
 
 
 
@@ -84,7 +84,7 @@ class NoticeMapperTest {
 
         //when
         noticeMapper.deleteNotice(noticeId);
-        NoticeReturnDto result = noticeMapper.selectNotice(noticeId);
+        NoticeReturnDto result = noticeMapper.selectNoticeByNoticeId(noticeId);
 
         //then
         assertThat(result).isNull();
@@ -107,7 +107,7 @@ class NoticeMapperTest {
         System.out.println("notice = " + noticeDto);
 
         //then
-        assertThat(noticeMapper.selectNotice(25L).getContent()).isEqualTo("수정한 내용");
+        assertThat(noticeMapper.selectNoticeByNoticeId(25L).getContent()).isEqualTo("수정한 내용");
     }
     @Test
     @DisplayName("selectAdTest")
@@ -117,7 +117,7 @@ class NoticeMapperTest {
           NoticeReturnDto notice = new NoticeReturnDto();
 
           //when
-        notice = noticeMapper.selectNotice(22L);
+        notice = noticeMapper.selectNoticeByNoticeId(22L);
           log.info("notice={}",notice);
 
           //then

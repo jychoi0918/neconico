@@ -1,7 +1,6 @@
 package com.neconico.neconico.service.admin.notice;
 
 import com.neconico.neconico.dto.admin.notice.NoticeDto;
-import com.neconico.neconico.dto.admin.notice.NoticeReturnDto;
 import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.paging.Criteria;
 import org.junit.jupiter.api.DisplayName;
@@ -12,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +50,7 @@ class NoticeServiceTest {
     void insertTest() throws Exception {
 
           //given
-       long count = noticeService.countTable();
+       long count = noticeService.countAllNotices();
 
         NoticeDto noticeDto = new NoticeDto();
         noticeDto.setUserId(3L);
@@ -65,7 +62,7 @@ class NoticeServiceTest {
           //when
         noticeService.insertNotice(noticeDto);
 
-        long result = noticeService.countTable();
+        long result = noticeService.countAllNotices();
 
 
           //then
@@ -83,7 +80,7 @@ class NoticeServiceTest {
             noticeService.deleteNotice(noticeId);
 
           //then
-            assertThat(noticeService.selectNotice(noticeId)).isNull();
+            assertThat(noticeService.selectNoticeByNoticeId(noticeId)).isNull();
     }
     @Test
     @DisplayName("updateTest")
@@ -100,7 +97,7 @@ class NoticeServiceTest {
 
         //when
         noticeService.updateNotice(noticeId,noticeDto);
-        NoticeViewDto result = noticeService.selectNotice(noticeId);
+        NoticeViewDto result = noticeService.selectNoticeByNoticeId(noticeId);
 
 
           //then

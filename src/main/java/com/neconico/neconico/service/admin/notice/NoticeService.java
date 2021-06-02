@@ -12,26 +12,19 @@ public interface NoticeService {
 
 
 
-    //insert
     void insertNotice(NoticeDto noticeDto);
 
-    //count => 페이징 할때 필요할 수도!
-    long countTable();
+    Long countAllNotices();
 
-    //delete
-    void deleteNotice(Long noticeId);
-
-    //update
-    void updateNotice(Long noticeId,NoticeDto noticeDto);
-
-    //selectByPaging
     List<NoticeViewDto> selectAllNotices(Criteria criteria);
 
-    //select one Notice
-    NoticeViewDto selectNotice(Long noticeId);
+    void deleteNotice(Long noticeId);
 
-    //update noticeStatus
+    void updateNotice(Long noticeId,NoticeDto noticeDto);
+
+    NoticeViewDto selectNoticeByNoticeId(Long noticeId);
+
     void updateNoticeStatus(NoticeStatusDto noticeStatusDto);
 
-    List<NoticeViewDto> selectNoticing(Criteria criteria);
+    List<NoticeViewDto> selectPublicNotices(Criteria criteria);
 }

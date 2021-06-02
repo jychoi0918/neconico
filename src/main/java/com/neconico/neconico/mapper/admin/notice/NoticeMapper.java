@@ -13,28 +13,21 @@ import java.util.List;
 @Mapper
 public interface NoticeMapper {
 
-    //select
-    List<NoticeReturnDto> selectByPaging(@Param("cri")Criteria criteria);
+    List<NoticeReturnDto> selectNotices(@Param("cri")Criteria criteria);
 
-    List<NoticeReturnDto> selectNoticing(@Param("cri")Criteria criteria, @Param("noticeStatus")String noticeStatus);
+    List<NoticeReturnDto> selectPublicNotices(@Param("cri")Criteria criteria, @Param("noticeStatus")String noticeStatus);
 
-    //count
-    public long countTable();
+    long countTotalNotices();
 
-    //select one notice
-    public NoticeReturnDto selectNotice(@Param("noticeId") Long noticeId);
+    NoticeReturnDto selectNoticeByNoticeId(@Param("noticeId") Long noticeId);
 
-    //insert
     void insertNotice(@Param("noticeDto")NoticeDto noticeDto);
 
-    //delete
-    public void deleteNotice(@Param("noticeId")Long noticeId);
+    void deleteNotice(@Param("noticeId")Long noticeId);
 
-    //update
-    public void updateNotice(@Param("noticeDto")NoticeDto noticeDto);
+    void updateNotice(@Param("noticeDto")NoticeDto noticeDto);
 
-    //statusUpdate
-    public void updateStatus(NoticeStatusDto noticeStatusDto);
+    void updateStatus(NoticeStatusDto noticeStatusDto);
 
 
 }

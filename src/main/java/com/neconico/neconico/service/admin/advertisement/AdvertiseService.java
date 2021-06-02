@@ -1,8 +1,8 @@
 package com.neconico.neconico.service.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertInfoDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertReturnDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.paging.Criteria;
 
@@ -11,39 +11,21 @@ import java.util.List;
 public interface AdvertiseService {
 
 
-    //select
+    List<AdvertReturnDto> selectPublicAdverts();
 
-    //'광고중' 광고글 가져오기
-    List<AdvertiseReturnDto> selectAdvertising();
+    List<AdvertReturnDto> selectAllAdverts(Criteria cri);
 
+    Long countAllAdverts();
 
-    //광고 리스트 가져오기
-    List<AdvertiseReturnDto> selectAllAd(Criteria cri);
+    AdvertReturnDto selectAdvertByAdvertId(Long advertisementId);
 
-    long countTable();
+    void insertAdvert(FileResultInfoDto fileResultInfoDto, AdvertInfoDto advertInfoDto);
 
-    AdvertiseReturnDto selectAd(Long advertisementId);
+    void deleteAdvert(Long advertisementId);
 
+    void updateAdvert(FileResultInfoDto fileResultInfoDto, AdvertReturnDto advertReturnDto);
 
-
-    //insert
-    void insertAd(FileResultInfoDto fileResultInfoDto, AdvertiseInfoDto advertiseInfoDto) throws Exception;
-
-
-
-    //delete
-    void deleteAd(Long advertisementId);
-
-
-
-    //update
-    void updateAd(FileResultInfoDto fileResultInfoDto, AdvertiseReturnDto advertiseReturnDto);
-
-
-/*    void updateAdSamePicture(AdvertiseInfoDto advertiseInfoDto);*/
-
-
-    void updateStatus(AdvertiseStatusDto advertiseStatusDto);
+    void updateStatus(AdvertStatusDto advertStatusDto);
 
 
 }

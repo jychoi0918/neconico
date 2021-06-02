@@ -1,78 +1,88 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/header :: header"/>
 <body>
-    <div class="wrap">
-        <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
-        <div class="section_wrap">
-            <div class="admin_left" th:replace="fragment/admin_menu :: admin_menu"/>
-            <div class="admin_right">
-                <h3 class="h_fs_26">공지사항</h3>
+<div class="wrap">
+    <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu :: admin_menu"/>
+        <div class="admin_right">
+            <h3 class="h_fs_26">공지사항</h3>
 
-                <div class="table adm08_table">
-                    <div class="adm08_reg_btn">
-                        <a th:href="@{/admin/notice/add}" href="./admin10_2.html">등록</a>
-                    </div>
+            <div class="table adm08_table">
+                <div class="adm08_reg_btn">
+                    <a th:href="@{/admin/notice/new}" href="./admin10_2.html">등록</a>
+                </div>
 
-                    <table>
-                        <colgroup>
-                            <col width="8%">
-                            <col width="30%">
-                            <col width="15%">
-                            <col width="20%">
-                            <col width="20%">
-							<col width="7%">
-                        </colgroup>
-                        <tr>
-                            <th>번호</th>
-                            <th>제목</th>
-                            <th>작성자</th>
-                            <th>작성일</th>
-                            <th>수정일</th>
-							<th>상태</th>
-                        </tr>
+                <table>
+                    <colgroup>
+                        <col width="8%">
+                        <col width="30%">
+                        <col width="15%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="7%">
+                    </colgroup>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                        <th>수정일</th>
+                        <th>상태</th>
+                    </tr>
 
-                        <tr th:each="notice : ${notices}">
-                            <td th:text="${notice.noticeId}"></td>
-                            <td><a  th:href="@{/admin/notice/{noticeId}(noticeId=${notice.noticeId})}"
-                                    th:text="${notice.title}">공지사항제목이 나타납니다.</a></td>
-                            <td th:text="${notice.accountId}">운영자</td>
-                            <td th:text="${notice.createdDate}">2021.05.01</td>
-                            <td th:text="${notice.compareDate} ? '-' : ${notice.modifiedDate}">2021.05.30</td>
-                            <td><a style="cursor: pointer" th:class="${notice.noticeStatus.equals('공개')}? changeStatus:''" th:text="${notice.noticeStatus}" onclick="updateStatus(this)">숨김</a></td>
-                        </tr>
+                    <tr th:each="notice : ${notices}">
+                        <td th:text="${notice.noticeId}"></td>
+                        <td><a th:href="@{/admin/notice/{noticeId}(noticeId=${notice.noticeId})}"
+                               th:text="${notice.title}">공지사항제목이 나타납니다.</a></td>
+                        <td th:text="${notice.accountId}">운영자</td>
+                        <td th:text="${notice.createdDate}">2021.05.01</td>
+                        <td th:text="${notice.compareDate} ? '-' : ${notice.modifiedDate}">2021.05.30</td>
+                        <td><a style="cursor: pointer" th:class="${notice.noticeStatus.equals('공개')}? changeStatus:''"
+                               th:text="${notice.noticeStatus}" onclick="updateStatus(this)">숨김</a></td>
+                    </tr>
 
-                    </table>
+                </table>
+                <div th:if="${pageMaker.totalContent}==0"
+                     style="height: 100px; text-align: center; vertical-align: middle">
+                    <a>아직 게시물이 없습니다</a>
+                </div>
 
-
-                    <div class="pagination" th:if="${pageMaker.totalContent}!=0">
-                        <ul>
-                            <li th:unless="${pageMaker.criteria.currentPage}==1">
-                                <a class="page_prev" th:href="@{/admin/notice/list(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
-                            </li >
-                            <li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                                <a class="" th:href="@{/admin/notices(currentPage=${idx})}" th:text="${idx}" th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
-                            </li>
-                            <li th:if="${pageMaker.hasNext}">
-                                <a class="page_next" th:href="@{/admin/notice/list(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="pagination" th:if="${pageMaker.totalContent}!=0">
+                    <ul>
+                        <li th:unless="${pageMaker.criteria.currentPage}==1">
+                            <a class="page_prev"
+                               th:href="@{/admin/notice/list(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
+                        </li>
+                        <li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                            <a class="" th:href="@{/admin/notices(currentPage=${idx})}" th:text="${idx}"
+                               th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
+                        </li>
+                        <li th:if="${pageMaker.hasNext}">
+                            <a class="page_next"
+                               th:href="@{/admin/notice/list(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <script>
-    function updateStatus(obj){
+
+    function updateStatus(obj) {
+
+
         let request = new XMLHttpRequest();
         let noticeId = obj.parentElement.parentElement.firstElementChild.innerText;
         let noticeStatus = obj.innerText;
 
-        if(noticeStatus=="숨김"){
-            noticeStatus="공개"
+        if (noticeStatus === "숨김") {
+            noticeStatus = "공개"
             obj.classList.add('changeStatus');
-        }else{
-            noticeStatus="숨김"
+        } else {
+            noticeStatus = "숨김"
             obj.classList.remove('changeStatus');
         }
 
@@ -85,15 +95,14 @@
         console.log(jsonContent);
         console.log(noticeStatus);
 
-        request.onreadystatechange = function changeStatus(){
-            if(request.readyState==4 && request.status==200){
+        request.onreadystatechange = function () {
+            if (request.readyState == 4 && request.status == 200) {
                 obj.innerText = noticeStatus;
             }
         }
 
-        request.open("PUT","/admin/notices/status/edit");
-        /*content type이 맞나?*/
-        request.setRequestHeader("Content-type","application/json");
+        request.open("PUT", "/admin/notices/status/edit");
+        request.setRequestHeader("Content-type", "application/json");
         request.send(jsonContent);
     }
 </script>

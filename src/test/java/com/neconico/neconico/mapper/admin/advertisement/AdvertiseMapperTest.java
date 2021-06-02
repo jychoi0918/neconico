@@ -1,13 +1,11 @@
 package com.neconico.neconico.mapper.admin.advertisement;
 
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertInfoDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertReturnDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.paging.Criteria;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class AdvertiseMapperTest {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired
     AdvertiseMapper advertiseMapper;
@@ -32,7 +29,7 @@ class AdvertiseMapperTest {
     void selectByPagingTest(){
 
           //given
-        List<AdvertiseReturnDto> adList = new ArrayList<>();
+        List<AdvertReturnDto> adList = new ArrayList<>();
         Criteria cri = new Criteria();
         cri.setSortingColumn("advertisementId");
         cri.setContentPerPage(10);
@@ -40,10 +37,7 @@ class AdvertiseMapperTest {
         cri.setRequestOrder("desc");
 
         //when
-        adList= advertiseMapper.selectByPaging(cri);
-        for (AdvertiseReturnDto advertiseReturnDto : adList) {
-            log.info("Ad DTO={}",advertiseReturnDto);
-        }
+        adList= advertiseMapper.selectAdverts(cri);
 
         //then
         assertThat(adList.size()).isEqualTo(10);
@@ -55,10 +49,17 @@ class AdvertiseMapperTest {
     void countTest(){
 
           //given
-        List<AdvertiseReturnDto> adList = advertiseMapper.selectAll();
+        Criteria cri = new Criteria();
+        cri.setCurrentPage(1);
+        cri.setContentPerPage(10000);
+        cri.setSortingColumn("advertisementId");
+        cri.setRequestOrder("desc");
+
+
+        List<AdvertReturnDto> adList = advertiseMapper.selectAdverts(cri);
 
           //when
-        long count = advertiseMapper.countTable();
+        long count = advertiseMapper.countTotalAdverts();
 
           //then
         assertThat(count).isEqualTo(adList.size());
@@ -70,9 +71,9 @@ class AdvertiseMapperTest {
 
           //given
 
-        long countBefore = advertiseMapper.countTable();
+        long countBefore = advertiseMapper.countTotalAdverts();
 
-        AdvertiseInfoDto ad = new AdvertiseInfoDto();
+        AdvertInfoDto ad = new AdvertInfoDto();
         ad.setUserId(5L);
         ad.setTitle("광고");
         ad.setUrl("www.ggomi.is.love");
@@ -83,9 +84,9 @@ class AdvertiseMapperTest {
         ad.setAdStatus("숨김");
 
           //when
-        advertiseMapper.insertAd(ad);
+        advertiseMapper.insertAdvert(ad);
 
-        long countAfter = advertiseMapper.countTable();
+        long countAfter = advertiseMapper.countTotalAdverts();
 
           //then
           assertThat(countBefore).isEqualTo(countAfter-1);
@@ -100,8 +101,7 @@ class AdvertiseMapperTest {
         Long adId = 4L;
 
         //when
-        AdvertiseReturnDto adRT = advertiseMapper.selectAd(adId);
-        log.info("log info={}",adRT);
+        AdvertReturnDto adRT = advertiseMapper.selectAdvertByAdvertId(adId);
 
 
         //then
@@ -118,10 +118,10 @@ class AdvertiseMapperTest {
         Long adId = 3L;
 
           //when
-          advertiseMapper.deleteAd(adId);
+          advertiseMapper.deleteAdvert(adId);
 
           //then
-        assertThat(advertiseMapper.selectAd(adId)).isNull();
+        assertThat(advertiseMapper.selectAdvertByAdvertId(adId)).isNull();
     }
     @Test
     @DisplayName("updateTest")
@@ -129,7 +129,7 @@ class AdvertiseMapperTest {
 
           //given
         Long advertiseId = 3L;
-        AdvertiseReturnDto ad = new AdvertiseReturnDto();
+        AdvertReturnDto ad = new AdvertReturnDto();
         ad.setAdvertisementId(advertiseId);
         ad.setTitle("광고 수정");
         ad.setUrl("www.gg.is.love");
@@ -140,11 +140,11 @@ class AdvertiseMapperTest {
         ad.setAdStatus("숨김");
 
         //when
-        advertiseMapper.updateAd(ad);
+        advertiseMapper.updateAdvert(ad);
 
 
           //then
-        assertThat(advertiseMapper.selectAd(advertiseId).getTitle()).isEqualTo("광고 수정");
+        assertThat(advertiseMapper.selectAdvertByAdvertId(advertiseId).getTitle()).isEqualTo("광고 수정");
     }
 
 
@@ -154,7 +154,7 @@ class AdvertiseMapperTest {
     void updateStatusTest(){
 
           //given
-        AdvertiseStatusDto adStatus = new AdvertiseStatusDto();
+        AdvertStatusDto adStatus = new AdvertStatusDto();
         adStatus.setAdvertisementId(4l);
         adStatus.setAdStatus("공개");
 
@@ -163,7 +163,7 @@ class AdvertiseMapperTest {
         advertiseMapper.updateStatus(adStatus);
 
           //then
-        assertThat(advertiseMapper.selectAd(4l).getAdStatus()).isEqualTo("공개");
+        assertThat(advertiseMapper.selectAdvertByAdvertId(4l).getAdStatus()).isEqualTo("공개");
 
 
     }
@@ -176,15 +176,10 @@ class AdvertiseMapperTest {
          String adStatus = "광고중";
 
           //when
-          List<AdvertiseReturnDto> adlist = advertiseMapper.selectAdvertising(adStatus);
-
-        for (AdvertiseReturnDto advertiseReturnDto : adlist) {
-            log.info("advertiseReturnDto= "+advertiseReturnDto.getAdImgUrl());
-            log.info("advertiseReturnDto= "+advertiseReturnDto.getUrl());
-        }
-
+          List<AdvertReturnDto> adlist = advertiseMapper.selectPublicAdverts(adStatus);
 
           //then
+          assertThat(adlist).anyMatch(a -> a.getAdStatus().equals(adStatus));
     }
 
 

@@ -2,9 +2,9 @@ package com.neconico.neconico.controller.admin.advertisement;
 
 
 import com.neconico.neconico.config.web.LoginUser;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseInfoDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertInfoDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertReturnDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.file.policy.FilePolicy;
@@ -28,31 +28,18 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdvertiseController {
 
-    private final AdvertiseService adService;
+    private final AdvertiseService advertService;
 
     private final FileService fileService;
 
-
-    //================================================================================
-
-    @GetMapping("/client")
-    public String client(Model model) {
-        List<AdvertiseReturnDto> adlist = adService.selectAdvertising();
-
-        model.addAttribute("adverts", adlist);
-
-
-        return "admin/advertisement/ad_index";
-    }
-    //********************************************************************************
 
 
     //광고 리스트 출력
     @GetMapping("/advert/list")
     public String adList(@ModelAttribute("cri") Criteria cri, Model model) {
 
-        List<AdvertiseReturnDto> list = adService.selectAllAd(cri);
-        Pagination page = new Pagination(cri, adService.countTable(), 10);
+        List<AdvertReturnDto> list = advertService.selectAllAdverts(cri);
+        Pagination page = new Pagination(cri, advertService.countAllAdverts(), 10);
         model.addAttribute("adList", list);
         model.addAttribute("pageMaker", page);
 
@@ -65,8 +52,8 @@ public class AdvertiseController {
     @PutMapping("/advert/status")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void updateStatus(@RequestBody AdvertiseStatusDto advertiseStatusDto) {
-        adService.updateStatus(advertiseStatusDto);
+    public void updateStatus(@RequestBody AdvertStatusDto advertStatusDto) {
+        advertService.updateStatus(advertStatusDto);
 
     }
 
@@ -75,7 +62,7 @@ public class AdvertiseController {
     @GetMapping("/advert/{advertiseId}")
     public String adDetail(@PathVariable Long advertiseId, Model model) {
 
-        AdvertiseReturnDto ad = adService.selectAd(advertiseId);
+        AdvertReturnDto ad = advertService.selectAdvertByAdvertId(advertiseId);
         model.addAttribute("ad", ad);
 
 
@@ -84,27 +71,27 @@ public class AdvertiseController {
 
 
     //등록 폼 출력
-    @GetMapping("/advert/add")
+    @GetMapping("/advert/new")
     public String addAdForm(Model model) {
 
-        model.addAttribute("advertiseDto", new AdvertiseInfoDto());
+        model.addAttribute("advertiseDto", new AdvertInfoDto());
 
         return "admin/advertisement/advert_add";
     }
 
 
     //등록 데이터 전송
-    @PostMapping("/advert/add")
+    @PostMapping("/advert/new")
     public String addAd(@RequestParam("imgFile") MultipartFile multipartFile,
-                        @ModelAttribute AdvertiseInfoDto advertiseInfoDto,
+                        @ModelAttribute AdvertInfoDto advertInfoDto,
                         @LoginUser SessionUser sessionUser) throws Exception {
 
-        advertiseInfoDto.setUserId(sessionUser.getUserId());
+        advertInfoDto.setUserId(sessionUser.getUserId());
 
 
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
         FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFile);
-        adService.insertAd(fileResultInfoDto, advertiseInfoDto);
+        advertService.insertAdvert(fileResultInfoDto, advertInfoDto);
 
 
         return "redirect:/admin/advert/list";
@@ -113,13 +100,13 @@ public class AdvertiseController {
 
     //삭제하기
     @PostMapping("/advert/delete")
-    public String deleteAd(@RequestParam(value = "advertisementId", required = false) String advertisementId,
-                           @RequestParam(value = "imgFileName", required = false) String imgFileName) throws IllegalArgumentException {
+    public String deleteAd(@RequestParam(value = "advertisementId") String advertisementId,
+                           @RequestParam(value = "imgFileName") String imgFileName) throws IllegalArgumentException {
 
 
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
         fileService.deleteFiles(imgFileName);
-        adService.deleteAd(Long.parseLong(advertisementId));
+        advertService.deleteAdvert(Long.parseLong(advertisementId));
 
         return "redirect:/admin/advert/list";
 
@@ -127,11 +114,10 @@ public class AdvertiseController {
 
 
     //수정하기 폼 출력
-    @GetMapping("/advert/edit/{advertisementId}")
+    @GetMapping("/advert/{advertisementId}/edit")
     public String editAdForm(@PathVariable("advertisementId") Long advertisementId, Model model) {
 
-        AdvertiseReturnDto advertiseReturnDto = adService.selectAd(advertisementId);
-        model.addAttribute("ad", advertiseReturnDto);
+        model.addAttribute("ad", advertService.selectAdvertByAdvertId(advertisementId));
 
 
         return "admin/advertisement/advert_edit";
@@ -139,22 +125,23 @@ public class AdvertiseController {
 
 
     //수정 데이터 전송
-    @PostMapping("/advert/edit/{advertisementId}")
+    @PostMapping("/advert/{advertisementId}/edit")
     public String editAdvert(@RequestParam("imgFile") MultipartFile multipartFile,
-                             @ModelAttribute("advertiseInfoDto") AdvertiseReturnDto advertiseReturnDto) throws IOException, IllegalStateException, IllegalArgumentException {
+                             @ModelAttribute("advertiseReturnDto") AdvertReturnDto advertReturnDto) throws Exception {
 
         if(multipartFile.isEmpty()) {
-            adService.updateAd(new FileResultInfoDto(null, null), advertiseReturnDto);
+            advertService.updateAdvert(new FileResultInfoDto(null, null), advertReturnDto);
 
             return "redirect:/admin/advert/{advertisementId}";
         }
 
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
-        fileService.deleteFiles(advertiseReturnDto.getImgFileName());
+        fileService.deleteFiles(advertReturnDto.getImgFileName());
         FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFile);
-        adService.updateAd(fileResultInfoDto, advertiseReturnDto);
+        advertService.updateAdvert(fileResultInfoDto, advertReturnDto);
         return "redirect:/admin/advert/{advertisementId}";
     }
 
-
+    //수정데이터 재 전송시 AdvertiseInfoDto로 하지 않은 이유 :
+    //Form에 뿌린 dto 와 일치해야지 채워지지 않아도 돌려 받을 수 있다.!
 }

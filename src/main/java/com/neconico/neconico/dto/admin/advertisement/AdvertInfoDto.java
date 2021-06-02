@@ -1,17 +1,16 @@
 package com.neconico.neconico.dto.admin.advertisement;
 
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.Alias;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Getter @Setter
 @ToString
 @NoArgsConstructor
-@Alias("AdvertiseInfoDto")
-public class AdvertiseInfoDto {
+@Alias("AdvertInfoDto")
+public class AdvertInfoDto {
 
     private long advertisementId;
     private long userId;

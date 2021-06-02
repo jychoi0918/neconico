@@ -4,17 +4,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.Alias;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Getter @Setter
-@ToString @Slf4j
+@ToString
 @NoArgsConstructor
-@Alias("AdvertiseReturnDto")
-public class AdvertiseReturnDto {
+@Alias("AdvertReturnDto")
+public class AdvertReturnDto {
 
     private long advertisementId;
     private long userId;

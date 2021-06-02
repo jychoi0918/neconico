@@ -4,7 +4,6 @@ package com.neconico.neconico.controller.admin.notice;
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.admin.notice.NoticeDto;
 import com.neconico.neconico.dto.admin.notice.NoticeStatusDto;
-import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.paging.Pagination;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 public class NoticeController {
 
     private final NoticeService noticeService;
-    private Long sessionUserId = 50L;
 
 
     /* ====================================================================================
@@ -29,21 +27,20 @@ public class NoticeController {
     @GetMapping("/notice/list/client")//리스트 가져오기
     public String clientNoticeList(Model model, Criteria cri) {
 
-        model.addAttribute("notices", noticeService.selectNoticing(cri));
-        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countTable(), 3));
+        model.addAttribute("notices", noticeService.selectPublicNotices(cri));
+        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countAllNotices(), 5));
 
-        return "admin/notice/notice";
+        return "mainpage/notice_public";
     }
 
     @GetMapping("/notice/{noticeId}/client")
     public String clientNotice(@PathVariable long noticeId, Model model) {
 
 
-        NoticeViewDto NoticeViewDto = noticeService.selectNotice(noticeId);
-        model.addAttribute("notice", NoticeViewDto);
+        model.addAttribute("notice", noticeService.selectNoticeByNoticeId(noticeId));
 
 
-        return "admin/notice/notice_view";
+        return "mainpage/notice_view";
 
     }
 
@@ -54,7 +51,7 @@ public class NoticeController {
     public String list(Model model, Criteria cri) {
 
         model.addAttribute("notices", noticeService.selectAllNotices(cri));
-        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countTable(), 3));
+        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countAllNotices(), 5));
 
         return "admin/notice/notice_list";
 
@@ -65,8 +62,7 @@ public class NoticeController {
     @GetMapping("/notice/{noticeId}")
     public String notice(@PathVariable long noticeId, Model model) {
 
-        NoticeViewDto NoticeViewDto = noticeService.selectNotice(noticeId);
-        model.addAttribute("notice", NoticeViewDto);
+        model.addAttribute("notice", noticeService.selectNoticeByNoticeId(noticeId));
 
 
         return "admin/notice/notice_detail";
@@ -75,14 +71,14 @@ public class NoticeController {
 
 
     //등록보기
-    @GetMapping("/notice/add")
+    @GetMapping("/notice/new")
     public String addForm() {
         return "admin/notice/notice_add";
     }
 
 
     //등록하기
-    @PostMapping("/notice/add")
+    @PostMapping("/notice/new")
     public String addNotice(@ModelAttribute("notice") NoticeDto notice,
                             @LoginUser SessionUser sessionUser) {
 
@@ -96,17 +92,16 @@ public class NoticeController {
 
 
     //수정하기 폼
-    @GetMapping("/notice/edit/{noticeId}")
+    @GetMapping("/notice/{noticeId}/edit")
     public String editNoticeForm(@PathVariable Long noticeId, Model model) {
 
-        NoticeViewDto NoticeViewDto = noticeService.selectNotice(noticeId);
-        model.addAttribute("notice", NoticeViewDto);
+        model.addAttribute("notice", noticeService.selectNoticeByNoticeId(noticeId));
 
         return "admin/notice/notice_edit";
     }
 
 
-    @PostMapping("/notice/edit/{noticeId}")
+    @PostMapping("/notice/{noticeId}/edit")
     public String editNotice(@PathVariable Long noticeId, @ModelAttribute NoticeDto noticeDto) {
 
         noticeService.updateNotice(noticeId, noticeDto);
@@ -115,7 +110,7 @@ public class NoticeController {
     }
 
 
-    @PostMapping("/notice/delete/{noticeId}")
+    @PostMapping("/notice/{noticeId}/delete")
     public String delete(@PathVariable Long noticeId) {
 
         noticeService.deleteNotice(noticeId);

@@ -1,8 +1,7 @@
 package com.neconico.neconico.service.admin.advertisement;
 
-import com.fasterxml.jackson.databind.deser.std.StdKeyDeserializer;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseReturnDto;
-import com.neconico.neconico.dto.admin.advertisement.AdvertiseStatusDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertReturnDto;
+import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.paging.Criteria;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,11 +28,11 @@ class AdvertiseServiceTest {
     void selectTest(){
 
           //given
-        List<AdvertiseReturnDto> adList = new ArrayList<>();
+        List<AdvertReturnDto> adList = new ArrayList<>();
         Criteria cri = new Criteria();
 
           //when
-        adList = advertiseService.selectAllAd(cri);
+        adList = advertiseService.selectAllAdverts(cri);
 
 
          //then
@@ -76,10 +75,10 @@ class AdvertiseServiceTest {
 
 
           //when
-            advertiseService.deleteAd(deleteId);
+            advertiseService.deleteAdvert(deleteId);
 
           //then
-            assertThat(advertiseService.selectAd(deleteId)).isNull();
+            assertThat(advertiseService.selectAdvertByAdvertId(deleteId)).isNull();
     }
 
     @Test
@@ -87,7 +86,7 @@ class AdvertiseServiceTest {
     void statusUpdateTest(){
 
           //given
-        AdvertiseStatusDto adStatus = new AdvertiseStatusDto();
+        AdvertStatusDto adStatus = new AdvertStatusDto();
         adStatus.setAdvertisementId(4l);
         adStatus.setAdStatus("공개");
 
@@ -96,7 +95,7 @@ class AdvertiseServiceTest {
           advertiseService.updateStatus(adStatus);
 
           //then
-        assertThat(advertiseService.selectAd(4l).getAdStatus()).isEqualTo("공개");
+        assertThat(advertiseService.selectAdvertByAdvertId(4l).getAdStatus()).isEqualTo("공개");
 
 
     }
@@ -110,10 +109,10 @@ class AdvertiseServiceTest {
 
 
         //when
-        List<AdvertiseReturnDto> adList = advertiseService.selectAdvertising();
+        List<AdvertReturnDto> adList = advertiseService.selectPublicAdverts();
 
-        for (AdvertiseReturnDto advertiseReturnDto : adList) {
-            log.info("advertise="+advertiseReturnDto);
+        for (AdvertReturnDto advertReturnDto : adList) {
+            log.info("advertise="+ advertReturnDto);
         }
 
     /*    //then
