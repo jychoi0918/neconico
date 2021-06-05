@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header class="header header_border" th:fragment="admin_body_header">
+        <div class="sub_header sub_header_admin h_con">
+            <h1 class="logo">
+                <a th:href="@{/}"><img th:src="@{/img/logo.png}" alt=""></a>
+                <span></span>
+            </h1>
+            <ul class="admin_wrap">
+                <li>
+                    <a href="#" class="admin_img">
+                        <img th:src="@{/img/main_user_icon_p.png}" alt="">
+                    </a>
+                    <div class="admin_name">
+                        <p><span th:text="${session.sessionUser.accountName}"></span>님</p>
+                    </div>
+                </li>
+                <li class="admin_logout clearfix">
+                    <a href="/logout">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+</header>
+</html>

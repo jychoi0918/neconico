@@ -14,6 +14,7 @@
         )
     </insert>
 
+
     <delete id="deleteAuthorNumber" parameterType="long">
         delete from email where email_id = #{emailId}
     </delete>

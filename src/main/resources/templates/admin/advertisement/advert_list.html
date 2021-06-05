@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+    <header th:replace="fragment/admin_body_header :: admin_body_header"/>
+    <div class="section_wrap">
+        <div th:replace="fragment/admin_menu :: admin_menu"/>
+
+        <div class="admin_right">
+            <h3 class="h_fs_26">광고관리</h3>
+            <div class="table adm08_table">
+                <div class="adm08_reg_btn">
+                    <a th:href="@{/admin/advert/new}">등록</a>
+                </div>
+                <table>
+                    <colgroup>
+                        <col width="10%">
+                        <col width="25%">
+                        <col width="15%">
+                        <col width="20%">
+                        <col width="20%">
+                        <col width="10%">
+                    </colgroup>
+                    <tr>
+                        <th>번호</th>
+                        <th>광고제목</th>
+                        <th>작성자</th>
+                        <th>시작일자</th>
+                        <th>종료일자</th>
+                        <th>상태</th>
+                    </tr>
+
+                    <tr th:each="ad:${adList}">
+                        <td th:text="${ad.advertisementId}">1</td>
+                        <td><a th:href="@{/admin/advert/{advertiseId}(advertiseId=${ad.advertisementId})}"
+                               th:text="${ad.title}">광고제목이 나타납니다.</a></td>
+                        <td th:text="${ad.accountId}">홍길동</td>
+                        <td name="startDate" th:text="${ad.startDate}">2021.05.01</td>
+                        <td name="endDate" th:text="${ad.endDate}">2021.05.30</td>
+                        <!--내가 다른 함수를 써서 사용하면 될까?-->
+                        <td><a class="" th:class="${ad.adStatus.equals('광고중')} ? changeStatus: ''" id="status"
+                               th:text="${ad.adStatus}" style="cursor: pointer"
+                               onclick="updateAdStatus(this)">광고중</a></td>
+                    </tr>
+                </table>
+                <div th:if="${pageMaker.totalContent}==0"
+                     style="height: 100px; text-align: center; vertical-align: middle">
+                    <a>아직 게시물이 없습니다</a>
+                </div>
+
+                <!--    페이징      -->
+                <div class="pagination" th:if="${pageMaker.totalContent}!=0">
+                    <ul>
+                        <li th:unless="${pageMaker.criteria.currentPage}==1">
+                            <a class="page_prev"
+                               th:href="@{/admin/adverts(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
+                        </li>
+                        <li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+                            <a class="" th:href="@{/admin/adverts(currentPage=${idx})}" th:text="${idx}"
+                               th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
+                        </li>
+                        <li th:if="${pageMaker.hasNext}">
+                            <a class="page_next"
+                               th:href="@{/admin/adverts(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    /* 날짜 형식 바꾸기 */
+    let startDate = document.getElementsByName("startDate");
+    let endDate = document.getElementsByName("endDate");
+
+    for (let i = 0; i < startDate.length; i++) {
+        startDate[i].innerText = (startDate[i].innerText.substring(0, 10));
+        endDate[i].innerText = (endDate[i].innerText.substring(0, 10));
+
+
+    }
+
+    <!-- 광고 공개/숨김 표시    -->
+    function updateAdStatus(obj) {
+        let request = new XMLHttpRequest()
+        let adId = obj.parentElement.parentElement.firstElementChild.innerText;
+        let adStatus = obj.innerText;
+
+        adStatus = (adStatus === "숨김" ? "광고중" : "숨김");
+
+        if (confirm(adStatus + " 으로 상태를 바꾸시겠습니까?") == true) {
+
+            if (adStatus == "광고중") {
+                obj.classList.add('changeStatus');
+            } else {
+                obj.classList.remove('changeStatus');
+            }
+
+            let content = new Object();
+            content.advertisementId = adId;
+            content.adStatus = adStatus;
+
+            let jsonContent = JSON.stringify(content);
+
+
+            request.onreadystatechange = function send() {
+                if (request.readyState == 4 && request.status == 200)
+                    obj.innerText = adStatus;
+            }
+
+            request.open("put", "/admin/advert/status");
+            request.setRequestHeader("Content-type", "application/json");
+            request.send(jsonContent);
+
+        } else {
+            return false;
+        }
+    }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.admin.advertisement.AdvertiseMapper">
+
+
+    <sql id="select">
+        select a.advertisement_id as advertisementId,
+               u.user_id as userId,
+               u.account_id as accountId,
+               a.title,
+               a.start_date as startDate,
+               a.end_date as endDate,
+               a.ad_img_urls as adImgUrl,
+               a.url,
+               a.img_file_names as imgFileName,
+               a.ad_status as adStatus
+        from advertisement a
+                 inner join users u
+                            on u.user_id = a.user_id
+    </sql>
+
+
+    <select id="selectAdverts" resultType="AdvertReturnDto">
+        <include refid="select"/>
+        order by ${sortingColumn} ${requestOrder}
+            limit ${contentPerPage} offset ${pageStart}
+
+    </select>
+    <select id="selectAll" resultType="AdvertReturnDto">
+        <include refid="select"/>
+
+    </select>
+    <select id="countTotalAdverts" resultType="long">
+        select count(advertisement_id)
+        from advertisement
+    </select>
+    <select id="selectAdvertByAdvertId" resultType="AdvertReturnDto">
+        <include refid="select"/>
+        where advertisement_id = #{advertisement}
+    </select>
+    <select id="selectPublicAdverts" resultType="AdvertReturnDto">
+        select ad_img_urls as adImgUrl,
+               url,
+               ad_status as adStatus
+        from advertisement
+        where ad_status = #{adStatus}
+    </select>
+    <insert id="insertAdvert" parameterType="AdvertInfoDto" useGeneratedKeys="true" keyProperty="advertisementId">
+        insert into advertisement(user_id,
+                                  title,
+                                  start_date,
+                                  end_date,
+                                  ad_img_urls,
+                                  url,
+                                  img_file_names,
+                                  ad_status)
+        values (#{userId},
+                #{title},
+                #{startDate},
+                #{endDate},
+                #{adImgUrl},
+                #{url},
+                #{imgFileName},
+                #{adStatus})
+    </insert>
+    <delete id="deleteAdvert" parameterType="long">
+        delete from advertisement
+        where advertisement_id=#{advertisementId}
+    </delete>
+    <update id="updateAdvert" parameterType="AdvertReturnDto">
+        update advertisement
+        set title = #{title},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            url = #{url},
+            ad_img_urls = #{adImgUrl},
+            img_file_names = #{imgFileName}
+        where advertisement_id = #{advertisementId}
+    </update>
+    <update id="updateStatus" parameterType="AdvertStatusDto">
+        update advertisement
+        set ad_status = #{adStatus}
+        where advertisement_id = #{advertisementId}
+    </update>
+
+
+
+</mapper>
