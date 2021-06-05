@@ -1,102 +1,103 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragment/header :: header"/>
 <body>
-<header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
-        <div class="section_wrap">
-            <div class="admin_left" th:replace="fragment/admin_menu :: admin_menu"/>
+<header th:replace="fragment/admin_body_header :: admin_body_header"/>
+<div class="section_wrap">
+    <div th:replace="fragment/admin_menu :: admin_menu"/>
 
-            <div class="admin_right clearfix">
-                <h3 class="h_fs_26">광고관리</h3>
+    <div class="admin_right clearfix">
+        <h3 class="h_fs_26">광고관리</h3>
 
-                <div class="adm08_list">
-                    <span  hidden id="advertisementId" th:text="${ad.advertisementId}"></span>
-                    <ul>
-                        <li>
-                            <span class="adm08_l">제목</span>
-                            <span th:text="${ad.title}" class="adm08_r">퍼피랜드-royal 강아지 사료</span>
-                        </li>
-                        <li>
-                            <span class="adm08_l">작성자</span>
-                            <span th:text="${ad.accountId}" class="adm08_r">배고픈 태크</span>
-                        </li>
-                        <li>
-                            <span class="adm08_l">광고 이미지 파일</span>
-                            <span id="imgFileName" th:text="${ad.imgFileName}" class="adm08_r">C://file/picture</span>
-                        </li>
-                        <li>
-                        <div style=" width:80% ;height: 10%" >
-                            <img th:src="${ad.adImgUrl}">
-                        </div>
-                        </li>
-                        <li>
-                            <span class="adm08_l">광고 연결 주소</span>
-                            <span class="adm08_r"><a style="color: #353f97 ; font-weight:bold" th:href="${ad.url}" target="_blank" th:text="${ad.url}">http://www.naver.com</a></span>
-                        </li>
-                        <li>
-                            <span class="adm08_l">광고 개시/종료 일자</span>
-                            <span class="adm08_r"><i id="startDate" th:text="${ad.startDate}">2021.05.01</i>  -  <i id="endDate" th:text="${ad.endDate}">2021.05.30</i></span>
-                        </li>
-                    </ul>
-                </div>
-
-                <ul class="adm08_btn_box">
-                    <li th:if="${ad.accountId}==${session.sessionUser.accountId}">
-                        <a href="#" class="modify_btn">수정</a>
-                    </li>
-                    <li>
-                        <a href="#" class="list_btn">목록으로</a>
-                    </li>
-                    <li>
-                        <a style="cursor: pointer" th:onclick="deleteAdvert()" class="del_btn">삭제</a>
-                    </li>
-                </ul>
-            </div>
+        <div class="adm08_list">
+            <span hidden id="advertisementId" th:text="${ad.advertisementId}"></span>
+            <ul>
+                <li>
+                    <span class="adm08_l">제목</span>
+                    <span th:text="${ad.title}" class="adm08_r">퍼피랜드-royal 강아지 사료</span>
+                </li>
+                <li>
+                    <span class="adm08_l">작성자</span>
+                    <span th:text="${ad.accountId}" class="adm08_r">배고픈 태크</span>
+                </li>
+                <li>
+                    <span class="adm08_l">광고 이미지 파일</span>
+                    <span id="imgFileName" th:text="${ad.imgFileName}" class="adm08_r">C://file/picture</span>
+                </li>
+                <li>
+                    <div style=" width:80% ;height: 10%">
+                        <img th:src="${ad.adImgUrl}">
+                    </div>
+                </li>
+                <li>
+                    <span class="adm08_l">광고 연결 주소</span>
+                    <span class="adm08_r"><a style="color: #353f97 ; font-weight:bold" th:href="${ad.url}"
+                                             target="_blank" th:text="${ad.url}">http://www.naver.com</a></span>
+                </li>
+                <li>
+                    <span class="adm08_l">광고 개시/종료 일자</span>
+                    <span class="adm08_r"><i id="startDate" th:text="${ad.startDate}">2021.05.01</i>  -  <i id="endDate"
+                                                                                                            th:text="${ad.endDate}">2021.05.30</i></span>
+                </li>
+            </ul>
         </div>
+
+        <ul class="adm08_btn_box">
+            <li th:if="${ad.accountId}==${session.sessionUser.accountId}">
+                <a href="#" class="modify_btn">수정</a>
+            </li>
+            <li>
+                <a href="#" class="list_btn">목록으로</a>
+            </li>
+            <li>
+                <a style="cursor: pointer" th:onclick="deleteAdvert()" class="del_btn">삭제</a>
+            </li>
+        </ul>
     </div>
+</div>
+</div>
 <script>
 
     /* 날짜 형식 바꾸기 */
-  let startDate = document.getElementById("startDate").innerText;
-  let endDate = document.getElementById("endDate").innerText;
+    let startDate = document.getElementById("startDate").innerText;
+    let endDate = document.getElementById("endDate").innerText;
 
-  document.getElementById("startDate").innerText=(startDate.substr(0,10));
-  document.getElementById("endDate").innerText=(endDate.substr(0,10));
-
-
-  const advertId = document.getElementById("advertisementId").innerText;
-  const fileName = document.getElementById("imgFileName").innerText;
+    document.getElementById("startDate").innerText = (startDate.substr(0, 10));
+    document.getElementById("endDate").innerText = (endDate.substr(0, 10));
 
 
+    const advertId = document.getElementById("advertisementId").innerText;
+    const fileName = document.getElementById("imgFileName").innerText;
 
-    function deleteAdvert(){
+
+    function deleteAdvert() {
         let form = document.createElement("form");
 
-        form.setAttribute("method","post");
-        form.setAttribute("action","/admin/advert/delete");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/admin/advert/delete");
 
         let data1 = document.createElement("input")
-        data1.setAttribute("type","hidden");
-        data1.setAttribute("name","advertisementId");
+        data1.setAttribute("type", "hidden");
+        data1.setAttribute("name", "advertisementId");
         data1.setAttribute("value", advertId);
 
         let data2 = document.createElement("input")
-        data2.setAttribute("type","hidden");
-        data2.setAttribute("name","imgFileName");
+        data2.setAttribute("type", "hidden");
+        data2.setAttribute("name", "imgFileName");
         data2.setAttribute("value", fileName);
 
         form.append(data1, data2);
         document.body.appendChild(form);
         console.log(form);
-        if(confirm("해당 광고를 삭제하시겠습니까?")==true){
+        if (confirm("해당 광고를 삭제하시겠습니까?") == true) {
 
 
             form.submit();
 
 
-            console.log(advertId,fileName);
+            console.log(advertId, fileName);
             alert("삭제되었습니다");
-        }else{
+        } else {
             alert("삭제취소하셨습니다")
             return false;
         }
