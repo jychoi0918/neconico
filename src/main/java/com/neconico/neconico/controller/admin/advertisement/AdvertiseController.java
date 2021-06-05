@@ -39,7 +39,7 @@ public class AdvertiseController {
     public String adList(@ModelAttribute("cri") Criteria cri, Model model) {
 
         List<AdvertReturnDto> advertList = advertService.selectAllAdverts(cri);
-        Pagination page = new Pagination(cri, advertService.countAllAdverts(), 10);
+        Pagination page = new Pagination(cri, advertService.countAllAdverts().intValue(), 10);
         model.addAttribute("adList", advertList);
         model.addAttribute("pageMaker", page);
 
