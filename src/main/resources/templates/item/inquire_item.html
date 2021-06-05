@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+	<header class="header" th:replace="fragment/body_header :: body_header"/>
+
+        <div class="store_view_section_wrap h_con">
+
+            <section class="store_view_box">
+				<div class="store_view_img_box swiper-container swiper2">
+					<ul class="swiper-wrapper">
+						<li class="swiper-slide" th:each="imgUrls : ${findItemInfo.itemImgUrls.split('>')}">
+							<img style="height: 455px" th:src="${imgUrls}" alt="">
+						</li>
+					</ul>
+
+					<div class="swiper-button-prev swiper-button-prev2 swiper-button-prev-white"></div>
+					<div class="swiper-button-next swiper-button-next2"></div>
+					<div class="swiper-pagination swiper-pagination-white"></div>
+				</div>
+
+
+				<script>
+					$(function(){
+						var store_swiper = new Swiper('.swiper2', {
+							navigation: {
+								nextEl: '.swiper-button-next2',
+								prevEl: '.swiper-button-prev2',
+							},
+							loop: true,
+							speed : 700,
+							slidesPerView: 1,
+							grabCursor: true,
+							autoplay: {
+								delay: 5000,
+								disableOnInteraction: false,
+							},
+							pagination: {
+								el: '.swiper-pagination',
+							    type: 'bullets',
+								clickable: true,
+							},
+						});
+					});
+				</script>
+
+				<div class="store_view_info_box">
+					<input type="hidden" id="itemId" th:value="${findItemInfo.itemId}">
+					<p th:text="${findItemInfo.title}"></p>
+					<p th:text="${findItemInfo.price + '원'}"></p>
+
+					<div class="store_view_info">
+						<div class="store_view_info_top">
+							<i><img src="/img/store_like.png" alt=""><b th:text="${countFavorite}">3</b></i>
+							<i><img src="/img/store_view.png" alt=""><b th:text="${findItemInfo.views}">72</b></i>
+							<i><img src="/img/store_clock.png" alt=""><b th:text="${betweenTime}">2일 전</b></i>
+						</div>
+
+						<div class="store_view_info_btm">
+							<ul class="store_view_info_btm1">
+								<li>
+									<p><i>상품상태</i> <span th:text="${findItemInfo.itemStatus}">새상품</span></p>
+								</li>
+								<li>
+									<p><i>배송비</i> <span class="col_pur" th:text="${findItemInfo.shippingPrice}">배송비 별도</span></p>
+								</li>
+								<li>
+									<p><i>거래지역</i> <span class="col_blue" th:text="${findItemInfo.area}">서울시 강서구 강서대로 1</span></p>
+								</li>
+							</ul>
+
+							<div class="store_view_info_btm2">
+								<p>상점정보</p>
+								<div>
+									<figure>
+										<a th:href="@{/store/{id}(id = ${findItemInfo.storeInquireInfoDto.userId})}">
+										<img style="height: 50px;" th:src="${findItemInfo.storeInquireInfoDto.storeImgPath}" alt="">
+										</a>
+									</figure>
+									<p th:text="${findItemInfo.storeInquireInfoDto.storeName}">큐크</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="store_view_btn">
+							<a style="cursor: pointer" class="store_like" onclick="addFavorite(this)">
+								<img class="like_off" src="/img/store_like.png" alt="">
+								<img class="like_on" src="/img/store_like_p.png" alt="">
+								<span>찜</span>
+							</a>
+							<a href="javascript:submitTrade()" class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('판매 중')}">구매하기</a>
+							<a class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('거래 중')}">거래 중</a>
+							<a class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('거래 완료')}">거래 완료</a>
+
+						</div>
+					</div>
+
+					<!--<script>
+						$(function(){
+							$('.store_like').click(function(){
+								$(this).toggleClass('on');
+							});
+						});
+					</script>-->
+
+				</div>
+
+            </section>
+
+			<div class="store_view_box02">
+				<h4>연관상품</h4>
+				<ul class="store_view_box02_list">
+					<li th:each="relatedProduct : ${relatedProducts}">
+						<a th:href="@{/item/{id}(id = ${relatedProduct.itemId})}">
+							<figure>
+								<img style="height: 200px" th:src="${relatedProduct.itemImg.split('>')[0]}" alt="">
+							</figure>
+							<p th:text="${relatedProduct.title}"></p>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<div class="store_view_box03">
+				<h4>상품정보</h4>
+
+				<div class="store_view_box03_content">
+					<pre th:text="${findItemInfo.content}"></pre>
+				</div>
+			</div>
+
+			<div class="store_view_box04">
+				<h4>상품문의</h4>
+				<div class="store_view_box04_content">
+					<div class="store_view_box04_write">
+						<textarea name="" id="questionContent" rows="3" style="resize: none;" placeholder="상품문의 입력" maxlength="100 "
+								  onchange="countText()" onkeydown="countText()" onkeypress="countText()" onkeyup="countText()"></textarea>
+						<div>
+							<span id="text_length">0/100</span>
+							<button onclick="submitQuestion()">
+								<img src="/img/pen_icon.png" alt=""><span>등록</span>
+							</button>
+						</div>
+					</div>
+
+					<ul class="store_view_box04_comment">
+						<li th:each="itemQuestion : ${findItemInfo.itemQuestionInquireDtoList}">
+							<figure>
+								<img th:src="${itemQuestion.storeInquireInfoDto.storeImgPath}" alt="">
+							</figure>
+
+							<div class="store_view_box04_com">
+								<h5 th:text="${itemQuestion.storeInquireInfoDto.storeName}">상점75524685호</h5>
+								<p th:if="${itemQuestion.content.contains('@')}" th:with="colonIdx = ${itemQuestion.content.indexOf(':')}" ><span th:text="${itemQuestion.content.substring(0, colonIdx + 1)}">@상점75524685호</span> <span style="background: none" th:text="${itemQuestion.content.substring(colonIdx + 1)}"> 아직도 안팔림</span></p>
+								<p th:unless="${itemQuestion.content.contains('@')}" th:text="${itemQuestion.content}">깎아주세요</p>
+								<div>
+									<a style="cursor: pointer" onclick="writeQuestionComment(this)"><img src="/img/talk_icon.png" alt=""><span>댓글달기</span></a>
+									<a style="cursor: pointer" onclick="removeQuestion(this)" th:if="${session.sessionUser != null && session.sessionUser.userId == itemQuestion.storeInquireInfoDto.userId}"><img src="/img/bin_icon.png" alt=""><span>삭제하기</span></a>
+									<p hidden th:text="${itemQuestion.itemQuestionId}"></p>
+								</div>
+
+								<span th:text="${itemQuestion.betweenTime}">1달 전</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+	<footer th:replace="fragment/footer :: footer"/>
+    </div>
+<script th:inline="javascript">
+	//내용 글자수 세기
+	const content = document.getElementById("questionContent");
+	const countText = () => {
+		const colonIdx = content.value.indexOf(':');
+		const resultAt = content.value.indexOf('@', colonIdx + 1);
+		const resultColon = content.value.indexOf(':', colonIdx + 1);
+		if(resultAt !== -1 || resultColon !== -1) {
+			if(resultAt !== -1) {
+				content.value = content.value.substring(0, resultAt);
+				alert("'@'나 ':'은 사용할 수 없습니다.");
+				return;
+			}else {
+				content.value = content.value.substring(0, resultColon);
+				alert("'@'나 ':'은 사용할 수 없습니다.");
+				return;
+			}
+		}
+
+		let textLength = document.getElementById("text_length");
+		let inputTextLength = content.value.length;
+
+		textLength.style.color = "BLACK";
+
+		if (inputTextLength >= 100) {
+			textLength.style.color = "RED";
+			if (inputTextLength > 100) {
+				inputTextLength -= 1;
+			}
+		}
+
+		const maxLength = "100";
+		textLength.innerHTML = inputTextLength + "/" + maxLength;
+	}
+
+	//문의, 댓글 등록
+	const sessionUser = [[${session.sessionUser}]];
+	const itemStoreInfoUserId = [[${findItemInfo.storeInquireInfoDto.userId}]];
+
+	const submitQuestion = () => {
+		if(sessionUser === null) {
+			location.href = "/login";
+			return;
+		}
+
+		const contentValue = document.getElementById("questionContent").value;
+		const itemId = document.getElementById('itemId').value;
+		const httpRequest = new XMLHttpRequest();
+
+		httpRequest.onreadystatechange = function () {
+			if(this.readyState === 4 && this.status === 200) {
+				const questionData = JSON.parse(this.responseText);
+				appendQuestion(questionData);
+			}
+		}
+
+
+		httpRequest.open("POST", "/question/" + itemId + "/new" + "?content=" + contentValue);
+		httpRequest.setRequestHeader("Content-Type", "application/json");
+		httpRequest.send();
+
+	}
+
+	//문의, 댓글 삭제
+	function removeQuestion (targetQuestion) {
+		let parentNode = targetQuestion.parentNode;
+		let itemQuestionId = parentNode.lastElementChild.innerHTML;
+		let httpRequest = new XMLHttpRequest();
+
+		httpRequest.onreadystatechange = function () {
+			if(this.readyState === 4 && this.status === 200) {
+				parentNode.parentNode.parentNode.remove();
+			}
+		}
+		httpRequest.open("DELETE", "/question/" + itemQuestionId +"/delete");
+		httpRequest.send();
+	}
+
+	//댓글 Element 생성
+	const appendQuestion = (questionData) => {
+		const liElement = document.createElement("li");
+
+		//figure
+		const figureElement = document.createElement("figure");
+
+		//figure의 자식노드 추가
+		const figureImgElement = document.createElement("img");
+		figureImgElement.setAttribute("src", questionData.storeImgPath);
+		figureElement.append(figureImgElement);
+
+		const divElement = document.createElement("div");
+		divElement.setAttribute("class", "store_view_box04_com");
+
+		const h5Element = document.createElement("h5");
+		h5Element.innerHTML = questionData.storeName;
+
+		//내용 댓글인지 체크
+		const paragraphElement = createContent(questionData);
+
+		//childDiv 생성
+		const childDivElement = createChildDivElement(questionData);
+
+		divElement.append(h5Element, paragraphElement, childDivElement);
+
+		liElement.append(figureElement, divElement);
+
+		const ulElement = document.querySelector('.store_view_box04_comment');
+
+		ulElement.prepend(liElement);
+
+	}
+
+	const createContent = (questionData) => {
+		if(questionData.content.indexOf('@') === -1) {
+			const paragraphElement = document.createElement('p');
+			paragraphElement.innerText = questionData.content;
+
+			return paragraphElement;
+		}else {
+			const paragraphElement = document.createElement('p');
+
+			const colonIndex = questionData.content.indexOf(':');
+			const targetStoreName = questionData.content.substring(0, colonIndex + 1);
+			const content = questionData.content.substring(colonIndex + 1, questionData.content.length);
+
+			const firstSpan = document.createElement("span");
+			firstSpan.innerText = targetStoreName;
+
+			const secondSpan = document.createElement("span");
+			secondSpan.style.background = "none";
+			secondSpan.innerText = content;
+
+			paragraphElement.append(firstSpan, secondSpan);
+
+			return paragraphElement;
+		}
+	}
+
+	const createChildDivElement = (questionData) => {
+		const childDivElement = document.createElement("div");
+
+		const commentAnchor = document.createElement("a");
+		commentAnchor.style.cursor = "pointer";
+
+		const commentSpan = document.createElement("span");
+		commentSpan.innerText = "댓글달기";
+
+		const commentImg = document.createElement('img');
+		commentImg.setAttribute("src", "https://neconicoimgs.s3.ap-northeast-2.amazonaws.com/staticImg/talk_icon.png");
+		commentAnchor.append(commentImg, commentSpan);
+
+
+		const deleteAnchor = document.createElement('a');
+		deleteAnchor.setAttribute("onclick", "removeQuestion(this)")
+		deleteAnchor.style.cursor = "pointer";
+
+		const deleteSpan = document.createElement("span");
+		deleteSpan.innerText = "삭제하기";
+
+		const deleteImg = document.createElement("img");
+		deleteImg.setAttribute("src", "https://neconicoimgs.s3.ap-northeast-2.amazonaws.com/staticImg/bin_icon.png");
+		deleteAnchor.append(deleteImg, deleteSpan);
+
+
+		const paragraphElement = document.createElement("p");
+		paragraphElement.setAttribute("hidden", true);
+		paragraphElement.innerHTML = questionData.itemQuestionId;
+
+		childDivElement.append(commentAnchor, deleteAnchor, paragraphElement);
+
+		return childDivElement;
+	}
+
+	//댓글작성
+	function writeQuestionComment(writeCommentAnchor) {
+		const h5Element = writeCommentAnchor.parentNode.parentNode.firstElementChild;
+		content.value = "@" + h5Element.innerHTML + ": ";
+		content.focus();
+	}
+
+	//해당 페이지의 아이템 id
+	const itemId = document.getElementById('itemId').value;
+
+	//조회수 증가
+	const incrementHits = () => {
+		const httpRequest = new XMLHttpRequest();
+
+
+		httpRequest.open("PUT", "/item/update/" + itemId + "/hits");
+		httpRequest.setRequestHeader("Content-Type", "text/plain");
+		httpRequest.send();
+	}
+
+	//찜목록 체크
+	const checkFavorite = () => {
+		//로그인 되어있지 않을경우 체크 x
+		if(sessionUser === null) {
+			return;
+		}
+
+		const httpRequest = new XMLHttpRequest();
+
+		httpRequest.onreadystatechange = function () {
+			if(this.readyState === 4 && this.status === 200) {
+				if(this.responseText === "true") {
+					const favoriteAnchor = document.querySelector('.store_like');
+					favoriteAnchor.classList.toggle('on');
+				}
+			}
+		}
+
+		httpRequest.open("GET", "/favorite/" + itemId + "/check");
+		httpRequest.setRequestHeader("Content-Type", "text/plain");
+		httpRequest.send();
+	}
+
+	//조회수 추가, 찜 체크
+	window.onload = e => {
+		incrementHits();
+		checkFavorite();
+	}
+
+	//찜 추가
+	function addFavorite(favoriteAnchor) {
+		if(sessionUser === null) {
+			location.href = "/login";
+			return;
+		}
+
+		const httpRequest = new XMLHttpRequest();
+		if(favoriteAnchor.classList.contains('on')) {
+			favoriteAnchor.classList.remove('on');
+			httpRequest.onreadystatechange = function () {
+				if(this.readyState === 4 && this.status === 200) {
+					alert('찜 해제되었습니다.');
+				}
+			}
+
+
+			httpRequest.open("POST", "/favorite/" + itemId + "/delete");
+			httpRequest.setRequestHeader("Content-Type", "text/plain");
+			httpRequest.send();
+		}else {
+			favoriteAnchor.classList.toggle('on');
+
+			httpRequest.onreadystatechange = function () {
+				if (this.readyState === 4 && this.status === 200) {
+					alert('찜 되었습니다.');
+				}
+			}
+
+			httpRequest.open("POST", "/favorite/" + itemId + "/new");
+			httpRequest.setRequestHeader("Content-Type", "text/plain");
+			httpRequest.send();
+		}
+	}
+
+	//구매하기
+	const submitTrade = () => {
+		if(sessionUser === null) {
+			location.href = "/login";
+			return;
+		}
+		if(sessionUser.userId === itemStoreInfoUserId) {
+			alert('자신이 등록한 상품은 구매요청 할 수 없습니다.');
+			return;
+		}
+
+		const httpRequest = new XMLHttpRequest();
+		httpRequest.onreadystatechange = function () {
+			if(this.readyState === 4 && this.status === 200) {
+				alert('구매요청 되었습니다.');
+				location.href = "/item/" + itemId;
+			}
+		}
+
+		httpRequest.open("POST", "/trade/" + itemId + "/request");
+		httpRequest.setRequestHeader("Content-Type", "text/plain");
+		httpRequest.send();
+	}
+</script>
+</body>
+</html>

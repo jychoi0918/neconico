@@ -124,7 +124,7 @@
     function subIdChange(subCategory) {
         subId.value = subCategory.value
         let targetSubText;
-        for (i = 0; i < subCategory.options.length; i++) {
+        for (let i = 0; i < subCategory.options.length; i++) {
             if (subCategory.options[i].value === subCategory.value) {
                 targetSubText = subCategory.options[i].innerText;
             }
@@ -143,14 +143,14 @@
             subCategory.removeChild(subCategory.firstChild);
         }
 
-        for (i = 0; i < subCategoryList.length; i++) {
+        for (let i = 0; i < subCategoryList.length; i++) {
             let option = document.createElement('option');
             option.innerText = subCategoryList[i].name;
             option.setAttribute('value', subCategoryList[i].categorySubId);
             options[i] = option;
         }
 
-        for (i = 0; i < options.length; i++) {
+        for (let i = 0; i < options.length; i++) {
             subCategory.appendChild(options[i]);
         }
 
@@ -159,7 +159,7 @@
 
         //바뀌는 main category 이름 span_category_main에 셋팅
         let targetMainText;
-        for (i = 0; i < mainCategory.options.length; i++) {
+        for (let i = 0; i < mainCategory.options.length; i++) {
             if (mainCategory.options[i].value === mainCategory.value) {
                 targetMainText = mainCategory.options[i].innerText;
             }

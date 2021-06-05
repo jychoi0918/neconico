@@ -66,7 +66,7 @@ function ajax() {
     httpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let resp = JSON.parse(this.responseText);
-            removeChildNode();
+            removeChildNode('itemListDiv');
             if ((resp.pagination.totalContent + 0) !== 0) {
                 createItemCard(resp.itemList);
                 createPageButton(resp.pagination);
@@ -76,8 +76,8 @@ function ajax() {
 
 }
 
-function removeChildNode() {
-    let parent = document.getElementById('itemListDiv');
+function removeChildNode(location) {
+    let parent = document.getElementById(location);
     while (parent.hasChildNodes()) {
         parent.removeChild(parent.firstChild);
     }
@@ -418,9 +418,11 @@ function transPrice(price) {
 
 //가져오는 날짜 형식 2021-04-29T10:13:18
 function calculateDay(input) {
-    let createTime = new Date(input);
+    let dateArr = (input + "").substring(0, 10).split('-');
+    let createTime = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
     let nowTime = new Date();
     let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
+
     if (time < 60) {
         return time + '초 전';
     } else {
@@ -428,7 +430,7 @@ function calculateDay(input) {
         if (time < 60) {
             return time + '분 전';
         } else {
-            time = Math.floor(time / 60);
+            time = Math.floor(time / 60)
             if (time < 24) {
                 return time + '시간 전';
             } else {
@@ -464,7 +466,7 @@ function clickStoreName(kind) {
     let parent = document.getElementById('storeName');
     if (kind == 0) {
         let storeName = parent.innerText.replace('상점명 변경', '').trim();
-        removeChildNode(parent);
+        removeChildNode('storeName');
         let input = document.createElement("input");
         input.setAttribute("value", storeName);
         let a = document.createElement("a");
@@ -484,7 +486,7 @@ function clickStoreName(kind) {
             if (this.readyState === 4 && this.status === 200) {
                 alert('처리가 되었습니다.')
 
-                removeChildNode(parent);
+                removeChildNode('storeName');
                 let span = document.createElement("span");
                 span.innerText = storeName;
                 let a = document.createElement("a");
@@ -506,7 +508,7 @@ function clickStoreContent(kind) {
 
     if (kind == 0) {
         let storeContent = div.innerText;
-        removeChildNode(div);
+        removeChildNode('storeContentBox');
 
         let textarea = document.createElement("textarea");
         textarea.innerText = storeContent;
@@ -523,7 +525,7 @@ function clickStoreContent(kind) {
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 alert('처리가 되었습니다.')
-                removeChildNode(div);
+                removeChildNode('storeContentBox');
 
                 let p = document.createElement("p");
                 p.innerText = storeContent;

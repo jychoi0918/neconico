@@ -55,16 +55,6 @@
                 <result column="question_store_store_name" property="storeName"/>
                 <result column="question_store_img_path" property="storeImgPath"/>
             </association>
-            <collection property="commentInquireDtoList" javaType="list" ofType="itemQuestionCommentInquireDto">
-                <id column="question_comment_id" property="questionCommentId"/>
-                <result column="comment_content" property="content"/>
-                <result column="comment_created_date" property="createdDate"/>
-                <association property="storeInquireInfoDto" javaType="storeInquireInfoDto">
-                    <id column="comment_store_user_id" property="userId"/>
-                    <result column="comment_store_name" property="storeName"/>
-                    <result column="comment_store_img_path" property="storeImgPath"/>
-                </association>
-            </collection>
         </collection>
     </resultMap>
 
@@ -89,9 +79,6 @@
             q.item_question_id as item_question_id,
             q.content as question_content,
             q.created_date as question_created_date,
-            c.question_comment_id as question_comment_id,
-            c.content as comment_content,
-            c.created_date as comment_created_date,
             s.user_id as user_id,
             s.store_name as store_name,
             s.store_img_path as store_img_path,
@@ -100,24 +87,18 @@
             cs.name as category_sub_name,
             question_store.user_id as question_store_user_id,
             question_store.store_name as question_store_store_name,
-            question_store.store_img_path as question_store_img_path,
-            comment_store.user_id as comment_store_user_id,
-            comment_store.store_name as comment_store_name,
-            comment_store.store_img_path as comment_store_img_path
+            question_store.store_img_path as question_store_img_path
         from item i
         inner join category_sub cs
         on i.category_sub_id = cs.category_sub_id
         left join item_question q
         on i.item_id = q.item_id
-        left join question_comment c
-        on q.item_question_id = c.question_id
         inner join store s
         on i.user_id = s.user_id
         left join store question_store
         on q.user_id = question_store.user_id
-        left join store comment_store
-        on c.user_id = comment_store.user_id
         where i.item_id = #{itemId}
+        order by q.created_date desc
     </select>
 
     <select id="selectItemByItemIdForUpdate" parameterType="long" resultType="itemInfoDto">
@@ -216,6 +197,12 @@
             modified_date = #{modifiedDate},
             shipping_price = #{shippingPrice},
             img_file_names = #{imgFileNames}
+        where item_id = #{itemId}
+    </update>
+
+    <update id="updateItemHits" parameterType="long">
+        update item
+        set hits = hits + 1
         where item_id = #{itemId}
     </update>
 

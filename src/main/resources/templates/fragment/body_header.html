@@ -113,5 +113,35 @@
       form.submit();
     }
   </script>
+  <div class="mo_menu_back">
+    <div class="mo_menu_inner">
+      <div class="m_top">
+        <div class="m_logo">
+          <a href="#">
+            <img src="/img/logo.png" alt="">
+          </a>
+        </div>
+        <div class="m_close_btn">
+          <button>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="mo_main_menu">
+        <ul class="m_main_menu">
+          <li th:each="categoryMain : ${session.categoryList}">
+            <a href="#void" th:text="${categoryMain.name}">대분류 1</a>
+            <ul class="m_sub_menu">
+              <li th:each="categorySub : ${categoryMain.categorySubInfoDtoList}">
+                <a th:href="@{/item/search/category(sub=${categorySub.categorySubId}, name=${categorySub.name}, currentPage=1)}" th:text="${categorySub.name}">중분류 1</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
 </header>
 </html>

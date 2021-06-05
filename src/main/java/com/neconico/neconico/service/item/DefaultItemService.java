@@ -134,6 +134,12 @@ public class DefaultItemService implements ItemService{
         return itemMapper.selectTotalItemCountBySubCategoryId(subId);
     }
 
+    @Override
+    @Transactional
+    public void incrementItemHits(Long itemId) {
+        itemMapper.updateItemHits(itemId);
+    }
+
     private Criteria setCriteria(Criteria criteria) {
         int currentPage = criteria.getCurrentPage();
         currentPage = currentPage == 0 ? currentPage + 1 : currentPage;

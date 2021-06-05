@@ -41,4 +41,7 @@ public interface ItemMapper {
                                                  @Param("subId") Long subId);
 
     Long selectTotalItemCountBySubCategoryId(@Param("subId") Long subId);
+
+    //조회수 추가
+    void updateItemHits(@Param("itemId") Long itemId);
 }

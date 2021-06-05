@@ -40,4 +40,7 @@ public interface ItemService {
     List<ItemCardViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId);
 
     Long countTotalItemsBySubCategoryId(Long subId);
+
+    //조회수 증가
+    void incrementItemHits(Long itemId);
 }

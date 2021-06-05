@@ -150,7 +150,7 @@ function removeImage(figureAnchor) {
         storedFiles[parseInt(figureInput.value)] = storedFiles[storedFiles.length - 1];
         storedFiles.pop();
     } else if (figureInput.value === '0' && storedFiles.length === 3) {
-        for (i = 0; i <= 1; i++) {
+        for (let i = 0; i <= 1; i++) {
             storedFiles[i] = storedFiles[i + 1];
         }
         storedFiles.pop();

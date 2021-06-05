@@ -1,9 +1,11 @@
 package com.neconico.neconico.controller.item;
 
+import com.neconico.neconico.Maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.category.CategoryInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
+import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardViewDto;
 import com.neconico.neconico.dto.users.SessionUser;
@@ -13,6 +15,7 @@ import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.paging.Pagination;
 import com.neconico.neconico.service.category.CategoryService;
 import com.neconico.neconico.service.file.FileService;
+import com.neconico.neconico.service.item.ItemFavoriteService;
 import com.neconico.neconico.service.item.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class ItemController {
     private final ItemService itemService;
     private final CategoryService categoryService;
     private final FileService fileService;
+    private final ItemFavoriteService itemFavoriteService;
 
     @GetMapping("/item/new")
     public String createItemPage(Model model) {
@@ -140,5 +145,48 @@ public class ItemController {
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ITEM));
         fileService.deleteFiles(itemInfoDto.getImgFileNames());
         itemService.removeItem(itemId);
+    }
+
+    /**
+     * 아이템 조회
+     */
+    @GetMapping("/item/{itemId}")
+    public String inquireItem(@PathVariable("itemId") Long itemId, Model model) {
+        //해당 아이템 조회
+        ItemInquireInfoDto findItemInfoDto = itemService.findItemByItemId(itemId);
+
+        //해당 아이템과 동일한 카테고리 items 조회
+        Criteria criteria = new Criteria();
+        criteria.setCurrentPage(0);
+        List<ItemCardViewDto> relatedProducts = itemService
+                .searchItemsBySubCategoryId(criteria, findItemInfoDto.getCategorySubInfoDto().getCategorySubId())
+                .stream()
+                .filter(i -> !i.getItemId().equals(findItemInfoDto.getItemId()))
+                .limit(6)
+                .collect(Collectors.toList());
+
+        //해당 아이템 찜 개수
+        String countFavorite = itemFavoriteService.countItemFavorite(itemId);
+
+        //시간차이 계산
+        String betweenTime = ItemDateDifferenceMaker.between(findItemInfoDto.getCreatedDate());
+
+        //상품문의 시간차이 계산.
+        findItemInfoDto.getItemQuestionInquireDtoList().stream()
+                .forEach( i -> i.setBetweenTime(ItemDateDifferenceMaker.between(i.getCreatedDate())));
+
+        model.addAttribute("countFavorite",countFavorite);
+        model.addAttribute("betweenTime", betweenTime);
+        model.addAttribute("findItemInfo", findItemInfoDto);
+        model.addAttribute("relatedProducts", relatedProducts);
+
+        return "item/inquire_item";
+    }
+
+    //조회수 증가
+    @PutMapping("/item/update/{itemId}/hits")
+    @ResponseStatus(HttpStatus.OK)
+    public void incrementHits(@PathVariable("itemId") Long itemId) {
+        itemService.incrementItemHits(itemId);
     }
 }
