@@ -73,15 +73,14 @@
     <script>
 
          /* 날짜 형식 바꾸기 */
-        window.onload = function(){
             let startDate = document.getElementsByName("startDate");
             let endDate = document.getElementsByName("endDate");
 
             for (let i = 0; i < startDate.length; i++) {
-                startDate[i].innerHTML =(startDate[i].innerHTML.substring(0,10));
-                endDate[i].innerHTML =(endDate[i].innerHTML.substring(0,10));
+                startDate[i].innerText =(startDate[i].innerText.substring(0,10));
+                endDate[i].innerText =(endDate[i].innerText.substring(0,10));
 
-            }
+
 
         }
 
@@ -107,8 +106,6 @@
 
                 let jsonContent = JSON.stringify(content);
 
-                console.log(jsonContent);
-                console.log(adStatus);
 
                 request.onreadystatechange = function send() {
                     if (request.readyState == 4 && request.status == 200)

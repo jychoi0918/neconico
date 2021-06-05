@@ -38,9 +38,9 @@ public class AdvertiseController {
     @GetMapping("/advert/list")
     public String adList(@ModelAttribute("cri") Criteria cri, Model model) {
 
-        List<AdvertReturnDto> list = advertService.selectAllAdverts(cri);
+        List<AdvertReturnDto> advertList = advertService.selectAllAdverts(cri);
         Pagination page = new Pagination(cri, advertService.countAllAdverts(), 10);
-        model.addAttribute("adList", list);
+        model.addAttribute("adList", advertList);
         model.addAttribute("pageMaker", page);
 
 
@@ -48,7 +48,7 @@ public class AdvertiseController {
     }
 
 
-    //상태 변경 : AJAX로 데이터 변경
+    //광고 상태 변경
     @PutMapping("/advert/status")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
@@ -113,6 +113,7 @@ public class AdvertiseController {
     }
 
 
+
     //수정하기 폼 출력
     @GetMapping("/advert/{advertisementId}/edit")
     public String editAdForm(@PathVariable("advertisementId") Long advertisementId, Model model) {
@@ -138,10 +139,10 @@ public class AdvertiseController {
         fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
         fileService.deleteFiles(advertReturnDto.getImgFileName());
         FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFile);
+
         advertService.updateAdvert(fileResultInfoDto, advertReturnDto);
+
         return "redirect:/admin/advert/{advertisementId}";
     }
 
-    //수정데이터 재 전송시 AdvertiseInfoDto로 하지 않은 이유 :
-    //Form에 뿌린 dto 와 일치해야지 채워지지 않아도 돌려 받을 수 있다.!
 }

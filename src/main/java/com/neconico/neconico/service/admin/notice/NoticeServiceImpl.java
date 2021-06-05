@@ -5,10 +5,7 @@ import com.neconico.neconico.dto.admin.notice.NoticeStatusDto;
 import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.mapper.admin.notice.NoticeMapper;
 import com.neconico.neconico.paging.Criteria;
-import com.neconico.neconico.service.admin.Status;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +36,7 @@ public class NoticeServiceImpl implements NoticeService {
     public List<NoticeViewDto> selectPublicNotices(Criteria cri) {
         setCriteria(cri);
 
-        return noticeMapper.selectPublicNotices(cri, Status.PUBLIC.getStatus())
+        return noticeMapper.selectPublicNotices(cri, NoticeStatus.PUBLIC.getNoticeStatus())
                 .stream()
                 .map(NoticeViewDto::new)
                 .collect(Collectors.toList());
@@ -51,7 +48,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         return new NoticeViewDto(noticeMapper.selectNoticeByNoticeId(noticeId));
     }
-    
+
 
     @Override
     @Transactional
@@ -59,7 +56,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         noticeDto.setCreatedDate(LocalDateTime.now());
         noticeDto.setModifiedDate(LocalDateTime.now());
-        noticeDto.setNoticeStatus(Status.HIDDEN.getStatus());
+        noticeDto.setNoticeStatus(NoticeStatus.HIDDEN.getNoticeStatus());
 
         noticeMapper.insertNotice(noticeDto);
     }

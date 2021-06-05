@@ -12,19 +12,21 @@ public interface NoticeService {
 
 
 
-    void insertNotice(NoticeDto noticeDto);
-
-    Long countAllNotices();
+    List<NoticeViewDto> selectPublicNotices(Criteria criteria);
 
     List<NoticeViewDto> selectAllNotices(Criteria criteria);
 
+    Long countAllNotices();
+
+    void insertNotice(NoticeDto noticeDto);
+
     void deleteNotice(Long noticeId);
 
-    void updateNotice(Long noticeId,NoticeDto noticeDto);
+    void updateNotice(Long noticeId, NoticeDto noticeDto);
 
     NoticeViewDto selectNoticeByNoticeId(Long noticeId);
 
     void updateNoticeStatus(NoticeStatusDto noticeStatusDto);
 
-    List<NoticeViewDto> selectPublicNotices(Criteria criteria);
+
 }

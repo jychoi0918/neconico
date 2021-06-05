@@ -55,56 +55,10 @@
             </form>
 
 
-            <script type="text/javascript">
+            <!--미리보기, 광고 데이터 보내기 -->
+            <script src="/js/admin/submit_advert.js"></script>
 
 
-                function previewPic(event) {
-
-                    let reader = new FileReader();
-                    let previewDiv = document.getElementById("preview");
-
-                    while (previewDiv.hasChildNodes())
-                        previewDiv.removeChild(previewDiv.firstChild);
-
-                    reader.onload = function (event) {
-                        let img = document.createElement("img");
-                        img.setAttribute("src", event.target.result);
-                        previewDiv.appendChild(img);
-                    };
-                    reader.readAsDataURL(event.target.files[0]);
-
-                }
-
-
-                function submitAdvert() {
-                    let title = document.forms["register"]["title"].value;
-                    let imgFile = document.forms["register"]["imgFile"].value;
-                    let url = document.forms["register"]["url"].value;
-                    let startDate = document.forms["register"]["startDate"].value;
-                    let endDate = document.forms["register"]["endDate"].value;
-
-                    if (title.trim() == "" || imgFile.trim() == "" || url.trim() == "" || startDate.trim() == "" || endDate.trim() == "") {
-                        alert("빈칸을 채워주세요");
-                        return;
-                    } else if ((startDate < endDate) == false) {
-                        alert("시간 설정이 잘못되었습니다 확인해 주세요");
-                    } else {
-                        startDate = new Date(startDate);
-                        endDate = new Date(endDate);
-                        console.log(startDate);
-                        console.log(endDate);
-
-
-
-                        const submitAd = document.getElementById('register');
-                        alert("등록완료!");
-                        submitAd.submit();
-
-                    }
-
-
-                }
-            </script>
             <script>
                 $(function () {
                     var fileTarget = $('.admin09_fileupload');

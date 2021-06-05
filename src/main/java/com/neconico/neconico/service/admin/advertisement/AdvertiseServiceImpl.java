@@ -6,7 +6,6 @@ import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.mapper.admin.advertisement.AdvertiseMapper;
 import com.neconico.neconico.paging.Criteria;
-import com.neconico.neconico.service.admin.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,7 @@ public class AdvertiseServiceImpl implements AdvertiseService {
 
     @Override
     public List<AdvertReturnDto> selectPublicAdverts() {
-        return advertMapper.selectPublicAdverts(Status.ADVERTISING.getStatus());
+        return advertMapper.selectPublicAdverts(AdvertStatus.ADVERTISING.getAdvertStatus());
     }
 
 
@@ -58,7 +57,7 @@ public class AdvertiseServiceImpl implements AdvertiseService {
     @Override
     @Transactional
     public void insertAdvert(FileResultInfoDto fileResultInfoDto, AdvertInfoDto advertInfoDto) {
-        advertInfoDto.setAdStatus(Status.HIDDEN.getStatus());
+        advertInfoDto.setAdStatus(AdvertStatus.HIDDEN.getAdvertStatus());
         advertMapper.insertAdvert(setAdvertiseDto(fileResultInfoDto, advertInfoDto));
     }
 

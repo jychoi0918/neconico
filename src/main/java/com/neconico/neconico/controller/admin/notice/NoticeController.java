@@ -22,31 +22,6 @@ public class NoticeController {
     private final NoticeService noticeService;
 
 
-    /* ====================================================================================
-    여기 부분은 client 부분입니다.*/
-    @GetMapping("/notice/list/client")//리스트 가져오기
-    public String clientNoticeList(Model model, Criteria cri) {
-
-        model.addAttribute("notices", noticeService.selectPublicNotices(cri));
-        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countAllNotices(), 5));
-
-        return "mainpage/notice_public";
-    }
-
-    @GetMapping("/notice/{noticeId}/client")
-    public String clientNotice(@PathVariable long noticeId, Model model) {
-
-
-        model.addAttribute("notice", noticeService.selectNoticeByNoticeId(noticeId));
-
-
-        return "mainpage/notice_view";
-
-    }
-
-
-    /* ====================================================================================*/
-
     @GetMapping("/notice/list")//리스트 가져오기
     public String list(Model model, Criteria cri) {
 
