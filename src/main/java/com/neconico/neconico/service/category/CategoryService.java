@@ -10,4 +10,6 @@ public interface CategoryService {
     List<CategoryInfoDto> findCategoryInfoAll();
 
     List<CategorySubInfoDto> findCategorySubAll();
+
+    List<CategorySubInfoDto> findCategorySubAllByMainName(String mainName);
 }

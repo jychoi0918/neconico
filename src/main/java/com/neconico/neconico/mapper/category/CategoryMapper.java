@@ -17,6 +17,8 @@ public interface CategoryMapper {
 
     CategorySubInfoDto selectCategorySubByName(@Param("name") String subName);
 
+    List<CategorySubInfoDto> selectCategorySubsByMainName(@Param("name") String mainName);
+
     void insertCategoryMain(@Param("name") String mainName);
 
     void insertCategorySub(@Param("mainId") Long mainId,

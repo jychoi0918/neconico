@@ -1,6 +1,7 @@
 package com.neconico.neconico.service.item;
 
 import com.neconico.neconico.Maker.ItemDateDifferenceMaker;
+import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
@@ -123,10 +124,21 @@ public class DefaultItemService implements ItemService{
     }
 
     @Override
-    public List<ItemCardSearchViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
-        List<ItemCardSearchViewDto> itemCardDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
+    public List<ItemCardSearchViewDto> searchItemsByMainCategory(Criteria criteria, List<CategorySubInfoDto> subCategoryList) {
+        List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemMapper.selectItemsByMainCategory(setCriteria(criteria), subCategoryList);
+        return createItemCardViewDto(itemCardSearchViewDtoList);
+    }
 
-        return createItemCardViewDto(itemCardDtoList);
+    @Override
+    public Long countTotalItemsBySubCategoryList(List<CategorySubInfoDto> subCategoryList) {
+        return itemMapper.selectTotalItemCountBySubCategoryList(subCategoryList);
+    }
+
+    @Override
+    public List<ItemCardSearchViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
+        List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
+
+        return createItemCardViewDto(itemCardSearchViewDtoList);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.neconico.neconico.controller.item;
 import com.neconico.neconico.Maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.category.CategoryInfoDto;
+import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
@@ -97,6 +98,24 @@ public class ItemController {
         model.addAttribute("itemCardList", itemCardSearchViewDtoList);
         model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
         return "item/sch_category_result";
+    }
+
+    @GetMapping("/item/search/categoryMain")
+    public String searchItemsByMainCategoryId(@RequestParam("name") String mainName,
+                                              @ModelAttribute("currentPage") Criteria criteria,
+                                              Model model) {
+
+        //main 카테고리에 해당하는 sub카테고리
+        List<CategorySubInfoDto> targetSubCategory = categoryService.findCategorySubAllByMainName(mainName);
+
+        List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemService.searchItemsByMainCategory(criteria, targetSubCategory);
+        int totalContent = itemService.countTotalItemsBySubCategoryList(targetSubCategory).intValue();
+
+
+        model.addAttribute("mainName", mainName);
+        model.addAttribute("itemCardList", itemCardSearchViewDtoList);
+        model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
+        return "item/sch_main_category_result";
     }
 
     /**

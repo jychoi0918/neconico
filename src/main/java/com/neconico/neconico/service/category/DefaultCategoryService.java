@@ -25,4 +25,9 @@ public class DefaultCategoryService implements CategoryService{
     public List<CategorySubInfoDto> findCategorySubAll() {
         return categoryMapper.selectCategorySubs();
     }
+
+    @Override
+    public List<CategorySubInfoDto> findCategorySubAllByMainName(String mainName) {
+        return categoryMapper.selectCategorySubsByMainName(mainName);
+    }
 }

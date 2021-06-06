@@ -42,6 +42,17 @@
         <include refid="selectCategorySubDto"></include>
     </select>
 
+    <select id="selectCategorySubsByMainName" resultType="categorySubInfoDto">
+        select
+            s.category_sub_id as categorySubId,
+            s.category_main_id as categoryMainId,
+            s.name as name
+        from category_main m
+        left join category_sub s
+        on m.category_main_id = s.category_main_id
+        where m.name = #{name}
+    </select>
+
     <insert id="insertCategoryMain" parameterType="string">
         insert into category_main(name)
         values(#{name})

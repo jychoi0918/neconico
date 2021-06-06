@@ -1,5 +1,6 @@
 package com.neconico.neconico.service.item;
 
+import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
@@ -36,6 +37,10 @@ public interface ItemService {
     List<ItemCardSearchViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto);
 
     Long countTotalItems(SearchInfoDto searchInfoDto);
+
+    List<ItemCardSearchViewDto> searchItemsByMainCategory(Criteria criteria, List<CategorySubInfoDto> subCategoryList);
+
+    Long countTotalItemsBySubCategoryList(List<CategorySubInfoDto> subCategoryList);
 
     List<ItemCardSearchViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId);
 

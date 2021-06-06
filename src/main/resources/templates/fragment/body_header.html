@@ -57,7 +57,7 @@
       <nav>
         <ul class="main_menu">
           <li th:each="categoryMain : ${session.categoryList}">
-            <a href="#void" th:text="${categoryMain.name}">대분류 1</a>
+            <a th:href="@{/item/search/categoryMain(name=${categoryMain.name}, currentPage=1)}" th:text="${categoryMain.name}">대분류 1</a>
             <ul class="sub_menu">
               <li th:each="categorySub : ${categoryMain.categorySubInfoDtoList}">
                 <a th:href="@{/item/search/category(sub=${categorySub.categorySubId}, name=${categorySub.name}, currentPage=1)}" th:text="${categorySub.name}">중분류 1</a>

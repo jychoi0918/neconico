@@ -137,6 +137,27 @@
         where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
     </select>
 
+    <select id="selectItemsByMainCategory" resultType="itemCardSearchViewDto">
+        <include refid="searchItems"/>
+        where category_sub_id in
+        <foreach collection="subCategoryList" item="subCategory" index="index" open="(" separator="," close=")">
+            #{subCategory.categorySubId}
+        </foreach>
+        <trim prefix="order by">
+            ${criteria.sortingColumn} ${criteria.requestOrder}
+        </trim>
+        limit #{criteria.contentPerPage} offset #{criteria.pageStart}
+    </select>
+
+    <select id="selectTotalItemCountBySubCategoryList" resultType="long">
+        select count(item_id)
+        from item
+        where category_sub_id in
+        <foreach collection="subCategoryList" item="subCategory" index="index" open="(" separator="," close=")">
+            #{subCategory.categorySubId}
+        </foreach>
+    </select>
+
     <select id="selectItemsBySubCategoryId" resultType="itemCardSearchViewDto">
         <include refid="searchItems"/>
         where category_sub_id = #{subId}
@@ -151,6 +172,8 @@
         from item
         where category_sub_id = #{subId}
     </select>
+
+
 
     <insert id="insertItems" useGeneratedKeys="true" keyProperty="itemId" parameterType="itemInfoDto">
         insert into item(
