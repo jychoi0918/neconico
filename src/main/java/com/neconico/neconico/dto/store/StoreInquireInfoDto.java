@@ -12,4 +12,5 @@ public class StoreInquireInfoDto {
     private Long userId;
     private String storeName;
     private String storeImgPath;
+    private String accountId;
 }

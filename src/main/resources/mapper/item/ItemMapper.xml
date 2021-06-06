@@ -24,6 +24,19 @@
         from item
     </sql>
 
+    <sql id="searchItems">
+        select
+            item_id,
+            title,
+            price,
+            item_img_urls as itemImg,
+            created_date as createdTime,
+            item_status as itemStatus,
+            sale_status as saleStatus,
+            hits as views
+        from item
+    </sql>
+
     <resultMap id="itemInquire" type="itemInquireInfoDto">
         <id column="item_id" property="itemId"/>
         <result column="title" property="title"/>
@@ -40,6 +53,7 @@
             <id column="user_id" property="userId"/>
             <result column="store_name" property="storeName"/>
             <result column="store_img_path" property="storeImgPath"/>
+            <result column="account_id" property="accountId"/>
         </association>
         <association property="categorySubInfoDto" javaType="categorySubInfoDto">
             <id column="category_sub_id" property="categorySubId"/>
@@ -82,6 +96,7 @@
             s.user_id as user_id,
             s.store_name as store_name,
             s.store_img_path as store_img_path,
+            u.account_id as account_id,
             cs.category_sub_id as category_sub_id,
             cs.category_main_id as category_main_id,
             cs.name as category_sub_name,
@@ -95,6 +110,8 @@
         on i.item_id = q.item_id
         inner join store s
         on i.user_id = s.user_id
+        inner join users u
+        on s.user_id = u.user_id
         left join store question_store
         on q.user_id = question_store.user_id
         where i.item_id = #{itemId}
@@ -106,16 +123,8 @@
         where item_id = #{itemId}
     </select>
 
-    <select id="selectItemBySearch" resultType="itemcarddto">
-        select
-            item_id,
-            title,
-            price,
-            item_img_urls as itemImg,
-            created_date as createdTime,
-            item_status as status,
-            hits as views
-        from item
+    <select id="selectItemBySearch" resultType="itemCardSearchViewDto">
+        <include refid="searchItems"/>
         where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
         <trim prefix="order by">
             ${criteria.sortingColumn} ${criteria.requestOrder}
@@ -128,16 +137,8 @@
         where title like concat('%', #{search.searchText}, '%') or area like concat('%', #{search.searchText}, '%')
     </select>
 
-    <select id="selectItemsBySubCategoryId" resultType="itemcarddto">
-        select
-            item_id,
-            title,
-            price,
-            item_img_urls as itemImg,
-            created_date as createdTime,
-            item_status as status,
-            hits as views
-        from item
+    <select id="selectItemsBySubCategoryId" resultType="itemCardSearchViewDto">
+        <include refid="searchItems"/>
         where category_sub_id = #{subId}
         <trim prefix="order by">
             ${criteria.sortingColumn} ${criteria.requestOrder}

@@ -7,7 +7,7 @@ import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
-import com.neconico.neconico.dto.item.card.ItemCardViewDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.process.S3FileProcess;
@@ -36,6 +36,9 @@ public class ItemController {
     private final FileService fileService;
     private final ItemFavoriteService itemFavoriteService;
 
+    /**
+     *아이템 등록
+     */
     @GetMapping("/item/new")
     public String createItemPage(Model model) {
         List<CategoryInfoDto> categoryInfoAll = categoryService.findCategoryInfoAll();
@@ -65,16 +68,17 @@ public class ItemController {
 
     /**
      * 검색
+     * 카테고리 검색
      */
     @GetMapping("/item/search")
     public String searchItems(@ModelAttribute("searchText")SearchInfoDto searchInfoDto,
                                @ModelAttribute("currentPage") Criteria criteria,
                                Model model) {
-        List<ItemCardViewDto> itemCardViewDtoList = itemService.searchItems(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemService.searchItems(criteria, searchInfoDto);
         int totalContent = itemService.countTotalItems(searchInfoDto).intValue();
 
         model.addAttribute("search", searchInfoDto.getSearchText());
-        model.addAttribute("itemCardList", itemCardViewDtoList);
+        model.addAttribute("itemCardList", itemCardSearchViewDtoList);
         model.addAttribute("pagination", new Pagination(criteria, totalContent,5));
         return "item/sch_result";
     }
@@ -85,12 +89,12 @@ public class ItemController {
                                           @ModelAttribute("currentPage") Criteria criteria,
                                           Model model) {
 
-        List<ItemCardViewDto> itemCardViewDtoList = itemService.searchItemsBySubCategoryId(criteria, subId);
+        List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemService.searchItemsBySubCategoryId(criteria, subId);
         int totalContent = itemService.countTotalItemsBySubCategoryId(subId).intValue();
 
         model.addAttribute("subId", subId);
         model.addAttribute("subName", subName);
-        model.addAttribute("itemCardList", itemCardViewDtoList);
+        model.addAttribute("itemCardList", itemCardSearchViewDtoList);
         model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
         return "item/sch_category_result";
     }
@@ -158,7 +162,7 @@ public class ItemController {
         //해당 아이템과 동일한 카테고리 items 조회
         Criteria criteria = new Criteria();
         criteria.setCurrentPage(0);
-        List<ItemCardViewDto> relatedProducts = itemService
+        List<ItemCardSearchViewDto> relatedProducts = itemService
                 .searchItemsBySubCategoryId(criteria, findItemInfoDto.getCategorySubInfoDto().getCategorySubId())
                 .stream()
                 .filter(i -> !i.getItemId().equals(findItemInfoDto.getItemId()))

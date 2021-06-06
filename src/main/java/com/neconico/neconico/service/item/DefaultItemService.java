@@ -6,7 +6,7 @@ import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
-import com.neconico.neconico.dto.item.card.ItemCardViewDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.mapper.item.ItemMapper;
 import com.neconico.neconico.paging.Criteria;
 import lombok.RequiredArgsConstructor;
@@ -107,12 +107,12 @@ public class DefaultItemService implements ItemService{
      * 상품 조건 검색
      */
     @Override
-    public List<ItemCardViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto) {
+    public List<ItemCardSearchViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto) {
         if( searchInfoDto.getSearchText() == null) {
             searchInfoDto.setSearchText("");
         }
 
-        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemBySearch(setCriteria(criteria), searchInfoDto);
+        List<ItemCardSearchViewDto> itemCardDtoList = itemMapper.selectItemBySearch(setCriteria(criteria), searchInfoDto);
 
         return createItemCardViewDto(itemCardDtoList);
     }
@@ -123,8 +123,8 @@ public class DefaultItemService implements ItemService{
     }
 
     @Override
-    public List<ItemCardViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
-        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
+    public List<ItemCardSearchViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId) {
+        List<ItemCardSearchViewDto> itemCardDtoList = itemMapper.selectItemsBySubCategoryId(setCriteria(criteria), subId);
 
         return createItemCardViewDto(itemCardDtoList);
     }
@@ -160,20 +160,16 @@ public class DefaultItemService implements ItemService{
         itemInfoDto.setModifiedDate(LocalDateTime.now());
     }
 
-    private List<ItemCardViewDto> createItemCardViewDto(List<ItemCardDto> itemCardDtoList) {
-        List<ItemCardViewDto> itemCardViewDtoList = itemCardDtoList.stream()
-                .map(ItemCardViewDto::new)
-                .collect(Collectors.toList());
+    private List<ItemCardSearchViewDto> createItemCardViewDto(List<ItemCardSearchViewDto> itemCardSearchViewDtoList) {
 
-        itemCardViewDtoList.stream()
+        itemCardSearchViewDtoList.stream()
                 .forEach(i -> i.setBetweenDate(ItemDateDifferenceMaker.between(i.getCreatedTime())));
 
-        itemCardViewDtoList.stream()
+        itemCardSearchViewDtoList.stream()
                 .filter(i -> i.getTitle().length() > 14)
                 .forEach(i -> i.setTitle(i.getTitle().substring(0, 11) + "..."));
 
-
-        return itemCardViewDtoList;
+        return itemCardSearchViewDtoList;
     }
 
     private void setChangeFileAndUrlResult(StringBuffer resultItemUrls, StringBuffer resultItemFileNames, StringBuffer deleteFileNames,

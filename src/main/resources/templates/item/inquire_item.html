@@ -74,8 +74,9 @@
 								<p>상점정보</p>
 								<div>
 									<figure>
-										<a th:href="@{/store/{id}(id = ${findItemInfo.storeInquireInfoDto.userId})}">
-										<img style="height: 50px;" th:src="${findItemInfo.storeInquireInfoDto.storeImgPath}" alt="">
+										<a th:href="@{/store/{id}(id = ${findItemInfo.storeInquireInfoDto.accountId})}">
+											<img style="height: 50px;" src="/img/main_user_icon.png" th:if="${findItemInfo.storeInquireInfoDto.storeImgPath.equals('')}">
+											<img style="height: 50px;" th:src="${findItemInfo.storeInquireInfoDto.storeImgPath}" th:unless="${findItemInfo.storeInquireInfoDto.storeImgPath.equals('')}" alt="">
 										</a>
 									</figure>
 									<p th:text="${findItemInfo.storeInquireInfoDto.storeName}">큐크</p>
@@ -89,7 +90,7 @@
 								<img class="like_on" src="/img/store_like_p.png" alt="">
 								<span>찜</span>
 							</a>
-							<a href="javascript:submitTrade()" class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('판매 중')}">구매하기</a>
+							<a style="cursor: pointer" href="javascript:submitTrade()" class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('판매 중')}">구매하기</a>
 							<a class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('거래 중')}">거래 중</a>
 							<a class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('거래 완료')}">거래 완료</a>
 

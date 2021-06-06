@@ -5,7 +5,7 @@ import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
-import com.neconico.neconico.dto.item.card.ItemCardViewDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.paging.Criteria;
@@ -179,7 +179,7 @@ class ItemServiceTest {
         SearchInfoDto searchInfoDto = getSearchInfoDto("수원");
 
         //when
-        List<ItemCardViewDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList).hasSize(5);
@@ -194,7 +194,7 @@ class ItemServiceTest {
         SearchInfoDto searchInfoDto = getSearchInfoDto("제목");
 
         //when
-        List<ItemCardViewDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList)

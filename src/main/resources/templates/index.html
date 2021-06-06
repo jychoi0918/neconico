@@ -9,11 +9,10 @@
         <section class="main_visual">
           <div class="swiper-container">
             <ul class="swiper-wrapper">
-              <li class="swiper-slide">
-                <img src="./img/mv_img01.jpg" alt="" />
-              </li>
-              <li class="swiper-slide">
-                <img src="./img/mv_img02.jpg" alt="" />
+              <li class="swiper-slide" th:each="advert : ${advertList}">
+                <a th:href="${advert.url}" target="_blank">
+                  <img th:src="${advert.adImgUrl}" alt="" />
+                </a>
               </li>
             </ul>
             <div class="swiper-button-prev"></div>
@@ -30,6 +29,10 @@
               <a th:href="@{/item/{id}(id=${itemCard.itemId})}">
                 <div class="list_img">
                   <img th:src="${itemCard.itemImg.split('>')[0]}" alt="" />
+
+                  <div class="list_img_sold_out out" th:if="${itemCard.saleStatus.equals('거래 완료')}">
+                    <p>판매완료</p>
+                  </div>
                 </div>
                 <div class="list_txt">
                   <h3 th:text="${itemCard.title}">오늘의 물건 01</h3>

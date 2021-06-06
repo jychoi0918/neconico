@@ -1,4 +1,3 @@
-
 function previewPic(event) {
 
     let reader = new FileReader();
@@ -40,6 +39,5 @@ function finalSend() {
 
     const submitAd = document.getElementById('register');
     alert("등록완료!");
-    console.log(submitAd);
     submitAd.submit();
 }

@@ -14,6 +14,10 @@
                     <a th:href="@{/item/{id}(id=${itemCard.itemId})}">
                         <div class="list_img">
                             <img th:src="${itemCard.itemImg.split('>')[0]}" alt="" />
+
+                            <div class="list_img_sold_out out" th:if="${itemCard.saleStatus.equals('거래 완료')}">
+                                <p>판매완료</p>
+                            </div>
                         </div>
                         <div class="list_txt">
                             <h3 th:text="${itemCard.title}">오늘의 물건 01</h3>
