@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header::header"/>
+<body>
+<div class="wrap">
+    <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu::admin_menu"/>
+
+        <div class="admin_right">
+            <h3 class="h_fs_26">상품 등록 수</h3>
+
+            <ul class="group_tab2">
+                <li class="active">
+                    <a style="cursor: pointer">대분류</a>
+                </li>
+                <li>
+                    <button>중분류</button>
+                    <ul class="group_tab2_sub">
+                        <li th:each="categoryMain : ${categoryList}">
+                            <a style="cursor: pointer" onclick="viewTargetChart(this)" th:text="${categoryMain.name}">메인카테고리 목록</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="group">
+                <div class="group_content1 group_content on">
+                    <div class="group_content_l">
+                        <canvas id="mainCategoryItemChart" width="500vw" height="300vh">대분류차트</canvas>
+                    </div>
+                    <div class="group_content_r">
+                        <table>
+                            <tr>
+                                <th>분류</th>
+                                <th>상품수</th>
+                            </tr>
+                            <tr th:each="categoryMainList : ${itemListByMainCategory}">
+                                <td th:text="${categoryMainList.mainCategoryName}">메인 카테고리</td>
+                                <td th:text="${categoryMainList.num}">개수</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="group_content2_1">
+                    <div th:each="categoryMain : ${countItemCategory}" class="group_content">
+                        <div class="group_content_l">
+                            <canvas th:classappend="'mainId' + ${categoryMain.categoryMainId}"></canvas>
+                        </div>
+                        <div class="group_content_r">
+                            <table>
+                                <tr>
+                                    <th th:text="${categoryMain.name}">해당 메인 카테고리</th>
+                                    <th >상품수</th>
+                                </tr>
+                                <tr th:each="categorySub : ${categoryMain.itemCategorySubInfoDtos}">
+                                    <td th:text="${categorySub.name}">해당 메인 카테고리 속한 서브카테고리 목록 반복</td>
+                                    <td th:text="${categorySub.num}">개수</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--메인 카테고리 차트-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    const mainCategoryDataList=[[${itemListByMainCategory}]];
+
+    var ctx = document.getElementById('mainCategoryItemChart');
+
+    let mainCategoryNumList=[];
+    let mainCategoryNameList=[];
+    for (i=0; i<mainCategoryDataList.length; i++){
+        mainCategoryNumList[i]=mainCategoryDataList[i].num;
+        mainCategoryNameList[i]=mainCategoryDataList[i].mainCategoryName;
+    }
+
+    var config = {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: mainCategoryNumList,
+                backgroundColor: [
+                    "red",
+                    "orange",
+                    "yellow",
+                    "green",
+                    "blue",
+                ],
+                label: 'Dataset 1'
+            }],
+            labels:
+            mainCategoryNameList
+        },
+        options: {
+            responsive: false,
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: '메인 카테고리 상품 등록 개수'
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    };
+
+    var myDoughnutChart = new Chart(ctx, config);
+
+</script>
+
+<!--서브 카테고리 아이템 차트-->
+<script th:inline="javascript">
+
+    const countItemChartData = [[${countItemCategory}]];
+
+    function viewTargetChart(targetMainCategory) {
+
+        let subCategoryList = getSubCategoryList(targetMainCategory.innerText);
+        let mainCategoryId = getMainCategoryId(targetMainCategory.innerText);
+        let nameAndNumMap = createNameAndNum(subCategoryList);
+        setChart(nameAndNumMap, mainCategoryId, targetMainCategory.innerText);
+    }
+
+    const getSubCategoryList = (targetCategoryName) => {
+        for(let i = 0; i<countItemChartData.length; i++) {
+            if(targetCategoryName === countItemChartData[i].name) {
+                return countItemChartData[i].itemCategorySubInfoDtos;
+            }
+        }
+    }
+
+    function getMainCategoryId(targetMainCategoryName) {
+        for(let i = 0; i<countItemChartData.length; i++) {
+            if(targetMainCategoryName === countItemChartData[i].name) {
+                return countItemChartData[i].categoryMainId;
+            }
+        }
+    }
+
+    const createNameAndNum = (subCategoryList) => {
+        let nameAndNumMap = new Map();
+        for(let idx in subCategoryList) {
+            nameAndNumMap.set(subCategoryList[idx].name, subCategoryList[idx].num);
+        }
+        return nameAndNumMap;
+    }
+
+    const setChart = (nameAndNumMap, mainCategoryId, mainCategoryName) => {
+        const ctx = document.querySelector(".mainId" + mainCategoryId).getContext("2d");
+
+        var subItemChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Array.from(nameAndNumMap.keys()),
+                datasets: [{
+                    label: mainCategoryName,
+                    data: Array.from(nameAndNumMap.values()),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

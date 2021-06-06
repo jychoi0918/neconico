@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header::header"/>
+<body>
+<div class="wrap">
+    <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu::admin_menu"/>
+
+            <div class="admin_right">
+                <h3 class="h_fs_26">회원가입 추이</h3>
+
+                <div class="join_graph">
+                    <canvas id="usersJoinChart"></canvas>
+                </div>
+
+                <div class="table">
+                    <table class="mg_b_10">
+                        <colgroup>
+                            <col width="10%" style="white-space:nowrap;">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                        </colgroup>
+                        
+                        <tr>
+                            <th></th>
+                            <th>1월</th>
+                            <th>2월</th>
+                            <th>3월</th>
+                            <th>4월</th>
+                            <th>5월</th>
+                            <th>6월</th>
+                            <th>7월</th>
+                            <th>8월</th>
+                            <th>9월</th>
+                            <th>10월</th>
+                            <th>11월</th>
+                            <th>12월</th>
+                        </tr>
+
+                        <tr>
+                            <td>가입인원</td>
+                            <td th:id="Jan"></td>
+                            <td th:id="Feb"></td>
+                            <td th:id="Mar"></td>
+                            <td th:id="Apr"></td>
+                            <td th:id="May"></td>
+                            <td th:id="Jun"></td>
+                            <td th:id="Jul"></td>
+                            <td th:id="Aug"></td>
+                            <td th:id="Sep"></td>
+                            <td th:id="Oct"></td>
+                            <td th:id="Nov"></td>
+                            <td th:id="Dec"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--유저 월별 가입 수 차트-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script th:inline="javascript">
+    const graphCreateData = [[${adminUserListByRegistered}]];
+
+    window.onload = e => {
+        console.log(graphCreateData);
+    }
+    new Chart(document.getElementById("usersJoinChart"), {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: '회원 가입 데이터',
+                data: [graphCreateData.Jan, graphCreateData.Feb, graphCreateData.Mar, graphCreateData.Apr,
+                    graphCreateData.May, graphCreateData.Jun, graphCreateData.Jul, graphCreateData.Aug,
+                    graphCreateData.Sep, graphCreateData.Oct, graphCreateData.Nov, graphCreateData.Dec
+                ],
+                borderColor: "rgba(255, 201, 14, 1)",
+                backgroundColor: "rgba(255, 201, 14, 0.5)",
+                fill: true,
+                lineTension: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: '유저 월별 가입 수 차트'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '월별'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        suggestedMin: 0,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: '가입 수'
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<!--유저 월별 가입 수 비율-->
+<script type="text/javascript" th:inline="javascript">
+    const userCreateData = [[${adminUserListByRegistered}]];
+
+    window.onload = event => {
+        executeInnerText();
+    }
+
+    function executeInnerText() {
+
+        document.getElementById("Jan").innerText=userCreateData.Jan;
+        document.getElementById("Feb").innerText=userCreateData.Feb;
+        document.getElementById("Mar").innerText=userCreateData.Mar;
+        document.getElementById("Apr").innerText=userCreateData.Apr;
+        document.getElementById("May").innerText=userCreateData.May;
+        document.getElementById("Jun").innerText=userCreateData.Jun;
+        document.getElementById("Jul").innerText=userCreateData.Jul;
+        document.getElementById("Aug").innerText=userCreateData.Aug;
+        document.getElementById("Sep").innerText=userCreateData.Sep;
+        document.getElementById("Oct").innerText=userCreateData.Oct;
+        document.getElementById("Nov").innerText=userCreateData.Nov;
+        document.getElementById("Dec").innerText=userCreateData.Dec;
+    }
+</script>
+</body>
+</html>

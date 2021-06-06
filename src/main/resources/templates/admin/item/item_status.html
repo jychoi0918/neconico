@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header::header"/>
+<body>
+<div class="wrap">
+    <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu::admin_menu"/>
+
+            <div class="admin_right">
+                <h3 class="h_fs_26">거래완료 비율</h3>
+
+                <div class="join_graph">
+                    <canvas id="itemListStatusChart"></canvas>
+                </div>
+
+                <div class="table">
+                    <table class="mg_b_10">
+                        <colgroup>
+                            <col width="10%" style="white-space:nowrap;">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                            <col width="7.5%">
+                        </colgroup>
+                        
+                        <tr>
+                            <th></th>
+                            <th>1월</th>
+                            <th>2월</th>
+                            <th>3월</th>
+                            <th>4월</th>
+                            <th>5월</th>
+                            <th>6월</th>
+                            <th>7월</th>
+                            <th>8월</th>
+                            <th>9월</th>
+                            <th>10월</th>
+                            <th>11월</th>
+                            <th>12월</th>
+                        </tr>
+
+                        <tr>
+                            <td>거래완료</td>
+                            <td th:id="Jan2"></td>
+                            <td th:id="Feb2"></td>
+                            <td th:id="Mar2"></td>
+                            <td th:id="Apr2"></td>
+                            <td th:id="May2"></td>
+                            <td th:id="Jun2"></td>
+                            <td th:id="Jul2"></td>
+                            <td th:id="Aug2"></td>
+                            <td th:id="Sep2"></td>
+                            <td th:id="Oct2"></td>
+                            <td th:id="Nov2"></td>
+                            <td th:id="Dec2"></td>
+                        </tr>
+
+                        <tr>
+                            <td>거래미완료</td>
+                            <td th:id="Jan"></td>
+                            <td th:id="Feb"></td>
+                            <td th:id="Mar"></td>
+                            <td th:id="Apr"></td>
+                            <td th:id="May"></td>
+                            <td th:id="Jun"></td>
+                            <td th:id="Jul"></td>
+                            <td th:id="Aug"></td>
+                            <td th:id="Sep"></td>
+                            <td th:id="Oct"></td>
+                            <td th:id="Nov"></td>
+                            <td th:id="Dec"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--유저 월별 가입 수 차트-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script th:inline="javascript">
+    const graphitemListStatusData = [[${itemListOnSale}]];
+    const graphitemListStatus2Data = [[${itemListSoldOut}]];
+
+    new Chart(document.getElementById("itemListStatusChart"), {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [
+                {
+                    label: '거래 완료',
+                    data: [graphitemListStatus2Data.Jan, graphitemListStatus2Data.Feb, graphitemListStatus2Data.Mar, graphitemListStatus2Data.Apr,
+                        graphitemListStatus2Data.May, graphitemListStatus2Data.Jun, graphitemListStatus2Data.Jul, graphitemListStatus2Data.Aug,
+                        graphitemListStatus2Data.Sep, graphitemListStatus2Data.Oct, graphitemListStatus2Data.Nov, graphitemListStatus2Data.Dec
+                    ],
+                    borderColor: "rgb(255, 153, 0, 1)",
+                    backgroundColor: "rgb(255, 153, 0, 0.5)",
+                    fill: false,
+                    lineTension: 0
+                },
+                {
+                    label: '거래 미완료',
+                    data: [graphitemListStatusData.Jan, graphitemListStatusData.Feb, graphitemListStatusData.Mar, graphitemListStatusData.Apr,
+                        graphitemListStatusData.May, graphitemListStatusData.Jun, graphitemListStatusData.Jul, graphitemListStatusData.Aug,
+                        graphitemListStatusData.Sep, graphitemListStatusData.Oct, graphitemListStatusData.Nov, graphitemListStatusData.Dec
+                    ],
+                    borderColor: "rgba(255, 201, 14, 1)",
+                    backgroundColor: "rgba(255, 201, 14, 0.5)",
+                    fill: false,
+                    lineTension: 0
+                }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: '유저 월별 가입 수 차트'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: '월별'
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    ticks: {
+                        suggestedMin: 0,
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: '가입 수'
+                    }
+                }]
+            }
+        }
+    });
+
+</script>
+
+<!--유저 월별 가입 수 비율-->
+<script type="text/javascript" th:inline="javascript">
+    const itemListStatusData = [[${itemListOnSale}]];
+    const itemListStatus2Data = [[${itemListSoldOut}]];
+
+    window.onload = event => {
+        executeInnerText();
+    }
+
+    function executeInnerText() {
+
+        document.getElementById("Jan").innerText=itemListStatusData.Jan;
+        document.getElementById("Feb").innerText=itemListStatusData.Feb;
+        document.getElementById("Mar").innerText=itemListStatusData.Mar;
+        document.getElementById("Apr").innerText=itemListStatusData.Apr;
+        document.getElementById("May").innerText=itemListStatusData.May;
+        document.getElementById("Jun").innerText=itemListStatusData.Jun;
+        document.getElementById("Jul").innerText=itemListStatusData.Jul;
+        document.getElementById("Aug").innerText=itemListStatusData.Aug;
+        document.getElementById("Sep").innerText=itemListStatusData.Sep;
+        document.getElementById("Oct").innerText=itemListStatusData.Oct;
+        document.getElementById("Nov").innerText=itemListStatusData.Nov;
+        document.getElementById("Dec").innerText=itemListStatusData.Dec;
+
+        document.getElementById("Jan2").innerText=itemListStatus2Data.Jan;
+        document.getElementById("Feb2").innerText=itemListStatus2Data.Feb;
+        document.getElementById("Mar2").innerText=itemListStatus2Data.Mar;
+        document.getElementById("Apr2").innerText=itemListStatus2Data.Apr;
+        document.getElementById("May2").innerText=itemListStatus2Data.May;
+        document.getElementById("Jun2").innerText=itemListStatus2Data.Jun;
+        document.getElementById("Jul2").innerText=itemListStatus2Data.Jul;
+        document.getElementById("Aug2").innerText=itemListStatus2Data.Aug;
+        document.getElementById("Sep2").innerText=itemListStatus2Data.Sep;
+        document.getElementById("Oct2").innerText=itemListStatus2Data.Oct;
+        document.getElementById("Nov2").innerText=itemListStatus2Data.Nov;
+        document.getElementById("Dec2").innerText=itemListStatus2Data.Dec;
+    }
+</script>
+</body>
+</html>

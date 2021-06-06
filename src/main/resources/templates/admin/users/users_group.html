@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header::header"/>
+<body>
+<div class="wrap">
+    <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu::admin_menu"/>
+
+            <div class="admin_right">
+                <h3 class="h_fs_26">회원 그룹별 조회</h3>
+                <ul class="group_tab">
+                    <li class="active">
+                        <a style="cursor: pointer">나이</a>
+                    </li>
+                    <li>
+                        <a style="cursor: pointer">성별</a>
+                    </li>
+                    <li>
+                        <a style="cursor: pointer">지역</a>
+                    </li>
+                </ul>
+
+                <div class="group">
+                    <div class="group_content1 group_content on">
+                        <div >
+                            <canvas id="myChart" style="width:100px; height:100px" ></canvas>
+                        </div>
+                        <div class="group_content_r">
+                            <table>
+                                <tr>
+                                    <th></th>
+                                    <th>비율</th>
+                                    <th>회원수</th>
+                                </tr>
+                                <tr>
+                                    <td>10대</td>
+                                    <td th:id="age10sPercent"></td>
+                                    <td th:id="age10sNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>20대</td>
+                                    <td th:id="age20sPercent"></td>
+                                    <td th:id="age20sNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>30대</td>
+                                    <td th:id="age30sPercent"></td>
+                                    <td th:id="age30sNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>40대</td>
+                                    <td th:id="age40sPercent"></td>
+                                    <td th:id="age40sNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>50대</td>
+                                    <td th:id="age50sPercent"></td>
+                                    <td th:id="age50sNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>60대 이상</td>
+                                    <td th:id="ageOver60sPercent"></td>
+                                    <td th:id="ageOver60sNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>총 인원</td>
+                                    <td th:id="ageTotalPercent"></td>
+                                    <td th:id="ageTotalNum"></td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="group_content2 group_content">
+                        <div id="piechart" class="group_content_l">
+
+                        </div>
+                        <div class="group_content_r">
+                            <table th:inline="text">
+                                <tr>
+                                    <th></th>
+                                    <th>남성</th>
+                                    <th>여성</th>
+                                    <th>미기입</th>
+                                </tr>
+                                <tr>
+                                    <td>인원 수</td>
+                                    <td th:id="maleNum"></td>
+                                    <td th:id="femaleNum"></td>
+                                    <td th:id="unknown"></td>
+                                </tr>
+                                <tr>
+                                    <td>총 인원</td>
+                                    <td colspan="3" th:id="genderTotalNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>비율</td>
+                                    <td th:id="malePercent">남성인원%</td>
+                                    <td th:id="femalePercent">여성인원%</td>
+                                    <td th:id="unknownPercent">여성인원%</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="group_content3 group_content">
+                        <div class="group_content_l">
+                            <canvas id="myLocationChart"></canvas>
+                        </div>
+                        <div class="group_content_r">
+                            <table>
+                                <tr>
+                                    <th>지역</th>
+                                    <th>비율</th>
+                                    <th>인원 수</th>
+                                </tr>
+                                <tr>
+                                    <td>서울</td>
+                                    <td th:id="seoulPercent"></td>
+                                    <td th:id="seoulNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>부산</td>
+                                    <td th:id="busanPercent"></td>
+                                    <td th:id="busanNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>대구</td>
+                                    <td th:id="daeguPercent"></td>
+                                    <td th:id="daeguNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>인천</td>
+                                    <td th:id="incheonPercent"></td>
+                                    <td th:id="incheonNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>광주</td>
+                                    <td th:id="gwangjuPercent"></td>
+                                    <td th:id="gwangjuNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>대전</td>
+                                    <td th:id="daejeonPercent"></td>
+                                    <td th:id="daejeonNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>울산</td>
+                                    <td th:id="ulsanPercent"></td>
+                                    <td th:id="ulsanNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>세종</td>
+                                    <td th:id="sejongPercent"></td>
+                                    <td th:id="sejongNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>경기</td>
+                                    <td th:id="gyeonggiPercent"></td>
+                                    <td th:id="gyeonggiNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>강원</td>
+                                    <td th:id="gangwonPercent"></td>
+                                    <td th:id="gangwonNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>충청</td>
+                                    <td th:id="chungcheongPercent"></td>
+                                    <td th:id="chungcheongNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>전라</td>
+                                    <td th:id="junraPercent"></td>
+                                    <td th:id="junraNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>경상</td>
+                                    <td th:id="gyeongsangPercent"></td>
+                                    <td th:id="gyeongsangNum"></td>
+                                </tr>
+                                <tr>
+                                    <td>제주</td>
+                                    <td th:id="jejuPercent"></td>
+                                    <td th:id="jejuNum"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--유저 나이대 차트-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script th:inline="javascript">
+    const graphAgeData = [[${userListByAge}]];
+
+    var ctx = document.getElementById("myChart");
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['10대', '20대', '30대', '40대', '50대', '60대 이상'],
+            datasets: [{
+                label: '연령대별 유저 수',
+                data: [graphAgeData.age10s,graphAgeData.age20s,graphAgeData.age30s,graphAgeData.age40s,graphAgeData.age50s,graphAgeData.ageOver60s],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<!--유저 성별 수 구글 차트-->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    const graphData = [[${userListByGender}]];
+
+    const graphDataKeys = Object.keys(graphData);
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Reason', 'Count'],
+            ['남성', graphData.male],
+            ['여성', graphData.female],
+            ['미기입', graphData.unknown]
+        ]);
+
+        var options = {
+            title: '가입 회원 성별 비율'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<!--유저 지역별 차트-->
+<script th:inline="javascript">
+    const graphLocationData = [[${userListByLocation}]];
+
+    var ctx = document.getElementById("myLocationChart");
+
+    var myLocationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['서울', '부산', '대구', '인천', '광주', '대전', '울산', '세종', '경기', '강원', '충청', '전라', '경상', '제주'],
+            datasets: [{
+                label: '지역별 유저수',
+                data: [graphLocationData.seoul, graphLocationData.busan, graphLocationData.daegu, graphLocationData.incheon,
+                    graphLocationData.gwangju, graphLocationData.daejeon, graphLocationData.ulsan, graphLocationData.sejong,
+                    graphLocationData.gyeonggi, graphLocationData.gangwon, graphLocationData.chungcheong, graphLocationData.junra,
+                    graphLocationData.gyeongsang, graphLocationData.jeju],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(201, 203, 207, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgb(201, 203, 207)',
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgb(201, 203, 207)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<!--유저 비율-->
+<script type="text/javascript" th:inline="javascript">
+
+    const userGenderData = [[${userListByGender}]];
+    const userAgeData = [[${userListByAge}]];
+    const userLocationData = [[${userListByLocation}]];
+
+    window.onload = event => {
+        executeInnerText();
+        executeInnerText2();
+        executeInnerText3();
+    }
+
+    /*유저 비율*/
+    function executeInnerText() {
+        const age10sPercent = userAgeData.age10s / userAgeData.ageTotal * 100
+        const age20sPercent = userAgeData.age20s / userAgeData.ageTotal * 100
+        const age30sPercent = userAgeData.age30s / userAgeData.ageTotal * 100
+        const age40sPercent = userAgeData.age40s / userAgeData.ageTotal * 100
+        const age50sPercent = userAgeData.age50s / userAgeData.ageTotal * 100
+        const ageOver60sPercent = userAgeData.ageOver60s / userAgeData.ageTotal * 100
+        const ageTotalPercent = userAgeData.ageTotal / userAgeData.ageTotal * 100
+
+        document.getElementById("age10sNum").innerText=userAgeData.age10s;
+        document.getElementById("age20sNum").innerText=userAgeData.age20s;
+        document.getElementById("age30sNum").innerText=userAgeData.age30s;
+        document.getElementById("age40sNum").innerText=userAgeData.age40s;
+        document.getElementById("age50sNum").innerText=userAgeData.age50s;
+        document.getElementById("ageOver60sNum").innerText=userAgeData.ageOver60s;
+        document.getElementById("ageTotalNum").innerText=userAgeData.ageTotal;
+
+        document.getElementById("age10sPercent").innerText=age10sPercent.toFixed(2)+"%";
+        document.getElementById("age20sPercent").innerText=age20sPercent.toFixed(2)+"%";
+        document.getElementById("age30sPercent").innerText=age30sPercent.toFixed(2)+"%";
+        document.getElementById("age40sPercent").innerText=age40sPercent.toFixed(2)+"%";
+        document.getElementById("age50sPercent").innerText=age50sPercent.toFixed(2)+"%";
+        document.getElementById("ageOver60sPercent").innerText=ageOver60sPercent.toFixed(2)+"%";
+        document.getElementById("ageTotalPercent").innerText=ageTotalPercent.toFixed(2)+"%";
+
+    }
+
+    /*유저 성별 비율*/
+    function executeInnerText2() {
+        const malePercent = userGenderData.male / userGenderData.genderTotal * 100
+        const femalePercent = userGenderData.female / userGenderData.genderTotal * 100
+        const unknownPercent = userGenderData.unknown / userGenderData.genderTotal * 100
+
+        document.getElementById("maleNum").innerText=userGenderData.male;
+        document.getElementById("femaleNum").innerText=userGenderData.female;
+        document.getElementById("unknown").innerText=userGenderData.unknown;
+        document.getElementById("genderTotalNum").innerText=userGenderData.genderTotal;
+        document.getElementById("malePercent").innerText=malePercent.toFixed(2)+"%";
+        document.getElementById("femalePercent").innerText=femalePercent.toFixed(2)+"%";
+        document.getElementById("unknownPercent").innerText=unknownPercent.toFixed(2)+"%";
+    }
+
+    /*유저 지역 비율*/
+    function executeInnerText3() {
+        const seoulPercent = userLocationData.seoul / userLocationData.addressTotal * 100
+        const busanPercent = userLocationData.busan / userLocationData.addressTotal * 100
+        const daeguPercent = userLocationData.daegu / userLocationData.addressTotal * 100
+        const incheonPercent = userLocationData.incheon / userLocationData.addressTotal * 100
+        const gwangjuPercent = userLocationData.gwangju / userLocationData.addressTotal * 100
+        const daejeonPercent = userLocationData.daejeon / userLocationData.addressTotal * 100
+        const ulsanPercent = userLocationData.ulsan / userLocationData.addressTotal * 100
+        const sejongPercent = userLocationData.sejong / userLocationData.addressTotal * 100
+        const gyeonggiPercent = userLocationData.gyeonggi / userLocationData.addressTotal * 100
+        const gangwonPercent = userLocationData.gangwon / userLocationData.addressTotal * 100
+        const chungcheongPercent = userLocationData.chungcheong / userLocationData.addressTotal * 100
+        const junraPercent = userLocationData.junra / userLocationData.addressTotal * 100
+        const gyeongsangPercent = userLocationData.gyeongsang / userLocationData.addressTotal * 100
+        const jejuPercent = userLocationData.jeju / userLocationData.addressTotal * 100
+
+        document.getElementById("seoulNum").innerText=userLocationData.seoul;
+        document.getElementById("busanNum").innerText=userLocationData.busan;
+        document.getElementById("daeguNum").innerText=userLocationData.daegu;
+        document.getElementById("incheonNum").innerText=userLocationData.incheon;
+        document.getElementById("gwangjuNum").innerText=userLocationData.gwangju;
+        document.getElementById("daejeonNum").innerText=userLocationData.daejeon;
+        document.getElementById("ulsanNum").innerText=userLocationData.ulsan;
+        document.getElementById("sejongNum").innerText=userLocationData.sejong;
+        document.getElementById("gyeonggiNum").innerText=userLocationData.gyeonggi;
+        document.getElementById("gangwonNum").innerText=userLocationData.gangwon;
+        document.getElementById("chungcheongNum").innerText=userLocationData.chungcheong;
+        document.getElementById("junraNum").innerText=userLocationData.junra;
+        document.getElementById("gyeongsangNum").innerText=userLocationData.gyeongsang;
+        document.getElementById("jejuNum").innerText=userLocationData.jeju;
+
+        document.getElementById("seoulPercent").innerText=seoulPercent.toFixed(2)+"%";
+        document.getElementById("busanPercent").innerText=busanPercent.toFixed(2)+"%";
+        document.getElementById("daeguPercent").innerText=daeguPercent.toFixed(2)+"%";
+        document.getElementById("incheonPercent").innerText=incheonPercent.toFixed(2)+"%";
+        document.getElementById("gwangjuPercent").innerText=gwangjuPercent.toFixed(2)+"%";
+        document.getElementById("daejeonPercent").innerText=daejeonPercent.toFixed(2)+"%";
+        document.getElementById("ulsanPercent").innerText=ulsanPercent.toFixed(2)+"%";
+        document.getElementById("sejongPercent").innerText=sejongPercent.toFixed(2)+"%";
+        document.getElementById("gyeonggiPercent").innerText=gyeonggiPercent.toFixed(2)+"%";
+        document.getElementById("gangwonPercent").innerText=gangwonPercent.toFixed(2)+"%";
+        document.getElementById("chungcheongPercent").innerText=chungcheongPercent.toFixed(2)+"%";
+        document.getElementById("junraPercent").innerText=junraPercent.toFixed(2)+"%";
+        document.getElementById("gyeongsangPercent").innerText=gyeongsangPercent.toFixed(2)+"%";
+        document.getElementById("jejuPercent").innerText=jejuPercent.toFixed(2)+"%";
+    }
+</script>
+</body>
+</html>
