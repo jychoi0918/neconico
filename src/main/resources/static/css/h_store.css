@@ -298,6 +298,7 @@
 .store_view_btn a:last-child { background: #7429ff; border-color: #7429ff; color: #fff; }
 .store_view_btn a:last-child:hover { background: #601edb; }
 
+.view_sold { background: #7429ff !important; color: #fff !important; border-color: #ccc !important; cursor: default; }
 /* sold out 됐을때 버튼 비활성화 클라스 */
 .view_sold_out { background: #ccc !important; color: #fff !important; border-color: #ccc !important; cursor: default; }
 

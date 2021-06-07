@@ -23,7 +23,7 @@
 
 				<script>
 					$(function(){
-						var store_swiper = new Swiper('.swiper2', {
+						let store_swiper = new Swiper('.swiper2', {
 							navigation: {
 								nextEl: '.swiper-button-next2',
 								prevEl: '.swiper-button-prev2',
@@ -90,13 +90,13 @@
 								<img class="like_on" src="/img/store_like_p.png" alt="">
 								<span>찜</span>
 							</a>
-							<a style="cursor: pointer" href="javascript:submitTrade()" class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('판매 중')}">구매하기</a>
+							<a style="cursor: pointer" href="javascript:submitTrade()" class="view_sold" th:if="${findItemInfo.saleStatus.equals('판매 중')}">구매하기</a>
 							<a class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('거래 중')}">거래 중</a>
 							<a class="view_sold_out" th:if="${findItemInfo.saleStatus.equals('거래 완료')}">거래 완료</a>
 
 						</div>
 					</div>
-
+					<!--##### ##### -->
 					<!--<script>
 						$(function(){
 							$('.store_like').click(function(){
@@ -396,6 +396,11 @@
 	function addFavorite(favoriteAnchor) {
 		if(sessionUser === null) {
 			location.href = "/login";
+			return;
+		}
+
+		if(sessionUser.userId === itemStoreInfoUserId){
+			alert('자신이 등록한 상품은 찜이 불가능 합니다.');
 			return;
 		}
 
