@@ -2,7 +2,6 @@ package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
 import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
-import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional

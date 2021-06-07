@@ -75,7 +75,7 @@
 								<div>
 									<figure>
 										<a th:href="@{/store/{id}(id = ${findItemInfo.storeInquireInfoDto.accountId})}">
-											<img style="height: 50px;" src="/img/main_user_icon.png" th:if="${findItemInfo.storeInquireInfoDto.storeImgPath.equals('')}">
+											<img style="height: 50px;" src="/img/user_icon.png" th:if="${findItemInfo.storeInquireInfoDto.storeImgPath.equals('')}">
 											<img style="height: 50px;" th:src="${findItemInfo.storeInquireInfoDto.storeImgPath}" th:unless="${findItemInfo.storeInquireInfoDto.storeImgPath.equals('')}" alt="">
 										</a>
 									</figure>
@@ -147,7 +147,10 @@
 
 					<ul class="store_view_box04_comment">
 						<li th:each="itemQuestion : ${findItemInfo.itemQuestionInquireDtoList}">
-							<figure>
+							<figure th:if="${itemQuestion.storeInquireInfoDto.storeImgPath.equals('')}">
+								<img src="/img/user_icon.png" alt="">
+							</figure>
+							<figure th:unless="${itemQuestion.storeInquireInfoDto.storeImgPath.equals('')}">
 								<img th:src="${itemQuestion.storeInquireInfoDto.storeImgPath}" alt="">
 							</figure>
 
@@ -255,9 +258,17 @@
 		//figure
 		const figureElement = document.createElement("figure");
 
+		//스토어 이미지가 없을경우
+		let imgSrc;
+		if(questionData.storeImgPath === "") {
+			imgSrc = "/img/user_icon.png";
+		}else {
+			imgSrc = questionData.storeImgPath;
+		}
+
 		//figure의 자식노드 추가
 		const figureImgElement = document.createElement("img");
-		figureImgElement.setAttribute("src", questionData.storeImgPath);
+		figureImgElement.setAttribute("src", imgSrc);
 		figureElement.append(figureImgElement);
 
 		const divElement = document.createElement("div");
@@ -272,12 +283,17 @@
 		//childDiv 생성
 		const childDivElement = createChildDivElement(questionData);
 
-		divElement.append(h5Element, paragraphElement, childDivElement);
+		//시간 span 생성
+		const betweenTimeSpanElement = document.createElement('span');
+		betweenTimeSpanElement.innerText = calculateDay(questionData.createdDate);
 
+		//childElement 추가
+		divElement.append(h5Element, paragraphElement, childDivElement, betweenTimeSpanElement);
 		liElement.append(figureElement, divElement);
 
 		const ulElement = document.querySelector('.store_view_box04_comment');
 
+		//첫번째 chileElement로 추가
 		ulElement.prepend(liElement);
 
 	}
@@ -463,6 +479,29 @@
 		httpRequest.open("POST", "/trade/" + itemId + "/request");
 		httpRequest.setRequestHeader("Content-Type", "text/plain");
 		httpRequest.send();
+	}
+
+	//가져오는 날짜 형식 2021-04-29T10:13:18
+	function calculateDay(input) {
+		let createTime = new Date(input);
+		let nowTime = new Date();
+		let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
+		if (time < 60) {
+			return time + '초 전';
+		} else {
+			time = Math.floor(time / 60);
+			if (time < 60) {
+				return time + '분 전';
+			} else {
+				time = Math.floor(time / 60);
+				if (time < 24) {
+					return time + '시간 전';
+				} else {
+					time = Math.floor(time / 24);
+					return time + '일 전';
+				}
+			}
+		}
 	}
 </script>
 </body>
