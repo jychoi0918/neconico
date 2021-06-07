@@ -5,7 +5,7 @@
     <div class="header_top">
       <ul class="h_con">
         <li th:unless="${session.sessionUser == null}" class="h_fs_12 h_fw_5">
-          <a th:if="${session.sessionUser.authority.equals('ROLE_ADMIN')}" th:href="@{/admin}">관리자</a>
+          <a th:if="${session.sessionUser.authority.equals('ROLE_ADMIN')}" th:href="@{/admin/users/list}">관리자</a>
         </li>
         <li class="h_fs_12 h_fw_5" th:if="${session.sessionUser == null}">
           <a th:href="@{/login}">로그인/회원가입</a>
@@ -27,13 +27,14 @@
                 class="h_fs_14"
                 type="text"
                 id="header_search"
+                name="searchText"
                 placeholder="상품명,지역명 검색"
         />
-        <a href="#"><img src="/img/search_p.png"  alt="" /></a>
+        <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
       <ul class="user">
         <li class="h_fs_14">
-          <a href="#"><i></i>판매하기</a>
+          <a th:href="@{/item/new}"><i></i>판매하기</a>
         </li>
         <li class="h_fs_14">
           <a th:href="@{/store/mystore}"><i></i>내상점</a>
@@ -56,10 +57,85 @@
       <nav>
         <ul class="main_menu">
           <li th:each="categoryMain : ${session.categoryList}">
-            <a href="#void" th:text="${categoryMain.name}">대분류 1</a>
+            <a th:href="@{/item/search/categoryMain(name=${categoryMain.name}, currentPage=1)}" th:text="${categoryMain.name}">대분류 1</a>
             <ul class="sub_menu">
               <li th:each="categorySub : ${categoryMain.categorySubInfoDtoList}">
-                <a href="#void" th:text="${categorySub.name}">중분류 1</a>
+                <a th:href="@{/item/search/category(sub=${categorySub.categorySubId}, name=${categorySub.name}, currentPage=1)}" th:text="${categorySub.name}">중분류 1</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+  <div class="mo_header h_con clearfix">
+    <h1 class="mo_logo">
+      <a th:href="@{/}"><img src="/img/logo.png" alt="" /></a>
+    </h1>
+    <div class="mo_nav_btn_box">
+      <div class="mo_nav_btn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    <div class="mo_search">
+      <a class="mo_sch_btn" href="#"
+      ><img src="/img/search_p.png" alt=""
+      /></a>
+      <div class="mo_search_box">
+        <input
+                class="h_fs_14"
+                type="text"
+                id="mo_schbox_btn"
+                name="searchText"
+                placeholder="상품명,지역명 검색"
+        />
+        <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function submitSearch() {
+      const search = document.getElementById("header_search");
+      const miniSearch = document.getElementById("mo_schbox_btn");
+      let form = document.createElement('form');
+      if(search.value !== '') {
+        form.append(search);
+        form.setAttribute('action', '/item/search');
+      }
+      if(miniSearch.value !== '') {
+        form.append(miniSearch);
+        form.setAttribute('action', '/item/search');
+      }
+      form.setAttribute('method', 'get');
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
+  <div class="mo_menu_back">
+    <div class="mo_menu_inner">
+      <div class="m_top">
+        <div class="m_logo">
+          <a href="#">
+            <img src="/img/logo.png" alt="">
+          </a>
+        </div>
+        <div class="m_close_btn">
+          <button>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="mo_main_menu">
+        <ul class="m_main_menu">
+          <li th:each="categoryMain : ${session.categoryList}">
+            <a href="#void" th:text="${categoryMain.name}">대분류 1</a>
+            <ul class="m_sub_menu">
+              <li th:each="categorySub : ${categoryMain.categorySubInfoDtoList}">
+                <a th:href="@{/item/search/category(sub=${categorySub.categorySubId}, name=${categorySub.name}, currentPage=1)}" th:text="${categorySub.name}">중분류 1</a>
               </li>
             </ul>
           </li>

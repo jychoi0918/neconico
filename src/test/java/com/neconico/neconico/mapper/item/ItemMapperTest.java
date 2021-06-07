@@ -4,7 +4,7 @@ import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
-import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.mapper.category.CategoryMapper;
@@ -183,7 +183,7 @@ class ItemMapperTest {
         //when
         itemMapper.deleteItem(itemId);
 
-        List<ItemCardDto> itemCardDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemCardDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
 
         //then
         assertThat(itemCardDtoList.size()).isLessThan(itemIds.size());
@@ -198,7 +198,7 @@ class ItemMapperTest {
         SearchInfoDto searchInfoDto = createSerSearchInfoDto("수원");
 
         //when
-        List<ItemCardDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList).hasSize(5);
@@ -213,7 +213,7 @@ class ItemMapperTest {
         SearchInfoDto searchInfoDto = createSerSearchInfoDto("제목");
 
         //when
-        List<ItemCardDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemInfoDtoList = itemMapper.selectItemBySearch(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList)
@@ -224,7 +224,9 @@ class ItemMapperTest {
     @Test
     @DisplayName("DB에 저장된 item의 총 수를 계산한다.")
     void count_the_total_number_of_items_stored_in_the_DB() throws Exception {
-        Long totalItemCount = itemMapper.selectTotalItemCount();
+        SearchInfoDto searchInfoDto = new SearchInfoDto();
+        searchInfoDto.setSearchText("");
+        Long totalItemCount = itemMapper.selectTotalItemCount(searchInfoDto);
 
         assertThat(totalItemCount).isEqualTo(itemIds.size());
     }

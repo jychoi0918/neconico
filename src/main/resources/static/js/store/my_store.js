@@ -66,6 +66,7 @@ function ajax() {
     httpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
             let resp = JSON.parse(this.responseText);
+            removeChildNode('itemListDiv');
             if ((resp.pagination.totalContent + 0) !== 0) {
                 createItemCard(resp.itemList);
                 createPageButton(resp.pagination);
@@ -75,7 +76,8 @@ function ajax() {
 
 }
 
-function removeChildNode(parent) {
+function removeChildNode(location) {
+    let parent = document.getElementById(location);
     while (parent.hasChildNodes()) {
         parent.removeChild(parent.firstChild);
     }
@@ -83,7 +85,6 @@ function removeChildNode(parent) {
 
 function createItemCard(itemList) {
     let parent = document.getElementById('itemListDiv');
-    removeChildNode(parent);
 
     switch (currentMenu) {
         case "tradeItem":
@@ -136,7 +137,7 @@ function createItemCard(itemList) {
             let item_tr = document.createElement("tr");
             let item_td1 = document.createElement("td");
             let img = document.createElement("img");
-            img.setAttribute("src", item.itemImg);
+            img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             item_td1.append(img);
 
@@ -232,7 +233,7 @@ function createItemCard(itemList) {
             table.append(itr);
             let itd1 = document.createElement("td");
             let img = document.createElement("img");
-            img.setAttribute("src", item.itemImg);
+            img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             itd1.append(img);
 
@@ -277,7 +278,7 @@ function createItemCard(itemList) {
 
             let fig = document.createElement("figure");
             let img = document.createElement("img");
-            img.setAttribute("src", item.itemImg);
+            img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             fig.append(img);
 
@@ -338,7 +339,7 @@ function createItemCard(itemList) {
 
             let itd1 = document.createElement("td");
             let img = document.createElement("img");
-            img.setAttribute("src", item.itemImg);
+            img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             itd1.append(img);
             let itd2 = document.createElement("td");
@@ -420,11 +421,23 @@ function calculateDay(input) {
     let dateArr = (input + "").substring(0, 10).split('-');
     let createTime = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
     let nowTime = new Date();
-    let cDay = Math.floor((nowTime.getTime() - createTime.getTime()) / 1000 / 60 / 60 / 24);
-    if (cDay == 0) {
-        return '오늘';
+    let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
+
+    if (time < 60) {
+        return time + '초 전';
     } else {
-        return cDay + '일 전';
+        time = Math.floor(time / 60);
+        if (time < 60) {
+            return time + '분 전';
+        } else {
+            time = Math.floor(time / 60)
+            if (time < 24) {
+                return time + '시간 전';
+            } else {
+                time = Math.floor(time / 24);
+                return time + '일 전';
+            }
+        }
     }
 }
 
@@ -453,7 +466,7 @@ function clickStoreName(kind) {
     let parent = document.getElementById('storeName');
     if (kind == 0) {
         let storeName = parent.innerText.replace('상점명 변경', '').trim();
-        removeChildNode(parent);
+        removeChildNode('storeName');
         let input = document.createElement("input");
         input.setAttribute("value", storeName);
         let a = document.createElement("a");
@@ -473,7 +486,7 @@ function clickStoreName(kind) {
             if (this.readyState === 4 && this.status === 200) {
                 alert('처리가 되었습니다.')
 
-                removeChildNode(parent);
+                removeChildNode('storeName');
                 let span = document.createElement("span");
                 span.innerText = storeName;
                 let a = document.createElement("a");
@@ -495,7 +508,7 @@ function clickStoreContent(kind) {
 
     if (kind == 0) {
         let storeContent = div.innerText;
-        removeChildNode(div);
+        removeChildNode('storeContentBox');
 
         let textarea = document.createElement("textarea");
         textarea.innerText = storeContent;
@@ -512,7 +525,7 @@ function clickStoreContent(kind) {
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 alert('처리가 되었습니다.')
-                removeChildNode(div);
+                removeChildNode('storeContentBox');
 
                 let p = document.createElement("p");
                 p.innerText = storeContent;

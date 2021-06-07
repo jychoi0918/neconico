@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
+    <div class="main_section_wrap h_con sch_result_wrap">
+        <section class="main_list">
+            <div class="list_tit">
+                <h2 class="h_fs_26">'<span th:text="${subName}">이솝향수</span>' 검색결과</h2>
+            </div>
+            <ul class="main_list_wrap">
+                <li th:each="itemCard : ${itemCardList}" >
+                    <a th:href="@{/item/{id}(id=${itemCard.itemId})}">
+                        <div class="list_img">
+                            <img th:src="${itemCard.itemImg.split('>')[0]}" alt="" />
+
+                            <div class="list_img_sold_out out" th:if="${itemCard.saleStatus.equals('거래 완료')}">
+                                <p>판매완료</p>
+                            </div>
+                        </div>
+                        <div class="list_txt">
+                            <h3 th:text="${itemCard.title}">오늘의 물건 01</h3>
+                            <p th:text="${itemCard.price + '원'}">0,000원</p>
+                            <span th:text="${itemCard.betweenDate}">1시간 전</span>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="pagination" th:each="idx : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                <a th:if="${pagination.hasPrev}" th:href="@{/item/search/category(sub=${subId}, name=${subName}, currentPage=${pagination.criteria.currentPage} - 1)}" class="page_prev" ></a>
+                <a th:unless="${idx == 0}" th:href="@{/item/search/category(sub=${subId}, name=${subName}, currentPage=${idx})}" th:classappend="${idx == pagination.criteria.currentPage} ? active : ''" th:text="${idx}"></a>
+                <a th:if="${pagination.hasNext}" th:href="@{/item/search/category(sub=${subId}, name=${subName}, currentPage=${pagination.criteria.currentPage} + 1)}" class="page_next"></a>
+            </div>
+        </section>
+    </div>
+    <footer th:replace="fragment/footer :: footer"/>
+</div>
+</body>
+</html>

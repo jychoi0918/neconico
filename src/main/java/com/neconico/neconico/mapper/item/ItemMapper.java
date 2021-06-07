@@ -1,10 +1,12 @@
 package com.neconico.neconico.mapper.item;
 
+import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.ItemQuestionInquireDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.paging.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -31,8 +33,22 @@ public interface ItemMapper {
 
     void deleteItem(@Param("itemId") Long itemId);
 
-    List<ItemCardDto> selectItemBySearch(@Param("criteria") Criteria criteria,  //main 검색바 검색
-                                         @Param("search") SearchInfoDto searchInfoDto);
+    List<ItemCardSearchViewDto> selectItemBySearch(@Param("criteria") Criteria criteria,  //main 검색바 검색
+                                                   @Param("search") SearchInfoDto searchInfoDto);
 
-    Long selectTotalItemCount(); //item 총 개수 count
+    Long selectTotalItemCount(@Param("search") SearchInfoDto searchInfoDto); //item 총 개수 count
+
+    //main카테고리 조회
+    List<ItemCardSearchViewDto> selectItemsByMainCategory(@Param("criteria") Criteria criteria, @Param("subCategoryList") List<CategorySubInfoDto> subCategoryList);
+
+    Long selectTotalItemCountBySubCategoryList(@Param("subCategoryList") List<CategorySubInfoDto> subCategoryList);
+
+    //sub카테고리 조회
+    List<ItemCardSearchViewDto> selectItemsBySubCategoryId(@Param("criteria") Criteria criteria,
+                                                 @Param("subId") Long subId);
+
+    Long selectTotalItemCountBySubCategoryId(@Param("subId") Long subId);
+
+    //조회수 추가
+    void updateItemHits(@Param("itemId") Long itemId);
 }

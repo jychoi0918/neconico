@@ -4,16 +4,12 @@ import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.store.card.StoreInfoCardDto;
 import com.neconico.neconico.dto.users.SessionUser;
-import com.neconico.neconico.file.policy.FilePolicy;
-import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.store.StoreItemListMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
-import com.neconico.neconico.service.file.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -27,7 +23,6 @@ public class StoreInfoService {
     private final StoreInfoMapper storeInfoMapper;
     private final StoreItemListMapper storeItemListMapper;
     private final UserMapper userMapper;
-    private final FileService fileService;
 
     public StoreInfoCardDto findStoreInfo(SessionUser user) {
 
@@ -63,17 +58,17 @@ public class StoreInfoService {
     }
 
     @Transactional
-    public void updateStoreImg(MultipartFile multipartFiles, Long userId) throws IOException {
-        StoreInfoDto initInfo = storeInfoMapper.selectStoreInfoByUser(userId);
+    public void updateStoreImg(FileResultInfoDto fileResultInfoDto, StoreInfoDto storeInfoDto) throws IOException {
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.STORE));
-        FileResultInfoDto result = fileService.uploadFiles(multipartFiles);
+        storeInfoDto.setStoreImgUrl(fileResultInfoDto.getFileUrls());
+        storeInfoDto.setStoreImgName(fileResultInfoDto.getFileNames());
 
-        updateStoreInfo(new StoreInfoDto(userId, null, result.getFileUrls(), null, result.getFileNames()));
+        // 업데이트 시, 동일한 이름을 가진 상점명은 업데이트를 못하게 설정
+        storeInfoDto.setStoreName(null);
+        storeInfoDto.setStoreInfo(null);
 
-        if(!(initInfo.getStoreImgUrl().equals(""))) {
-            fileService.deleteFiles(initInfo.getStoreImgName());
-        }
+        updateStoreInfo(storeInfoDto);
+
     }
 
     public String calculateCreatedDate(String accountId) {
@@ -88,6 +83,11 @@ public class StoreInfoService {
     public SessionUser getSessionUserInfoByAccountId(String accountId) {
         return userMapper.selectSessionUserInfoByAccountId(accountId);
     }
+
+    public StoreInfoDto findStoreInfoByUserId(Long userId) {
+        return storeInfoMapper.selectStoreInfoByUser(userId);
+    }
+
 
 
 }

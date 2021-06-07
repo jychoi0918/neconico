@@ -105,35 +105,6 @@
         where item_question_id = #{itemQuestionId}
     </delete>
 
-    <select id="selectQuestionCommentById" resultType="questioncommentresponse">
-        select q.question_id          AS itemQuestionId,
-               q.question_comment_id AS questionCommentId,
-               s.store_name       AS storeName,
-               s.store_img_path   AS storeImgPath,
-               q.content          AS content,
-               q.created_date     AS createdDate
-        from question_comment q
-                     inner join store s
-                on q.user_id = s.user_id
-        where q.question_comment_id = #{questionCommentId}
-    </select>
-
-    <insert id="insertQuestionComment" parameterType="itemquestiondto" useGeneratedKeys="true" keyColumn="question_comment_id"
-            keyProperty="id">
-        insert into question_comment (question_id, user_id, created_date, content)
-        values (#{objectId}, #{userId}, SYSDATE(), #{content})
-    </insert>
-
-    <update id="updateQuestionComment">
-        update question_comment
-        set content = #{content}
-        where question_comment_id = #{questionCommentId}
-    </update>
-
-    <delete id="deleteQuestionComment">
-        delete from question_comment
-        where question_comment_id = #{questionCommentId}
-    </delete>
 </mapper>
 
 

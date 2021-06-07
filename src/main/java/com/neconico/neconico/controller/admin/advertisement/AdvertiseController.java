@@ -20,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -49,7 +48,7 @@ public class AdvertiseController {
 
 
     //광고 상태 변경
-    @PutMapping("/advert/status")
+    @PutMapping("/adve/status")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public void updateStatus(@RequestBody AdvertStatusDto advertStatusDto) {

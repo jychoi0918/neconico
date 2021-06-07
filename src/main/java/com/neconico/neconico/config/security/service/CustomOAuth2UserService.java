@@ -9,7 +9,7 @@ import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
 import com.neconico.neconico.service.email.certgenerator.GenerateCertCharacter;
-import com.neconico.neconico.service.store.provider.StoreInfoMaker;
+import com.neconico.neconico.Maker.StoreInfoMaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -93,7 +93,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         }
 
         if(attributes.getEmail() == null) {
-            attributes.changeEmail(generateNumber + "@");
+            attributes.changeEmail(attributes.getUniqueId() + "@");
         }
 
         if(attributes.getGender() == null) {

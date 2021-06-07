@@ -2,7 +2,6 @@ package com.neconico.neconico.service.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
 import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
-import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.mapper.item.ItemQuestionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,28 +36,5 @@ public class ItemQuestionService {
     public ItemQuestionResponseDto getItemQuestion(Long itemQuestionId) {
         return itemQuestionMapper.selectItemQuestionResponseById(itemQuestionId);
     }
-
-    @Transactional
-    public QuestionCommentResponseDto createQuestionCommentId(Long itemId,Long userId, String content) {
-        ItemQuestionDto itemQuestionDto = new ItemQuestionDto(itemId, userId, content);
-        itemQuestionMapper.insertQuestionComment(itemQuestionDto);
-        return getQuestionComment(itemQuestionDto.getId());
-    }
-
-    @Transactional
-    public QuestionCommentResponseDto modifyQuestionComment(Long questionCommentId, String content) {
-        itemQuestionMapper.updateItemQuestion(questionCommentId, content);
-        return getQuestionComment(questionCommentId);
-    }
-
-    @Transactional
-    public void deleteQuestionComment(Long questionCommentId) {
-        itemQuestionMapper.deleteItemQuestion(questionCommentId);
-    }
-
-    public QuestionCommentResponseDto getQuestionComment(Long questionCommentId) {
-        return itemQuestionMapper.selectQuestionCommentById(questionCommentId);
-    }
-
 
 }

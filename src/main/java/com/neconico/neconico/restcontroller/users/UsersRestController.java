@@ -1,5 +1,7 @@
 package com.neconico.neconico.restcontroller.users;
 
+import com.neconico.neconico.config.web.LoginUser;
+import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.service.email.EmailService;
 import com.neconico.neconico.service.users.UserService;
@@ -22,10 +24,13 @@ public class UsersRestController {
     }
 
     @PostMapping("/user/email/send")
-    public ResponseEntity<Long> sendEmail(@RequestParam("emailAddress") String emailAddress) throws Exception{
-        Long emailId = emailService.sendAuthorNumberMail(emailAddress, 6);
-
-        return new ResponseEntity<>(emailId, HttpStatus.OK);
+    public ResponseEntity<Long> sendEmail(@RequestParam("emailAddress") String emailAddress) {
+        try {
+            Long emailId = emailService.sendAuthorNumberMail(emailAddress, 6);
+            return new ResponseEntity<>(emailId, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/user/email/{authorNumber}/check")
@@ -40,4 +45,19 @@ public class UsersRestController {
         emailService.deleteAuthorNumber(emailId);
     }
 
+    //아이템 등록시 내 주소 검색
+    @GetMapping("/user/find/address")
+    public ResponseEntity<UserInfoDto> findUserAddress(@LoginUser SessionUser sessionUser) {
+        UserInfoDto userInfoDto = userService.findUserByAccountId(sessionUser.getAccountId());
+        return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
+    }
+
+    //이메일 증복 체크
+    @GetMapping("/user/check/email/{email}")
+    public ResponseEntity<Boolean> checkEmailDuplication(@PathVariable("email") String email) {
+        if(userService.findUserByEmail(email) == null) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
+    }
 }

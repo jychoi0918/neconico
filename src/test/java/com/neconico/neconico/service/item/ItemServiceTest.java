@@ -5,7 +5,7 @@ import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
-import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.paging.Criteria;
@@ -139,11 +139,13 @@ class ItemServiceTest {
                 "https//fdd",
                 "2f23f-f3fd-fdn이미지.png"); // 변경된 파일
 
+        String[] currentFiles = itemInfoDto.getItemImgUrls().split(">");
+
         //when
         itemInfoDto.setTitle("바뀐제목");
         itemInfoDto.setContent("바뀐 내용");
 
-        itemService.changeItemInfo(fileResultInfoDto, itemInfoDto);
+        itemService.changeItemInfo(fileResultInfoDto, currentFiles, itemInfoDto);
         ItemInquireInfoDto changeItemInfo = itemService.findItemByItemId(itemId);
 
         //then
@@ -177,7 +179,7 @@ class ItemServiceTest {
         SearchInfoDto searchInfoDto = getSearchInfoDto("수원");
 
         //when
-        List<ItemCardDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList).hasSize(5);
@@ -192,7 +194,7 @@ class ItemServiceTest {
         SearchInfoDto searchInfoDto = getSearchInfoDto("제목");
 
         //when
-        List<ItemCardDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
+        List<ItemCardSearchViewDto> itemInfoDtoList = itemService.searchItems(criteria, searchInfoDto);
 
         //then
         assertThat(itemInfoDtoList)
@@ -203,7 +205,9 @@ class ItemServiceTest {
     @Test
     @DisplayName("DB에 저장된 item의 총 수를 계산한다.")
     void count_the_total_number_of_items_stored_in_the_DB() throws Exception {
-        Long totalItemCount = itemService.countTotalItems();
+        SearchInfoDto searchInfoDto = new SearchInfoDto();
+        searchInfoDto.setSearchText("");
+        Long totalItemCount = itemService.countTotalItems(searchInfoDto);
 
         assertThat(totalItemCount).isEqualTo(itemIds.size());
     }

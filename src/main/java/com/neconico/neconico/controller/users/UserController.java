@@ -1,8 +1,9 @@
 package com.neconico.neconico.controller.users;
 
+import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.users.*;
 import com.neconico.neconico.service.store.StoreInfoService;
-import com.neconico.neconico.service.store.provider.StoreInfoMaker;
+import com.neconico.neconico.Maker.StoreInfoMaker;
 import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -116,5 +117,13 @@ public class UserController {
         userService.changeUserAccountPw(accountId, accountPw);
 
         return "redirect:/login";
+    }
+
+    //인증거부 시 보여줄 페이지
+    @GetMapping("/denied")
+    public String accessDenied(@RequestParam(value = "exception", required = false) String exception, @LoginUser SessionUser sessionUser, Model model) {
+
+        model.addAttribute("username", sessionUser.getAccountName());
+        return "users/denied";
     }
 }

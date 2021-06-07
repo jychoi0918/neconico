@@ -63,7 +63,7 @@
                i.price         price,
                i.item_img_urls img,
                i.created_date  created,
-               i.item_status   status,
+               i.sale_status   status,
                i.hits          views
         from item i
     </sql>

@@ -1,10 +1,11 @@
 package com.neconico.neconico.service.item;
 
+import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
 import com.neconico.neconico.dto.item.ItemInquireInfoDto;
 import com.neconico.neconico.dto.item.SearchInfoDto;
-import com.neconico.neconico.dto.item.card.ItemCardDto;
+import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.paging.Criteria;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public interface ItemService {
                     Long subId,
                     ItemInfoDto itemInfoDto);
 
-    void changeItemInfo(FileResultInfoDto fileResultInfoDto,
-                        ItemInfoDto itemInfoDto);
+    String changeItemInfo(FileResultInfoDto fileResultInfoDto, String[] currentFiles,
+                          ItemInfoDto itemInfoDto);
 
     void removeItem(Long itemId);
 
@@ -33,7 +34,18 @@ public interface ItemService {
      * main페이지 추천 상품 리스트
      * 상품 조건 검색
      */
-    List<ItemCardDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto);
+    List<ItemCardSearchViewDto> searchItems(Criteria criteria, SearchInfoDto searchInfoDto);
 
-    Long countTotalItems();
+    Long countTotalItems(SearchInfoDto searchInfoDto);
+
+    List<ItemCardSearchViewDto> searchItemsByMainCategory(Criteria criteria, List<CategorySubInfoDto> subCategoryList);
+
+    Long countTotalItemsBySubCategoryList(List<CategorySubInfoDto> subCategoryList);
+
+    List<ItemCardSearchViewDto> searchItemsBySubCategoryId(Criteria criteria, Long subId);
+
+    Long countTotalItemsBySubCategoryId(Long subId);
+
+    //조회수 증가
+    void incrementItemHits(Long itemId);
 }

@@ -2,7 +2,6 @@ package com.neconico.neconico.restcontroller.item;
 
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
-import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.service.item.ItemQuestionService;
 import lombok.RequiredArgsConstructor;
@@ -33,28 +32,6 @@ public class ItemQuestionRestController {
     @DeleteMapping("/question/{questionId}/delete")
     private void deleteItemQuestion(@PathVariable(name = "questionId") Long questionId) {
         itemQuestionService.deleteItemQuestion(questionId);
-    }
-
-
-    //QuestionReply
-    @PostMapping("/questionComment/{questionId}/new")
-    public QuestionCommentResponseDto createQuestionComment(@PathVariable(name = "questionId") Long itemId,
-                                                            @LoginUser SessionUser user,
-                                                            @RequestParam("content") String content) {
-        return itemQuestionService.createQuestionCommentId(itemId, user.getUserId(), content);
-
-    }
-
-    @PutMapping("/questionComment/{questionCommentId}/edit")
-    public QuestionCommentResponseDto updateQuestionComment(@PathVariable(name = "questionCommentId") Long questionCommentId,
-                                                            @RequestParam("content") String content) {
-        return itemQuestionService.modifyQuestionComment(questionCommentId, content);
-
-    }
-
-    @DeleteMapping("/questionComment/{questionCommentId}/delete")
-    private void deleteQuestionComment(@PathVariable(name = "questionCommentId") Long questionCommentId) {
-        itemQuestionService.deleteQuestionComment(questionCommentId);
     }
 
 }
