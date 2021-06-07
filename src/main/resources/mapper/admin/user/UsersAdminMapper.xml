@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.admin.user.UsersAdminMapper">
+
+    <select id="countUserList" resultType="long">
+        select count(user_id) from users
+        where authority = #{authority};
+    </select>
+
+    <select id="selectUserList" resultType="UserListDto">
+        SELECT
+                USER_ID as userId
+             ,ACCOUNT_ID as accountId
+             ,ACCOUNT_NAME as accountName
+             ,EMAIL
+             ,CREATED_DATE as createDate
+             ,GENDER
+        FROM users
+        where authority = 'ROLE_USER'
+        order by ${sortingColumn} ${requestOrder}
+        limit #{contentPerPage} offset #{pageStart}
+    </select>
+
+    <select id="selectAdminList" resultType="UserListDto">
+        SELECT
+                USER_ID as userId
+             ,ACCOUNT_ID as accountId
+             ,ACCOUNT_NAME as accountName
+             ,EMAIL
+             ,CREATED_DATE as createDate
+             ,GENDER
+        FROM users
+        where authority = 'ROLE_ADMIN'
+        order by ${sortingColumn} ${requestOrder}
+        limit #{contentPerPage} offset #{pageStart}
+    </select>
+
+    <select id="selectUserListByAge" resultType="map">
+        select
+                count(case when age BETWEEN 10 and 19 then 1 end) as "age10s",
+                count(case when age BETWEEN 20 and 29 then 1 end) as "age20s",
+                count(case when age BETWEEN 30 and 39 then 1 end) as "age30s",
+                count(case when age BETWEEN 40 and 49 then 1 end) as "age40s",
+                count(case when age BETWEEN 50 and 59 then 1 end) as "age50s",
+                count(case when age > 60 then 1 end) as "ageOver60s",
+                count(age) as "ageTotal"
+        from
+                (select date_format(now(), '%Y' )-date_format(birthdate, '%Y')+1 as age from users) T
+    </select>
+
+    <select id="selectUserListByGender" resultType="map">
+        select
+                count(case when gender = 'M' then 1 end) as "male",
+                count(case when gender = 'F' then 1 end) as "female",
+                count(case when gender = 'U' then 1 end) as "unknown",
+                count(case when (gender = 'M' or gender = 'F' or gender = 'U') then 1 end) as "genderTotal"
+        from users
+    </select>
+
+    <select id="selectUserListByLocation" resultType="map">
+        select
+                count(case when address = '서울' then 1 end) as "seoul",
+                count(case when address = '부산' then 1 end) as "busan",
+                count(case when address = '대구' then 1 end) as "daegu",
+                count(case when address = '인천' then 1 end) as "incheon",
+                count(case when address = '광주' then 1 end) as "gwangju",
+                count(case when address = '대전' then 1 end) as "daejeon",
+                count(case when address = '울산' then 1 end) as "ulsan",
+                count(case when address = '세종' then 1 end) as "sejong",
+                count(case when address = '경기' then 1 end) as "gyeonggi",
+                count(case when address = '강원' then 1 end) as "gangwon",
+                count(case when address = '충청' then 1 end) as "chungcheong",
+                count(case when address = '전라' then 1 end) as "junra",
+                count(case when address = '경상' then 1 end) as "gyeongsang",
+                count(case when address = '제주' then 1 end) as "jeju",
+                count(address) as "addressTotal"
+        from
+                (select substr(address,1,2) as address from users) T
+    </select>
+
+    <select id="selectUserListByRegistered" resultType="map">
+        select
+                count(case when join_month = '01' then 1 end) as "Jan",
+                count(case when join_month = '02' then 1 end) as "Feb",
+                count(case when join_month = '03' then 1 end) as "Mar",
+                count(case when join_month = '04' then 1 end) as "Apr",
+                count(case when join_month = '05' then 1 end) as "May",
+                count(case when join_month = '06' then 1 end) as "Jun",
+                count(case when join_month = '07' then 1 end) as "Jul",
+                count(case when join_month = '08' then 1 end) as "Aug",
+                count(case when join_month = '09' then 1 end) as "Sep",
+                count(case when join_month = '10' then 1 end) as "Oct",
+                count(case when join_month = '11' then 1 end) as "Nov",
+                count(case when join_month = '12' then 1 end) as "Dec"
+        from
+                (select substr(created_date,6,2) as join_month from users) T
+    </select>
+
+</mapper>

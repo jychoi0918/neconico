@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header::header"/>
+<body>
+<div class="wrap">
+    <header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+
+    <div class="section_wrap">
+        <div class="admin_left" th:replace="fragment/admin_menu::admin_menu"/>
+            <div class="admin_right">
+                <h3 class="h_fs_26">회원목록</h3>
+                <table>
+                    <colgroup>
+                        <col width="8%">
+                        <col width="15%">
+                        <col width="15%">
+                        <col width="30%">
+                        <col width="24%">
+                        <col width="8%">
+                    </colgroup>
+                    <tr>
+                        <th>순번</th>
+                        <th>아이디</th>
+                        <th>이름</th>
+                        <th>이메일</th>
+                        <th>가입일자</th>
+                        <th>성별</th>
+                    </tr>
+                    
+                    <tr th:each="userList : ${userList}">
+                        <td th:text="${userList.userId}">유저번호</td>
+                        <td th:text="${userList.accountId}">아이디</td>
+                        <td th:text="${userList.accountName}">이름</td>
+                        <td th:text="${userList.email}">이메일</td>
+                        <td th:text="${userList.createDate}">가입일자</td>
+                        <td th:text="${userList.gender}">성별</td>
+                    </tr>
+                </table>
+
+                <div class="sch_box">
+                    <select name="" id="">
+                        <option value="">아이디</option>
+                        <option value="">이름</option>
+                        <option value="">이메일</option>
+                    </select>
+                    <input type="text" placeholder="검색어를 입력하세요.">
+                    <input type="button" value="검색">
+                </div>
+
+                <div class="pagination" th:if="${paging.totalContent}!=0">
+                    <ul>
+                        <li th:unless="${paging.criteria.currentPage}==1">
+                            <a class="page_prev"
+                               th:href="@{/admin/users/list(currentPage=${paging.criteria.currentPage}-1)}"></a>
+                        </li>
+                        <li th:each="idx : ${#numbers.sequence(paging.startPage, paging.endPage)}">
+                            <a class="" th:href="@{/admin/users/list(currentPage=${idx})}" th:text="${idx}"
+                               th:classappend="${idx == paging.criteria.currentPage} ? active : ''">1</a>
+                        </li>
+                        <li th:if="${paging.hasNext}">
+                            <a class="page_next"
+                               th:href="@{/admin/users/list(currentPage=${paging.criteria.currentPage}+1)}"></a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

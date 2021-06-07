@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neconico.neconico.mapper.admin.item.ItemAdminMapper">
+    <resultMap id="countCategoryMain" type="itemCategoryMainInfoDto">
+        <id column="mainId" property="categoryMainId"></id>
+        <result column="mainName" property="name"></result>
+        <collection property="itemCategorySubInfoDtos" javaType="list" ofType="itemCategorySubInfoDto">
+            <id column="subId" property="categorySubId"></id>
+            <result column="subName" property="name"></result>
+            <result column="num" property="num"></result>
+        </collection>
+    </resultMap>
+
+    <select id="countItemBySaleStatus" resultType="map">
+        select
+                count(case when sale_month = '01' then 1 end) as "Jan",
+                count(case when sale_month = '02' then 1 end) as "Feb",
+                count(case when sale_month = '03' then 1 end) as "Mar",
+                count(case when sale_month = '04' then 1 end) as "Apr",
+                count(case when sale_month = '05' then 1 end) as "May",
+                count(case when sale_month = '06' then 1 end) as "Jun",
+                count(case when sale_month = '07' then 1 end) as "Jul",
+                count(case when sale_month = '08' then 1 end) as "Aug",
+                count(case when sale_month = '09' then 1 end) as "Sep",
+                count(case when sale_month = '10' then 1 end) as "Oct",
+                count(case when sale_month = '11' then 1 end) as "Nov",
+                count(case when sale_month = '12' then 1 end) as "Dec"
+        from
+                (select substr(modified_date,6,2) as sale_month from item where sale_status = #{salestatus}) T
+    </select>
+
+    <select id="countItemByMainCategory" resultType="CategoryMainCountDto">
+        select mc.name as maincategoryname, count(mc.name)/3 as num
+        from item i
+                     inner join category_sub sc
+                on i.category_sub_id = sc.category_main_id
+                     inner join category_main mc
+                on sc.category_main_id = mc.category_main_id
+        group by mc.name
+    </select>
+
+    <select id="countItemBySubCategory" resultType="CategorySubCountDto">
+        select mc.name as mainCategoryName, sc.name as subcategoryname, count(sc.name) as num
+        from item i
+                     left join category_sub sc
+                on i.category_sub_id = sc.category_main_id
+                     left join category_main mc
+                on sc.category_main_id = mc.category_main_id
+        where 1=1
+        group by sc.name
+    </select>
+
+    <select id="countItemForStats" resultMap="countCategoryMain">
+        select
+                m.category_main_id as mainId,
+                m.name as mainName,
+                s.category_sub_id as subId,
+                s.name as subName,
+                (select count(category_sub_id) from item where category_sub_id=s.category_sub_id) as num
+        from category_main m
+        left join category_sub s
+        on m.category_main_id = s.category_main_id
+    </select>
+
+</mapper>

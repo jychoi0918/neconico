@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header::header"/>
+<body>
+<div class="wrap">
+	<header class="header header_border" th:replace="fragment/admin_body_header::admin_body_header"/>
+
+	<div class="section_wrap">
+		<div class="admin_left" th:replace="fragment/admin_menu::admin_menu"/>
+
+		<div class="admin_right admin_category">
+			<h3 class="h_fs_26">카테고리 관리</h3>
+
+			<ul class="cate_tab">
+				<li class="active"><a style="cursor: pointer">대분류</a></li>
+				<li><a style="cursor: pointer">중분류</a></li>
+			</ul>
+			<div class="admin_catebox">
+				<div class="cate_1 on">
+					<div class="cate_top">
+						<ul>
+							<li th:each="categoryMain : ${categoryList}">
+								<div class="cate_top_l">
+									<p th:text="${categoryMain.name}" value="">대분류 목록</p>
+								</div>
+								<div class="cate_top_r">
+									<p th:each="categorySub : ${categoryMain.categorySubInfoDtoList}" th:text="${categorySub.name}">중분류 목록</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="cate_btm">
+						<h4>대분류</h4>
+						<form id ="mainNameSubmit" th:action="@{/admin/item/category/new}" method="post">
+							<div class="cate_01">
+								<input type="text" id="mainName" name ="mainName">
+								<input type="button" id="mainNameButton" value="등록" >
+							</div>
+						</form>
+
+						<form id ="mainNameUpdateSubmit" th:action="@{/admin/item/category/update}" method="post">
+							<div class="cate_02">
+								<select id="original" name="mainId">
+									<option name="" th:each="categoryMain : ${categoryList}" th:text="${categoryMain.name}" th:value="${categoryMain.categoryMainId}">대분류 카테고리 선택지</option>
+								</select>
+								<input name="mainName" type="text">
+								<input type="button" id="mainNameUpdateButton" value="수정" >
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<div class="cate_2">
+					<div class="cate_top">
+						<ul>
+							<li th:each="categoryMain : ${categoryList}">
+								<div class="cate_top_l">
+									<p th:text="${categoryMain.name}" value="">대분류 목록</p>
+								</div>
+								<div class="cate_top_r">
+									<p th:each="categorySub : ${categoryMain.categorySubInfoDtoList}" th:text="${categorySub.name}">중분류 목록</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<div class="cate_btm cate_btm_2">
+						<div class="cate_btm_l">
+							<h4>대분류</h4>
+
+							<div class="cate_01">
+								<select id="mainIdSubmit">
+									<option th:each="categoryMain : ${categoryList}" th:text="${categoryMain.name}" th:value="${categoryMain.categoryMainId}">대분류 선택</option>
+								</select>
+							</div>
+							<div class="cate_02">
+								<select onchange="changeSubCategory(this)">
+									<option th:each="categoryMain : ${categoryList}"
+											th:text="${categoryMain.name}"
+											th:value="${categoryMain.categoryMainId}">대분류 1
+									</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="cate_btm_r">
+							<h4>중분류</h4>
+
+							<div class="cate_01">
+								<input id="subNameSubmit" type="text" class="width_resize">
+								<input type="button" id="subNameButton" value="등록">
+							</div>
+							<div class="cate_02">
+								<select id="subIdSubmit" >
+									<option th:each="categorySub : ${categoryList.get(0).categorySubInfoDtoList}"
+											th:text="${categorySub.name}"
+											th:value="${categorySub.categorySubId}">중분류 1
+									</option>
+								</select>
+								<input id="updateSubNameSubmit" type="text">
+								<input type="button" id="updateSubNameButton" value="수정">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function(){
+			$('.cate_tab > li').click(function(){
+				var n = $(this).index();
+				$('.cate_tab > li').removeClass('active');
+				$(this).addClass('active');
+
+				$('.admin_catebox > div').removeClass('on');
+				$('.admin_catebox > div').eq(n).addClass('on');
+			});
+		});
+	</script>
+
+</div>
+
+<script th:inline="javascript">
+	/**
+	 * 카테고리 바 변경
+	 */
+	const categoryList = [[${categoryList}]] // 카테코리 리스트
+
+	function changeSubCategory(mainCategory) {
+		let subCategory = document.getElementById("subIdSubmit");
+		let subCategoryList;
+		for (let i = 0; i < categoryList.length; i++){
+			if (parseInt(mainCategory.value) === categoryList[i].categoryMainId){
+				subCategoryList = categoryList[i].categorySubInfoDtoList;
+				break;
+			}
+		}
+		const options = [];
+
+		while (subCategory.hasChildNodes()) {
+			subCategory.removeChild(subCategory.firstChild);
+		}
+
+		for (let i = 0; i < subCategoryList.length; i++) {
+			let option = document.createElement('option');
+			option.innerText = subCategoryList[i].name;
+			option.setAttribute('value', subCategoryList[i].categorySubId);
+			options[i] = option;
+		}
+
+		for (let i = 0; i < options.length; i++) {
+			subCategory.appendChild(options[i]);
+		}
+
+	}
+</script>
+
+<script>
+
+	document.getElementById("mainNameButton").onclick=submitInsertMainCategory;
+	document.getElementById("mainNameUpdateButton").onclick=submitUpdateMainCategory;
+	document.getElementById("subNameButton").onclick=submitInsertSubCategory;
+	document.getElementById("updateSubNameButton").onclick=submitUpdateSubCategory;
+
+	//메인카테고리 추가
+	function submitInsertMainCategory() {
+		if (confirm("등록하시겠습니까") == true) {
+			document.getElementById("mainNameSubmit").submit();
+
+			alert("등록 완료")
+		} else {
+			alert("등록 취소")
+			return false;
+		}
+	}
+
+	//메인카테고리 수정
+	function submitUpdateMainCategory() {
+		if (confirm("수정하시겠습니까") == true) {
+			document.getElementById("mainNameUpdateSubmit").submit();
+
+			alert("수정 완료")
+		} else {
+			alert("수정 취소")
+			return false;
+		}
+	}
+
+	//서브카테고리 추가
+	function submitInsertSubCategory() {
+		if (confirm("등록하시겠습니까") == true) {
+
+			const mainIdSubmit = document.getElementById("mainIdSubmit").value;
+			const subNameSubmit = document.getElementById("subNameSubmit").value;
+
+			const form = document.createElement("form");
+			form.setAttribute("method", "post");
+			form.setAttribute("action","/admin/item/subcategory/new");
+
+			const data1 = document.createElement("input");
+			data1.setAttribute("type","text");
+			data1.setAttribute("name","mainId");
+			data1.setAttribute("value",mainIdSubmit);
+
+			const data2 = document.createElement("input");
+			data2.setAttribute("type","text");
+			data2.setAttribute("name","subName");
+			data2.setAttribute("value",subNameSubmit);
+
+			form.append(data1, data2);
+
+			document.body.appendChild(form);
+			form.submit();
+
+			alert("등록 완료")
+		} else {
+			alert("등록 취소")
+			return false;
+		}
+	}
+
+	//서브카테고리 수정
+	function submitUpdateSubCategory() {
+		if (confirm("수정하시겠습니까") == true) {
+
+			const subIdSubmit = document.getElementById("subIdSubmit").value;
+			const updateSubNameSubmit = document.getElementById("updateSubNameSubmit").value;
+
+			const form = document.createElement("form");
+			form.setAttribute("method", "post");
+			form.setAttribute("action","/admin/item/subcategory/update");
+
+			const data1 = document.createElement("input");
+			data1.setAttribute("type","text");
+			data1.setAttribute("name","subId");
+			data1.setAttribute("value",subIdSubmit);
+
+			const data2 = document.createElement("input");
+			data2.setAttribute("type","text");
+			data2.setAttribute("name","subName");
+			data2.setAttribute("value",updateSubNameSubmit);
+
+
+			form.append(data1, data2);
+
+			document.body.appendChild(form);
+			form.submit();
+
+			alert("수정 완료")
+		} else {
+			alert("수정 취소")
+			return false;
+		}
+	}
+
+</script>
+</body>
+</html>
