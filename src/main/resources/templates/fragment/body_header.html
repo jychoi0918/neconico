@@ -5,7 +5,7 @@
     <div class="header_top">
       <ul class="h_con">
         <li th:unless="${session.sessionUser == null}" class="h_fs_12 h_fw_5">
-          <a th:if="${session.sessionUser.authority.equals('ROLE_ADMIN')}" th:href="@{/admin}">관리자</a>
+          <a th:if="${session.sessionUser.authority.equals('ROLE_ADMIN')}" th:href="@{/admin/users/list}">관리자</a>
         </li>
         <li class="h_fs_12 h_fw_5" th:if="${session.sessionUser == null}">
           <a th:href="@{/login}">로그인/회원가입</a>
