@@ -6,12 +6,11 @@ import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.service.email.EmailService;
 import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class UsersRestController {
@@ -26,10 +25,13 @@ public class UsersRestController {
     }
 
     @PostMapping("/user/email/send")
-    public ResponseEntity<Long> sendEmail(@RequestParam("emailAddress") String emailAddress) throws Exception{
-        Long emailId = emailService.sendAuthorNumberMail(emailAddress, 6);
-
-        return new ResponseEntity<>(emailId, HttpStatus.OK);
+    public ResponseEntity<Long> sendEmail(@RequestParam("emailAddress") String emailAddress) {
+        try {
+            Long emailId = emailService.sendAuthorNumberMail(emailAddress, 6);
+            return new ResponseEntity<>(emailId, HttpStatus.OK);
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/user/email/{authorNumber}/check")
@@ -49,5 +51,14 @@ public class UsersRestController {
     public ResponseEntity<UserInfoDto> findUserAddress(@LoginUser SessionUser sessionUser) {
         UserInfoDto userInfoDto = userService.findUserByAccountId(sessionUser.getAccountId());
         return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
+    }
+
+    //이메일 증복 체크
+    @GetMapping("/user/check/email/{email}")
+    public ResponseEntity<Boolean> checkEmailDuplication(@PathVariable("email") String email) {
+        if(userService.findUserByEmail(email) == null) {
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK);
     }
 }

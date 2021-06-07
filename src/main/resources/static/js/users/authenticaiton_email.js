@@ -6,8 +6,42 @@ const authorNumberCheck = document.getElementById("author_number_check");
 let executeTimer = null;
 let executeTimeOut = null;
 
-const sendAuthorNum = () => {
+//이메일 증복 체크
+const checkEmailDuplication = () => {
     const inputEmail = document.getElementById("email");
+    const inputEmailValue = inputEmail.value;
+
+    //이메일 양식 체크
+    if(inputEmailValue === '' ||
+        (inputEmailValue.indexOf('@') === -1 || inputEmailValue.indexOf('.') === -1)) {
+        alert('잘못된 이메일 양식입니다.');
+        return;
+    }
+
+    const httpRequest = new XMLHttpRequest();
+
+    httpRequest.onreadystatechange = function () {
+        if(this.readyState === 4 && this.status === 200) {
+            if(this.responseText === 'true') { //등록되지 않은 이메일
+                //증복 확인 후 이메일 전송
+                sendAuthorNum(inputEmail);
+            }else {
+                alert('등록된 이메일 입니다.');
+            }
+        }else if(this.readyState === 4 && this.status === 400) {
+            alert('잘못된 이메일 양식입니다.');
+        }
+    }
+
+    httpRequest.open("GET", "/user/check/email/" + inputEmail.value);
+    httpRequest.setRequestHeader("Content-Type", "text/plain");
+    httpRequest.send();
+
+}
+
+const sendAuthorNum = (emailDom) => {
+    const inputEmail = emailDom;
+
     const httpRequest = new XMLHttpRequest();
     //타이머 count
     let timerCount = 180;
@@ -35,6 +69,12 @@ const sendAuthorNum = () => {
         alert('인증확인 시간을 초과하였습니다.');
     }
 
+    const timeOutForErrorEmail = executeTimer => {
+        clearInterval(executeTimer); //타이머 정지
+        deleteAuthorNumber(); // 인증번호 제거
+        emailConfirm.style.display = "none";
+    }
+
     /*
      * 인증버튼을 누른후 여러번 누를시 기존에 있는 인증번호, 타이머 제거
      * 기존 인증확인되었을 시 확인 제거
@@ -49,6 +89,9 @@ const sendAuthorNum = () => {
     httpRequest.onreadystatechange = function () {
         if(this.readyState === 4 && this.status === 200) {
             emailId.value = parseInt(this.responseText);
+        }else if(this.readyState === 4 && this.status === 400) {
+            timeOutForErrorEmail(executeTimer);
+            alert('잘못된 이메일 양식입니다.');
         }
     }
 
@@ -56,6 +99,7 @@ const sendAuthorNum = () => {
     httpRequest.setRequestHeader("Content-Type", "test/plain");
     httpRequest.send();
 
+    // 잘못된 전송일 경우
     emailConfirm.style.display = "block";
     executeTimer = setInterval(timer, 1000);
     executeTimeOut = setTimeout(timeOut, 180050, executeTimer);
@@ -100,9 +144,12 @@ const deleteAuthorNumber = () => {
 }
 
 //해당 페이지를 벗어났을경우 인증번호가 있을경우 삭제
-window.addEventListener('beforeunload', (event) => {
-    event.preventDefault();
+window.onbeforeunload = e => {
+    e.preventDefault();
+
     if(emailId.value != '') {
         deleteAuthorNumber();
     }
-});
+}
+
+

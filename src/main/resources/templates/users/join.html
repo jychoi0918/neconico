@@ -55,7 +55,7 @@
 
                     <input type="email" th:field="*{email}" class="join_email2" placeholder="이메일">
                     <label th:for="*{email}" class="join_label"></label>
-                    <input type="button" value="인증하기" id="join_email" class="join_email" onclick="sendAuthorNum()">
+                    <input type="button" value="인증하기" id="join_email" class="join_email" onclick="checkEmailDuplication()">
                     <div id="email_confirm" style="display: none">
                         <input type="email" id="author_number" class="join_email2" placeholder="인증번호">
                         <label for="join_email2" class="join_label"></label>
