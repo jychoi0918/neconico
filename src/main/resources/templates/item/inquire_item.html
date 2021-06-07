@@ -52,7 +52,7 @@
 
 					<div class="store_view_info">
 						<div class="store_view_info_top">
-							<i><img src="/img/store_like.png" alt=""><b th:text="${countFavorite}">3</b></i>
+							<i><img src="/img/store_like.png" alt=""><b id="count_favorite" th:text="${countFavorite}">3</b></i>
 							<i><img src="/img/store_view.png" alt=""><b th:text="${findItemInfo.views}">72</b></i>
 							<i><img src="/img/store_clock.png" alt=""><b th:text="${betweenTime}">2일 전</b></i>
 						</div>
@@ -405,14 +405,20 @@
 		}
 
 		const httpRequest = new XMLHttpRequest();
+
+		//찜 개수 element
+		const countFavoriteElement = document.querySelector("#count_favorite");
+
 		if(favoriteAnchor.classList.contains('on')) {
 			favoriteAnchor.classList.remove('on');
 			httpRequest.onreadystatechange = function () {
 				if(this.readyState === 4 && this.status === 200) {
 					alert('찜 해제되었습니다.');
+					let countFavoriteNum = parseInt(countFavoriteElement.innerText);
+					countFavoriteNum -= 1;
+					countFavoriteElement.innerText = countFavoriteNum;
 				}
 			}
-
 
 			httpRequest.open("POST", "/favorite/" + itemId + "/delete");
 			httpRequest.setRequestHeader("Content-Type", "text/plain");
@@ -423,6 +429,9 @@
 			httpRequest.onreadystatechange = function () {
 				if (this.readyState === 4 && this.status === 200) {
 					alert('찜 되었습니다.');
+					let countFavoriteNum = parseInt(countFavoriteElement.innerText);
+					countFavoriteNum += 1;
+					countFavoriteElement.innerText = countFavoriteNum.toString();
 				}
 			}
 
