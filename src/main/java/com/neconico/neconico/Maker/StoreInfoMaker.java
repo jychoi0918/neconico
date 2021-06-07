@@ -1,4 +1,4 @@
-package com.neconico.neconico.service.store.provider;
+package com.neconico.neconico.Maker;
 
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import lombok.AccessLevel;
