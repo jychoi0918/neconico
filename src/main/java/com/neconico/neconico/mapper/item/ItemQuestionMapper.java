@@ -2,7 +2,6 @@ package com.neconico.neconico.mapper.item;
 
 import com.neconico.neconico.dto.item.ItemQuestionDto;
 import com.neconico.neconico.dto.item.ItemQuestionResponseDto;
-import com.neconico.neconico.dto.item.QuestionCommentResponseDto;
 import com.neconico.neconico.dto.item.card.ItemQuestionCardDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -27,13 +26,5 @@ public interface ItemQuestionMapper {
     void updateItemQuestion(@Param("itemQuestionId") Long itemQuestionId, @Param("content") String content);
 
     void deleteItemQuestion(@Param("itemQuestionId") Long itemQuestionId);
-
-    QuestionCommentResponseDto selectQuestionCommentById(@Param("questionCommentId") Long itemQuestionId);
-
-    void insertQuestionComment(ItemQuestionDto itemQuestionDto);
-
-    void updateQuestionComment(@Param("questionCommentId") Long questionCommentId, @Param("content") String content);
-
-    void deleteQuestionComment(@Param("questionCommentId") Long questionCommentId);
 
 }
