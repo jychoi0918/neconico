@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/store/mystore", "/item/manage").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/item/new", "/item/**/edit", "/item/**/delete", "/question/**", "/trade/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/", "/login*", "/user/**", "/item/**", "/notice/**", "/store/**").permitAll()
+                .antMatchers("/notice", "/notice/**", "/adinquiry", "/request/question", "/policy").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //로그인
@@ -85,7 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //oauth 로그인
                 .oauth2Login()
                 .loginPage("/login")
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/", true)
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
 
