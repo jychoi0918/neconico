@@ -39,9 +39,9 @@ html, body { height: 100%; }
 .header_middle ul li { display: inline-block; margin-left: 10px; position: relative; }
 .header_middle ul li:hover a { color: #7429ff; }
 .header_middle .user i { display: inline-block; width: 20px; height: 20px; margin-right: 5px; background-repeat: no-repeat; background-position: center; background-size: cover; transition: all 0.5s; vertical-align: top; }
-/* 새로운 게시물있을 경우 알람 */
+/* 새로운 게시물있을 경우 알람
 .header_middle .user li:nth-child(2)::after { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; background: #b37ffc; position: absolute; top: -4px; right: -6px; }
-
+*/
 .header_middle .user li:nth-child(1) i { background-image: url(../img/main_sell_icon.png); }
 .header_middle .user li:nth-child(2) i { background-image: url(../img/main_user_icon.png); }
 .header_middle .user li:nth-child(3) i { background-image: url(../img/main_box_icon.png); }

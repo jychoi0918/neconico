@@ -20,8 +20,8 @@
 
     <sql id="selectOverlap">
         select t.TRADE_ID        AS tradeId,
-               t.USER_ID         AS itemId,
-               t.ITEM_ID         AS buyerId,
+               t.USER_ID         AS buyerId,
+               t.ITEM_ID         AS itemId,
                t.REQUEST_CREATE  AS requestCreated,
                t.RESPONSE_CREATE AS responseCreated,
                t.TRADE_STATUS    AS tradeStatus,

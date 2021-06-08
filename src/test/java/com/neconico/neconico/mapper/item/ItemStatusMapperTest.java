@@ -1,5 +1,6 @@
 package com.neconico.neconico.mapper.item;
 
+import com.neconico.neconico.dto.item.ItemStatusDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Nested;
@@ -16,13 +17,13 @@ class ItemStatusMapperTest {
     @Autowired
     ItemStatusMapper itemStatusMapper;
 
-    Long itemId = 1L;
+    Long itemId = 263L;
 
     @Test
     @DisplayName("아이템 상태 조회")
     void selectItemStatusByItemIdTest() {
         //given
-        Long itemId = 2L;
+        Long itemId = 263L;
         String status = "판매 중";
         //when
         String result = itemStatusMapper.selectItemStatusByItemId(itemId);
@@ -37,8 +38,8 @@ class ItemStatusMapperTest {
         String status = "거래 완료";
 
         //when
-        itemStatusMapper.updateItemStatus(itemId, status);
-        String result = itemStatusMapper.selectItemStatusByItemId(itemId);
+        itemStatusMapper.updateItemStatus(new ItemStatusDto(263L, status));
+        String result = itemStatusMapper.selectItemStatusByItemId(263L);
 
 
         //then

@@ -1,5 +1,6 @@
 package com.neconico.neconico.mapper.item;
 
+import com.neconico.neconico.dto.item.ItemStatusDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -8,7 +9,7 @@ public interface ItemStatusMapper {
 
     String selectItemStatusByItemId(@Param("itemId") Long itemId);
 
-    void updateItemStatus(@Param("itemId") Long itemId, @Param("status") String status);
+    void updateItemStatus(ItemStatusDto itemStatusDto);
 
     void insertPurchaseItem(@Param("itemId") Long itemId, @Param("buyerId") Long buyerId);
 

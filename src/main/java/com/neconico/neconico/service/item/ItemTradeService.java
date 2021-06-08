@@ -1,5 +1,6 @@
 package com.neconico.neconico.service.item;
 
+import com.neconico.neconico.dto.item.ItemStatusDto;
 import com.neconico.neconico.dto.item.ItemTradeDto;
 import com.neconico.neconico.mapper.item.ItemStatusMapper;
 import com.neconico.neconico.mapper.item.ItemTradeMapper;
@@ -33,7 +34,7 @@ public class ItemTradeService {
 
         //TRADE 테이블에 거래요청을 만들어준다. 그리고 상품의 상태를 거래 중으로 변경해준다.
         itemTradeMapper.insertItemTradeRequestByBuyerAndItem(buyerId, itemId);
-        itemStatusMapper.updateItemStatus(itemId, "거래 중");
+        itemStatusMapper.updateItemStatus(new ItemStatusDto(itemId, "거래 중"));
     }
 
     public void responseTrade(Long sellerId, Long tradeId, String status) {
@@ -47,14 +48,14 @@ public class ItemTradeService {
         //상태에 따라 분기 나눠줌
         switch (status) {
             case "cancel":
+                itemStatusMapper.updateItemStatus(new ItemStatusDto(tradeInfo.getItemId(), "판매 중"));
                 itemTradeMapper.updateItemTradeResponseByTradeAndItem(tradeId, "취소");
-                itemStatusMapper.updateItemStatus(tradeInfo.getItemId(),  "판매 중");
                 break;
             case "success":
+                itemStatusMapper.updateItemStatus(new ItemStatusDto(tradeInfo.getItemId(), "거래 완료"));
                 itemTradeMapper.updateItemTradeResponseByTradeAndItem(tradeId, "완료");
                 itemStatusMapper.insertSaleItem(tradeInfo.getItemId(), tradeInfo.getSellerId());
                 itemStatusMapper.insertPurchaseItem(tradeInfo.getItemId(), tradeInfo.getBuyerId());
-                itemStatusMapper.updateItemStatus(tradeInfo.getItemId(), "거래 완료");
                 break;
             default:
                 throw new IllegalArgumentException("Input Invalid Status");

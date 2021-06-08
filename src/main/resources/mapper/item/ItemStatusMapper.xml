@@ -10,7 +10,7 @@
         from ITEM
         where ITEM_ID = #{itemId}
     </select>
-    <update id="updateItemStatus">
+    <update id="updateItemStatus" parameterType="itemstatusdto">
         update ITEM
         set SALE_STATUS = #{status}
         where ITEM_ID = #{itemId}

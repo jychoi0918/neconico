@@ -139,6 +139,7 @@ function createItemCard(itemList) {
             let img = document.createElement("img");
             img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
+            img.setAttribute("class", "trade_card_img")
             item_td1.append(img);
 
             let item_td2 = document.createElement("td");
@@ -222,9 +223,9 @@ function createItemCard(itemList) {
         let th4 = document.createElement("th");
         th4.innerText = '작성자 닉네임';
         let th5 = document.createElement("th");
-        th4.innerText = '작성 내용';
+        th5.innerText = '작성 내용';
         let th6 = document.createElement("th");
-        th4.innerText = '등록 시간';
+        th6.innerText = '등록 시간';
         tr.append(th1, th2, th3, th4, th5, th6);
         table.append(colgroup, tr);
 
@@ -243,18 +244,15 @@ function createItemCard(itemList) {
             a.innerText = item.title;
             itd2.append(a);
             let itd3 = document.createElement("td");
-            itd.innerText = transPrice(item.price);
+            itd3.innerText = transPrice(item.price);
             let itd4 = document.createElement("td");
-            itd4.innerText = item.wirterName;
+            itd4.innerText = item.writerName;
             let itd5 = document.createElement("td");
             itd5.innerText = item.content;
             let itd6 = document.createElement("td");
-            let span1 = document.createElement("span");
-            span1.innerText = item.buyerName;
-            let br = document.createElement("br")
-            let span2 = document.createElement("span");
-            span2.innerText = calculateDay(item.replyCreateTime);
-            itd6.append(span1, br, span2);
+            let span = document.createElement("span");
+            span.innerText = calculateDay(item.replyCreatedTime);
+            itd6.append(span);
 
             itr.append(itd1, itd2, itd3, itd4, itd5, itd6);
 
@@ -277,10 +275,13 @@ function createItemCard(itemList) {
 
 
             let fig = document.createElement("figure");
+            let div1 = document.createElement("div");
+            div1.setAttribute("class","list_img");
             let img = document.createElement("img");
             img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
-            fig.append(img);
+            div1.append(img);
+            fig.append(div1);
 
             let div = document.createElement("div");
             let h4 = document.createElement("h4");
@@ -417,12 +418,11 @@ function transPrice(price) {
 }
 
 //가져오는 날짜 형식 2021-04-29T10:13:18
+//가져오는 날짜 형식 2021-04-29T10:13:18
 function calculateDay(input) {
-    let dateArr = (input + "").substring(0, 10).split('-');
-    let createTime = new Date(dateArr[0], dateArr[1] - 1, dateArr[2]);
+    let createTime = new Date(input);
     let nowTime = new Date();
-    let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
-
+    let time = Math.floor((nowTime.getTime() - createTime.getTime()) / 1000);
     if (time < 60) {
         return time + '초 전';
     } else {
@@ -430,7 +430,7 @@ function calculateDay(input) {
         if (time < 60) {
             return time + '분 전';
         } else {
-            time = Math.floor(time / 60)
+            time = Math.floor(time / 60);
             if (time < 24) {
                 return time + '시간 전';
             } else {
