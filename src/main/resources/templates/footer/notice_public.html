@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header :: header"/>
+<body>
+    <div class="wrap">
+        <header class="header" th:replace="fragment/body_header :: body_header"/>
+
+        <div class="notice_section_wrap h_con">
+
+            <section class="main_list">
+                <div class="list_tit">
+                    <h2 class="h_fs_26">공지사항</h2>
+                </div>
+                
+				<table>
+					<colgroup>
+						<col width="15%">
+						<col width="40%">
+						<col width="20%">
+						<col width="25%">
+					</colgroup>
+					<tr>
+						<th>번호</th>
+						<th>제목</th>
+						<th>작성자</th>
+						<th>작성일</th>
+					</tr>
+
+					<tr th:each="notice:${notices}">
+						<td th:text="${notice.noticeId}">1</td>
+						<td><a th:href="@{/notice/{noticeId}(noticeId=${notice.noticeId})}"
+							   th:text="${notice.title}">공지사항제목이 나타납니다.</a></td>
+						<td>운영자</td>
+						<td th:text="${notice.createdDate}">2021.05.01</td>
+					</tr>
+
+
+				</table>
+
+				<div th:if="${pageMaker.totalContent}==0"
+					 style="height: 100px; text-align: center; vertical-align: middle">
+					<a>아직 게시물이 없습니다</a>
+				</div>
+
+				<div class="pagination" th:if="${pageMaker.totalContent}!=0">
+					<ul>
+						<li th:unless="${pageMaker.criteria.currentPage}==1">
+							<a class="page_prev" th:href="@{/notice(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
+						</li >
+						<li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
+							<a class="" th:href="@{/notice(currentPage=${idx})}" th:text="${idx}" th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
+						</li>
+						<li th:if="${pageMaker.hasNext}">
+							<a class="page_next" th:href="@{/notice(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
+						</li>
+					</ul>
+				</div>
+            </section>
+
+        </div>
+        
+
+
+        <footer th:replace="fragment/footer::footer"/>
+    </div>
+</body>
+</html>
