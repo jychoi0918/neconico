@@ -24,14 +24,15 @@
             <section class="find_id_wrap">
                 <h3 class="h_fs_26">아이디 찾기</h3>
                 <form th:href="@{/user/find/id}" th:object="${userFindIdForm}" method="post" name="find_id" class="find_id_form">
+                    <input type="text" th:field="*{accountName}" class="find_name" placeholder="이름" maxlength="10">
+                    <label th:for="*{accountName}" class="find_id_label"><i><img src="/img/find_id_name.png" alt=""></i></label>
+                    <input type="email" th:field="*{email}" class="find_email" placeholder="이메일" maxlength="40">
+                    <label th:for="*{email}" class="find_id_label find_id_label2"><i><img src="/img/find_id_email.png" alt=""></i></label>
+                    <p style="color: #7429ff">* 소셜로그인일 경우 해당 서비스에서 찾으시길 바랍니다.</p>
                     <p th:if="${#fields.hasErrors('accountName')}" th:errors="*{accountName}"></p>
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
-                    <input type="text" th:field="*{accountName}" class="find_name" placeholder="이름" required>
-                    <label th:for="*{accountName}" class="find_id_label"><i><img src="/img/find_id_name.png" alt=""></i></label>
-                    <input type="email" th:field="*{email}" class="find_email" placeholder="이메일" required>
-                    <label th:for="*{email}" class="find_id_label"><i><img src="/img/find_id_email.png" alt=""></i></label>
 
-                    <input type="button" value="확 인" onclick="submitForm()">
+                    <input type="button" value="확 인"  class="find_id_btn" onclick="submitForm()">
                 </form>
             </section>
         </div>
