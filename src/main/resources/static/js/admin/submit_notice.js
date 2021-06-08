@@ -10,7 +10,6 @@ function submit_notice() {
         alert("등록완료!");
 
         submit_btn[0].submit();
-        submit_btn[1].submit();
 
     }
 }

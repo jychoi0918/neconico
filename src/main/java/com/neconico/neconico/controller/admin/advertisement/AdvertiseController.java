@@ -50,7 +50,6 @@ public class AdvertiseController {
     //광고 상태 변경
     @PutMapping("/adve/status")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public void updateStatus(@RequestBody AdvertStatusDto advertStatusDto) {
         advertService.updateStatus(advertStatusDto);
 

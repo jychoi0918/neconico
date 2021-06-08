@@ -357,7 +357,7 @@
 .admin_img img { width: 100%; vertical-align: bottom; }
 .admin_name p { font-size: 1.125rem; font-weight: bold; }
 .admin_name p span { display: inline-block; padding: 0 10px; color: #7429ff; letter-spacing: 1px; position: relative; vertical-align: bottom; }
-.admin_name p span::after { content: ''; display: block; width: 65px; height: 1px; background: #7429ff; position: absolute; bottom: 0; left: 0; }
+.admin_name p span::after { content: ''; display: block; width: 100%; height: 1px; background: #7429ff; position: absolute; bottom: 0; left: 0; }
 
 .admin_logout a { display: block; width: 150px; height: 40px; line-height: 40px; border: 1px solid #eee; text-align: center; font-size: 0.875rem; transition: all 0.5s; font-weight: 500; color: #666; }
 .admin_logout:hover a { border-color: #7429ff; color: #7429ff; font-weight: 500; }
