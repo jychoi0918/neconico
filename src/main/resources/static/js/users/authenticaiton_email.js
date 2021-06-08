@@ -108,6 +108,76 @@ const sendAuthorNum = (emailDom) => {
 
 }
 
+// 비밀번호 찾기 시 이메일 전송
+const sendAuthorNumForFindPw = () => {
+    const inputEmail = document.getElementById("email");
+
+    const httpRequest = new XMLHttpRequest();
+    //타이머 count
+    let timerCount = 180;
+
+    //타이머
+    const timer = () => {
+        timerCount--;
+        const authorTimer = document.getElementById("author_timer");
+        let min;
+        let sec;
+
+        min = "0" + String(Math.floor(timerCount/60));
+        sec = String(timerCount%60);
+
+        if(sec.length === 1) {
+            sec = "0" + sec;
+        }
+        authorTimer.innerHTML = "인증확인 남은시간 " + min + ":" + sec;
+    }
+
+    const timeOut = executeTimer => {
+        clearInterval(executeTimer); //타이머 정지
+        deleteAuthorNumber(); // 인증번호 제거
+        emailConfirm.style.display = "none";
+        alert('인증확인 시간을 초과하였습니다.');
+    }
+
+    const timeOutForErrorEmail = executeTimer => {
+        clearInterval(executeTimer); //타이머 정지
+        deleteAuthorNumber(); // 인증번호 제거
+        emailConfirm.style.display = "none";
+    }
+
+    /*
+     * 인증버튼을 누른후 여러번 누를시 기존에 있는 인증번호, 타이머 제거
+     * 기존 인증확인되었을 시 확인 제거
+     */
+    if(emailId.value != '') {
+        deleteAuthorNumber();
+        authorNumberCheck.value = false;
+        clearInterval(executeTimer);
+        clearTimeout(executeTimeOut);
+    }
+
+    httpRequest.onreadystatechange = function () {
+        if(this.readyState === 4 && this.status === 200) {
+            emailId.value = parseInt(this.responseText);
+        }else if(this.readyState === 4 && this.status === 400) {
+            timeOutForErrorEmail(executeTimer);
+            alert('잘못된 이메일 양식입니다.');
+        }
+    }
+
+    httpRequest.open("POST", "/user/email/send?emailAddress=" + inputEmail.value);
+    httpRequest.setRequestHeader("Content-Type", "test/plain");
+    httpRequest.send();
+
+    // 잘못된 전송일 경우
+    emailConfirm.style.display = "block";
+    executeTimer = setInterval(timer, 1000);
+    executeTimeOut = setTimeout(timeOut, 180050, executeTimer);
+    alert('인증번호를 해당 메일로 발송하였습니다.');
+
+
+}
+
 //이메일 인증확인
 const checkAuthorNum = () => {
     const authorNumber = document.getElementById("author_number").value;
