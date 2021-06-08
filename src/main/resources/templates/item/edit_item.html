@@ -489,8 +489,6 @@
         const itemId = document.getElementById('item_id').value; // 아이템 아이디
 
         formData.enctype = 'multipart/form-data';
-        // formData.method = 'post';
-        // formData.action = '/item/' + itemId + '/edit';
 
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {

@@ -1,5 +1,6 @@
 package com.neconico.neconico.service.admin.user;
 
+import com.neconico.neconico.dto.admin.user.SearchConditionDto;
 import com.neconico.neconico.dto.admin.user.UserListDto;
 import com.neconico.neconico.paging.Criteria;
 
@@ -9,12 +10,10 @@ import java.util.Map;
 public interface UsersAdminService {
 
     //전체 회원 수
-    public long countUserList(String authority);
+    public long countUserList(String authority, SearchConditionDto searchConditionDto);
 
     //회원 목록 조회
-    List<UserListDto> selectUserList(Criteria cri);
-
-    List<UserListDto> selectAdminList(Criteria cri);
+    List<UserListDto> selectUserList(Criteria cri, String authority, SearchConditionDto searchConditionDto);
 
     //회원 그룹별 조회
     Map<String, Long> selectUserListByAge();

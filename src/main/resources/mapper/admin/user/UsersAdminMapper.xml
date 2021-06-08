@@ -7,35 +7,41 @@
 
     <select id="countUserList" resultType="long">
         select count(user_id) from users
-        where authority = #{authority};
+        where authority = #{authority}
+        <!-- 검색 조건에 따른 동적쿼리 -->
+        <if test='searchCondition.searchCondition == "id"'>
+            AND account_id like concat('%', #{searchCondition.searchText}, '%')
+        </if>
+        <if test='searchCondition.searchCondition == "name"'>
+            AND account_name like concat('%', #{searchCondition.searchText}, '%')
+        </if>
+        <if test='searchCondition.searchCondition == "email"'>
+            AND email like concat('%', #{searchCondition.searchText}, '%')
+        </if>
     </select>
 
     <select id="selectUserList" resultType="UserListDto">
         SELECT
-                USER_ID as userId
-             ,ACCOUNT_ID as accountId
-             ,ACCOUNT_NAME as accountName
-             ,EMAIL
-             ,CREATED_DATE as createDate
-             ,GENDER
+        USER_ID as userId
+        ,ACCOUNT_ID as accountId
+        ,ACCOUNT_NAME as accountName
+        ,EMAIL
+        ,CREATED_DATE as createDate
+        ,GENDER
         FROM users
-        where authority = 'ROLE_USER'
-        order by ${sortingColumn} ${requestOrder}
-        limit #{contentPerPage} offset #{pageStart}
-    </select>
-
-    <select id="selectAdminList" resultType="UserListDto">
-        SELECT
-                USER_ID as userId
-             ,ACCOUNT_ID as accountId
-             ,ACCOUNT_NAME as accountName
-             ,EMAIL
-             ,CREATED_DATE as createDate
-             ,GENDER
-        FROM users
-        where authority = 'ROLE_ADMIN'
-        order by ${sortingColumn} ${requestOrder}
-        limit #{contentPerPage} offset #{pageStart}
+        where authority = #{authority}
+        <!-- 검색 조건에 따른 동적쿼리 -->
+        <if test='searchCondition.searchCondition == "id"'>
+            AND account_id like concat('%', #{searchCondition.searchText}, '%')
+        </if>
+        <if test='searchCondition.searchCondition == "name"'>
+            AND account_name like concat('%', #{searchCondition.searchText}, '%')
+        </if>
+        <if test='searchCondition.searchCondition == "email"'>
+            AND email like concat('%', #{searchCondition.searchText}, '%')
+        </if>
+        order by ${cri.sortingColumn} ${cri.requestOrder}
+        limit #{cri.contentPerPage} offset #{cri.pageStart}
     </select>
 
     <select id="selectUserListByAge" resultType="map">
