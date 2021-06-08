@@ -17,7 +17,7 @@ public interface NoticeMapper {
 
     List<NoticeReturnDto> selectPublicNotices(@Param("cri")Criteria criteria, @Param("noticeStatus")String noticeStatus);
 
-    long countTotalNotices();
+    long countTotalNotices(@Param("status")String status);
 
     NoticeReturnDto selectNoticeByNoticeId(@Param("noticeId") Long noticeId);
 

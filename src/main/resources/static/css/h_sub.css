@@ -544,8 +544,8 @@
 
 .adm10_list ul { width: 100%; border-top: 1px solid #222; }
 .adm10_list ul li { padding: 15px 0; border-bottom: 1px solid #ccc; }
-.adm10_list ul li:nth-child(2) { display: flex; }
-.adm10_list ul li:nth-child(2) > div { width: 50%; }
+.adm10_list ul li:nth-child(3) { display: flex; }
+.adm10_list ul li:nth-child(3) > div { width: 50%; }
 .adm10_list ul li span { display: inline-block; font-weight: 500; }
 .adm10_l { width: 180px; color: #7429ff; vertical-align: top; }
 .adm10_r { width: calc(100% - 200px); }

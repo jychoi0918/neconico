@@ -18,6 +18,8 @@ public interface NoticeService {
 
     Long countAllNotices();
 
+    Long countPublicNotices();
+
     void insertNotice(NoticeDto noticeDto);
 
     void deleteNotice(Long noticeId);

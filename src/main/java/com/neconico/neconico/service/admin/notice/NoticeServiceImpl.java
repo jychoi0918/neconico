@@ -87,9 +87,13 @@ public class NoticeServiceImpl implements NoticeService {
 
     @Override
     public Long countAllNotices() {
-        return noticeMapper.countTotalNotices();
+        return noticeMapper.countTotalNotices(null);
     }
 
+    @Override
+    public Long countPublicNotices() {
+        return noticeMapper.countTotalNotices(NoticeStatus.PUBLIC.getNoticeStatus());
+    }
 
     private Criteria setCriteria(Criteria cri) {
         cri.setSortingColumn("noticeId");

@@ -41,7 +41,7 @@ public class HomeController {
     public String noticeList(Model model, Criteria cri) {
 
         model.addAttribute("notices", noticeService.selectPublicNotices(cri));
-        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countAllNotices().intValue(), 5));
+        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countPublicNotices().intValue(), 5));
 
         return "footer/notice_public";
 
