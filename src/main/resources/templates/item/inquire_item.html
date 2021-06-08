@@ -111,7 +111,7 @@
 
 			<div class="store_view_box02">
 				<h4>연관상품</h4>
-				<ul class="store_view_box02_list">
+				<ul class="store_view_box02_list" th:if="${relatedProducts != null}">
 					<li th:each="relatedProduct : ${relatedProducts}">
 						<a th:href="@{/item/{id}(id = ${relatedProduct.itemId})}">
 							<figure>
