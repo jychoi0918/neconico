@@ -357,7 +357,7 @@
 .admin_img img { width: 100%; vertical-align: bottom; }
 .admin_name p { font-size: 1.125rem; font-weight: bold; }
 .admin_name p span { display: inline-block; padding: 0 10px; color: #7429ff; letter-spacing: 1px; position: relative; vertical-align: bottom; }
-.admin_name p span::after { content: ''; display: block; width: 65px; height: 1px; background: #7429ff; position: absolute; bottom: 0; left: 0; }
+.admin_name p span::after { content: ''; display: block; width: 100%; height: 1px; background: #7429ff; position: absolute; bottom: 0; left: 0; }
 
 .admin_logout a { display: block; width: 150px; height: 40px; line-height: 40px; border: 1px solid #eee; text-align: center; font-size: 0.875rem; transition: all 0.5s; font-weight: 500; color: #666; }
 .admin_logout:hover a { border-color: #7429ff; color: #7429ff; font-weight: 500; }
@@ -544,8 +544,8 @@
 
 .adm10_list ul { width: 100%; border-top: 1px solid #222; }
 .adm10_list ul li { padding: 15px 0; border-bottom: 1px solid #ccc; }
-.adm10_list ul li:nth-child(2) { display: flex; }
-.adm10_list ul li:nth-child(2) > div { width: 50%; }
+.adm10_list ul li:nth-child(3) { display: flex; }
+.adm10_list ul li:nth-child(3) > div { width: 50%; }
 .adm10_list ul li span { display: inline-block; font-weight: 500; }
 .adm10_l { width: 180px; color: #7429ff; vertical-align: top; }
 .adm10_r { width: calc(100% - 200px); }

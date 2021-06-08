@@ -30,13 +30,16 @@
     <select id="countTotalNotices" resultType="long">
         select count(notice_id)
         from notice
+        <if test='status !=null'>
+            where notice_status = #{status}
+        </if>
     </select>
     <select id="selectPublicNotices" resultType="NoticeReturnDto">
         select n.notice_id    as noticeId,
-               n.title,
-               u.account_id as accountId,
-               n.created_date as createdDate,
-               n.modified_date as modifiedDate
+        n.title,
+        u.account_id as accountId,
+        n.created_date as createdDate,
+        n.modified_date as modifiedDate
         from notice n
         inner join users u
         on n.user_id = u.user_id

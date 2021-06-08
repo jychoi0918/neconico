@@ -68,7 +68,7 @@ class NoticeMapperTest {
             noticeMapper.insertNotice(noticeDto);
         }
         //then
-        assertThat(noticeMapper.countTotalNotices()).isEqualTo(20);
+        assertThat(noticeMapper.countTotalNotices(null)).isEqualTo(20);
 
 
 

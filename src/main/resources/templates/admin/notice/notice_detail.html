@@ -41,8 +41,9 @@
             </div>
 
             <ul class="adm08_btn_box">
-                <li th:if="${notice.accountId}==${session.sessionUser.accountId}">
-                    <a th:href="@{/admin/notice/{noticeId}/edit(noticeId=${notice.noticeId})}" class="modify_btn">수정</a>
+                <li>
+                    <a th:if="${notice.accountId}==${session.sessionUser.accountId}"
+                       th:href="@{/admin/notice/{noticeId}/edit(noticeId=${notice.noticeId})}" class="modify_btn">수정</a>
                 </li>
                 <li>
                     <a href="#" th:href="@{/admin/notice/list}" class="list_btn">목록으로</a>
@@ -58,7 +59,6 @@
 <script>
 
     const noticeId = document.getElementById("noticeId").innerText;
-    console.log(noticeId);
 
     function askDelete(noticeId) {
         if (confirm("삭제하시겠습니까?") == true) {

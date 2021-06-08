@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="fragment/header :: header"/>
+<body>
+    <div class="wrap">
+        <header class="header" th:replace="fragment/body_header :: body_header"/>
+
+        <div class="notice_section_wrap h_con clearfix">
+
+            <section class="main_list">
+                <div class="list_tit">
+                    <h2 class="h_fs_26">공지사항</h2>
+                </div>
+                
+				<div class="adm10_list">
+                    <ul>
+                        <li>
+                            <span class="adm10_l">등록번호</span>
+                            <span id="noticeId" th:text="${notice.noticeId}" class="adm10_r">1004</span>
+                        </li>
+                        <li>
+                            <span class="adm10_l">제목</span>
+                            <span th:text="${notice.title}" class="adm10_r">사이트 정기 점검</span>
+                        </li>
+                        <li>
+                            <div>
+                                <span class="adm10_l">등록일</span>
+                                <span th:text="${notice.createdDate}" class="adm10_r">2021.05.08</span>
+                            </div>
+                            <div>
+                                <span class="adm10_l">작성자</span>
+                                <span class="adm10_r">운영자</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="adm10_l">내용</span>
+                            <span/>
+                            <pre th:text="${notice.content}"  class="adm10_r">사이트 정기 점검으로 이용이 불가할 예정입니다.<br>
+                            점검일시 : 2021.05.08 00:00 ~ 03:00<br>
+                            임시텍스트입니다.임시텍스트입니다.임시텍스트입니다.임시텍스트입니다.임시텍스트입니다.
+                                임시텍스트입니다.임시텍스트입니다.임시텍스트입니다.
+                                임시텍스트입니다.임시텍
+                                스트입니다.임시텍스트입니다.임시텍스트입니다.임시텍스트입니다.임시텍
+                                스트입니다.임시텍스트입니다.임시텍스트입니다.임시텍스트입니다.</pre>
+                        </li>
+                    </ul>
+                </div>
+
+                <ul class="adm08_btn_box notice_btn_box">
+                    <li>
+                        <a th:href="@{/notice}" class="list_btn">목록으로</a>
+                    </li>
+                </ul>
+
+            </section>
+
+        </div>
+
+        <footer th:replace="fragment/footer::footer"/>
+
+    </div>
+</body>
+</html>

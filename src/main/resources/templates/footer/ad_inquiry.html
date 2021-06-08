@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+<div class="wrap">
+    <header class="header" th:replace="fragment/body_header :: body_header"/>
+
+    <div class="notice_section_wrap h_con clearfix">
+
+        <section class="main_list">
+            <div class="list_tit">
+                <h2 class="h_fs_26">광고문의</h2>
+            </div>
+            <div class="content_part">
+                <div class="img_section">
+                    <img th:src="@{/img/logo.png}" style="width:100%">
+                </div>
+                <div class="div_text">
+                    <div style="margin: 10% 20%;">
+                        <hr>
+                        <br>
+                        <br>내꼬니꼬에 광고를 문의하실 광고주들은
+                        <br>아래 이메일로 연락해 주세요.
+                        <br>
+                        <br>빠르게 답변드리겠습니다
+                        <br>
+                        <br>
+                        <br>
+                        <a class="email_part">&nbsp;xorals9448@gmail.com&nbsp; </a>
+                        <br>
+                        <br>
+                        <br>
+                        <hr>
+
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <footer th:replace="fragment/footer::footer"/>
+
+</div>
+<style>
+    .content_part {
+        width: 90%;
+        height: 80%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+    }
+
+    .img_section {
+        margin-bottom: 5%
+
+    }
+
+    .div_text {
+        width: 1000px;
+        font-size: 24px;
+        font-weight: 500;
+        text-align: center;
+        background-color: rgb(246, 240, 248);
+
+    }
+
+    .email_part {
+        font-size: 30px;
+        color: rgb(238, 232, 240);
+        background-color: rgba(129, 42, 206, 0.466);
+
+
+    }
+
+</style>
+</body>
+</html>

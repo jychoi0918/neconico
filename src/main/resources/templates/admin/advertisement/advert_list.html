@@ -54,15 +54,15 @@
                     <ul>
                         <li th:unless="${pageMaker.criteria.currentPage}==1">
                             <a class="page_prev"
-                               th:href="@{/admin/adverts(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
+                               th:href="@{/admin/advert/list(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
                         </li>
                         <li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                            <a class="" th:href="@{/admin/adverts(currentPage=${idx})}" th:text="${idx}"
+                            <a class="" th:href="@{/admin/advert/list(currentPage=${idx})}" th:text="${idx}"
                                th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
                         </li>
                         <li th:if="${pageMaker.hasNext}">
                             <a class="page_next"
-                               th:href="@{/admin/adverts(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
+                               th:href="@{/admin/advert/list(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
                         </li>
                     </ul>
                 </div>

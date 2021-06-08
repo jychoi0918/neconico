@@ -4,16 +4,16 @@
   <div class="footer_top">
     <ul class="h_con footer_menu">
       <li class="h_fs_14">
-        <a href="/store/notice.html">공지사항</a>
+        <a th:href="@{/notice}">공지사항</a>
       </li>
       <li class="h_fs_14">
-        <a href="#">광고안내</a>
+        <a th:href="@{/adinquiry}">광고안내</a>
       </li>
       <li class="h_fs_14">
-        <a href="#">운영정책</a>
+        <a th:href="@{/policy}" target="_blank">운영정책</a>
       </li>
       <li class="h_fs_14">
-        <a href="#">문의하기</a>
+        <a th:href="@{/question}">문의하기</a>
       </li>
     </ul>
   </div>
@@ -21,7 +21,7 @@
   <div class="footer_bottom">
     <div class="h_con f_add">
       <h1 class="f_logo">
-        <a th:href="@{/}"> <img src="/img/f_logo.png" alt="" /></a>
+        <a th:href="@{/}"> <img th:src="@{/img/f_logo.png}" alt="" /></a>
       </h1>
       <div class="f_info">
         <address>내꼬니꼬 서비스 xorals9448@gmail.com</address>

@@ -96,7 +96,6 @@ public class NoticeController {
 
     @PutMapping("/notices/status/edit")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public void changeStatus(@RequestBody NoticeStatusDto noticeStatusDto) {
 
         noticeService.updateNoticeStatus(noticeStatusDto);

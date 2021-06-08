@@ -56,7 +56,7 @@
                                th:href="@{/admin/notice/list(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
                         </li>
                         <li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
-                            <a class="" th:href="@{/admin/notices(currentPage=${idx})}" th:text="${idx}"
+                            <a class="" th:href="@{/admin/notice/list(currentPage=${idx})}" th:text="${idx}"
                                th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
                         </li>
                         <li th:if="${pageMaker.hasNext}">
@@ -78,32 +78,33 @@
         let noticeId = obj.parentElement.parentElement.firstElementChild.innerText;
         let noticeStatus = obj.innerText;
 
-        if (noticeStatus === "숨김") {
-            noticeStatus = "공개"
-            obj.classList.add('changeStatus');
-        } else {
-            noticeStatus = "숨김"
-            obj.classList.remove('changeStatus');
-        }
-
-        let content = new Object();
-        content.noticeId = noticeId;
-        content.noticeStatus = noticeStatus;
-
-        let jsonContent = JSON.stringify(content);
-
-        console.log(jsonContent);
-        console.log(noticeStatus);
-
-        request.onreadystatechange = function () {
-            if (request.readyState == 4 && request.status == 200) {
-                obj.innerText = noticeStatus;
+        if(confirm("상태를 바꾸시겠습니까?")==true) {
+            if (noticeStatus === "숨김") {
+                noticeStatus = "공개"
+                obj.classList.add('changeStatus');
+            } else {
+                noticeStatus = "숨김"
+                obj.classList.remove('changeStatus');
             }
-        }
 
-        request.open("PUT", "/admin/notices/status/edit");
-        request.setRequestHeader("Content-type", "application/json");
-        request.send(jsonContent);
+            let content = new Object();
+            content.noticeId = noticeId;
+            content.noticeStatus = noticeStatus;
+
+            let jsonContent = JSON.stringify(content);
+
+            request.onreadystatechange = function () {
+                if (request.readyState == 4 && request.status == 200) {
+                    obj.innerText = noticeStatus;
+                }
+            }
+
+            request.open("PUT", "/admin/notices/status/edit");
+            request.setRequestHeader("Content-type", "application/json");
+            request.send(jsonContent);
+        }else{
+            return false;
+        }
     }
 </script>
 </body>
