@@ -10,7 +10,8 @@
         <section class="my_store_box">
             <div class="my_store_img_box">
                 <figure id="preview">
-                    <img th:src="${storeInfo.storeImgUrl}" id="uploadImg" alt="">
+                    <img th:if="${storeInfo.storeImgUrl.equals('')}" src="/img/user_icon.png">
+                    <img th:unless="${storeInfo.storeImgUrl.equals('')}" th:src="${storeInfo.storeImgUrl}">
                 </figure>
 
                 <form id="storeImgForm" enctype="multipart/form-data">

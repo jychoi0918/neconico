@@ -20,7 +20,6 @@ public class MyStoreItemListRestController {
     @PostMapping("/mystore/list/myItem")
     public Map<String, Object> getMyItemList(@RequestBody StoreItemRequestDto request, @LoginUser SessionUser user) {
         Map<String, Object> itemList = listService.createMyItemList(user.getUserId(), request);
-
         return itemList;
     }
 

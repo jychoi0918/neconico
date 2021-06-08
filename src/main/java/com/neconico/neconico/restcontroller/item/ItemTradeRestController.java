@@ -18,7 +18,7 @@ public class ItemTradeRestController {
     }
 
     @PostMapping("/trade/{tradeId}/response")
-    public void responseTrade(@PathVariable("tradeId")Long tradeId,
+    public void responseTrade(@PathVariable("tradeId") Long tradeId,
                               @RequestParam(name = "status") String status,
                               @LoginUser SessionUser user) {
         tradeService.responseTrade(user.getUserId(), tradeId, status);

@@ -1,7 +1,3 @@
-/*<![CDATA[*/
-let userId = /*[[ ${userId} ]]*/ +"";
-/*]]*/
-
 let currentMenu = 'myItem';
 let currentPage = 1;
 let sortingColumn = 'CREATED';
@@ -12,7 +8,7 @@ window.onload = function () {
 }
 
 function logVar() {
-    console.log(userId + "," + currentMenu + "," + currentPage + "," + sortingColumn + "," + requestOrder);
+    console.log(accountId + "," + currentMenu + "," + currentPage + "," + sortingColumn + "," + requestOrder);
 }
 
 function selectMenu(menu) {
@@ -20,6 +16,7 @@ function selectMenu(menu) {
     logVar();
     ajax();
 }
+
 
 function selectSortingColumn(column) {
     if (column == sortingColumn) {
@@ -63,7 +60,7 @@ function ajax() {
     let reqData = JSON.stringify(requestDto);
     let httpRequest = new XMLHttpRequest();
 
-    httpRequest.open("POST", "/store/" + userId + "/list/" + currentMenu);
+    httpRequest.open("POST", "/store/" + accountId + "/list/" + currentMenu);
     httpRequest.setRequestHeader("Content-Type", "application/json");
     httpRequest.send(reqData);
 
@@ -113,10 +110,13 @@ function createItemCard(itemList) {
 
 
             let fig = document.createElement("figure");
+            let div1 = document.createElement("div");
+            div1.setAttribute("class","list_img");
             let img = document.createElement("img");
             img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
-            fig.append(img);
+            div1.append(img);
+            fig.append(div1);
 
             let div = document.createElement("div");
             let h4 = document.createElement("h4");
@@ -256,7 +256,7 @@ function transPrice(price) {
 function calculateDay(input) {
     let createTime = new Date(input);
     let nowTime = new Date();
-    let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
+    let time = Math.floor((nowTime.getTime() - createTime.getTime()) / 1000);
     if (time < 60) {
         return time + '초 전';
     } else {

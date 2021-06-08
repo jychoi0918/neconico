@@ -485,7 +485,7 @@
 	function calculateDay(input) {
 		let createTime = new Date(input);
 		let nowTime = new Date();
-		let time = Math.floor(nowTime.getTime() - createTime.getTime()) / 1000;
+		let time = Math.floor((nowTime.getTime() - createTime.getTime()) / 1000);
 		if (time < 60) {
 			return time + '초 전';
 		} else {

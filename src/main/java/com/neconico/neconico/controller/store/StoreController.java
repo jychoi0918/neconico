@@ -29,7 +29,7 @@ public class StoreController {
         HashMap<String, Long> itemCountMap = listService.createItemListCount(user.getUserId());
         itemCountMap.forEach((key, value) -> model.addAttribute(key, value));
 
-        model.addAttribute("userId",user.getUserId());
+        model.addAttribute("accountId", accountId);
 
         return "store/store";
     }

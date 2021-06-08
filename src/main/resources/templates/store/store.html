@@ -10,7 +10,8 @@
         <section class="my_store_box">
             <div class="my_store_img_box">
                 <figure>
-                    <img th:src="${storeInfo.storeImgUrl}" alt="">
+                    <img th:if="${storeInfo.storeImgUrl.equals('')}" src="/img/user_icon.png">
+                    <img th:unless="${storeInfo.storeImgUrl.equals('')}" th:src="${storeInfo.storeImgUrl}">
                 </figure>
             </div>
 
@@ -43,7 +44,7 @@
         <div class="my_store_box02">
             <ul class="my_store_box02_tab">
                 <li class="on">
-                    <a onclick="selectMenu('myItem')" href="#myItem">내 상품<span
+                    <a onclick="selectMenu('myItem')" href="#myItem">상품<span
                             th:text="'('+${myItemCount}+')'"></span></a>
                 </li>
                 <li>
@@ -88,6 +89,9 @@
     </div>
     <footer th:replace="fragment/footer :: footer"/>
 </div>
-<script src="/js/store/store/js" th:inline="javascript"></script>
+<script th:inline="javascript">
+    let accountId = [[ ${accountId}]]+"";
+</script>
+<script src="/js/store/store.js"></script>
 </body>
 </html>
