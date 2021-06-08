@@ -484,7 +484,7 @@ function clickStoreName(kind) {
         httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
-                alert('처리가 되었습니다.')
+                alert('상점명이 변경 되었습니다.')
 
                 removeChildNode('storeName');
                 let span = document.createElement("span");
@@ -524,7 +524,7 @@ function clickStoreContent(kind) {
         httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
-                alert('처리가 되었습니다.')
+                alert('상점 소개글이 변경 되었습니다.')
                 removeChildNode('storeContentBox');
 
                 let p = document.createElement("p");
@@ -571,7 +571,7 @@ function storeImgUpload() {
     httpRequest.open("post", "/mystore/img/edit");
     httpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
-            alert('처리가 되었습니다.')
+            alert('상점 이미지가 변경 되었습니다.')
             document.getElementById('inputImgLabel').setAttribute("style", "display: block")
             document.getElementById('submitImgLabel').setAttribute("style", "display: none")
         }
