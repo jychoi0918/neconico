@@ -318,6 +318,7 @@
 .store_view_box03 > h4 { font-size: 18px; font-weight: 500; padding-bottom: 15px; margin-bottom: 30px; border-bottom: 1px solid #ccc; }
 
 .store_view_box03_content { border: 1px solid #eee; padding: 10px; }
+.store_view_box03_content pre {white-space: pre-wrap;}
 
 .store_view_box04 { margin: 30px 0 80px; }
 .store_view_box04 > h4 { font-size: 18px; font-weight: 500; padding-bottom: 15px; }
