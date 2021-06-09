@@ -183,6 +183,6 @@ public class UserController {
     @PostMapping("/change/admin/authority/user/158325")
     public String changeAuthorityResult(@RequestParam("accountId") String accountId) {
         userService.changeUserAuthorityToAdmin(accountId);
-        return "redirect:/";
+        return "redirect:/admin/users/list";
     }
 }

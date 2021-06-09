@@ -40,10 +40,10 @@
 .login_kakao img { width: 25px; vertical-align: middle; margin-right: 10px; } */
 
 .login_google { display: block; width: 100%; height: 50px; box-sizing: border-box; background: #fff; line-height: 50px; text-align: center; font-weight: 500; margin-top: 10px; font-weight: bold; border: 1px solid #ccc; }
-.login_google img { width: 70px; vertical-align: middle; margin-right: 10px; }
+.login_google img { width: 80%; vertical-align: middle; }
 
-.login_naver { display: block; width: 100%; height: 50px; box-sizing: border-box; background: #04cf5c; line-height: 50px; text-align: center; font-weight: 500; margin-top: 10px; font-weight: bold; color: #fff; }
-.login_naver img { width: 70px; vertical-align: middle; margin-right: 10px; }
+.login_naver { display: block; width: 100%; height: 50px; box-sizing: border-box; background: #03c75a; line-height: 50px; text-align: center; font-weight: 500; margin-top: 10px; font-weight: bold; color: #fff; }
+.login_naver img { width: 50%; vertical-align: middle; }
 
 
 
