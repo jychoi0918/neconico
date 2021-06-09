@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neconico.neconico.mapper.store.StoreReviewMapper">
+    <insert id="insertStoreReview" keyProperty="store_review_id">
+        insert into store_review(purchase_item_id, content, created_date)
+        values (#{purchaseId}, #{content}, SYSDATE())
+    </insert>
+
+    <update id="updateStoreReview">
+        update store_review
+        set content = #{content}
+        where purchase_item_id = #{purchaseId}
+    </update>
+
+    <delete id="deleteStoreReview">
+        delete from store_review
+        where purchase_item_id = #{purchaseId}
+    </delete>
+</mapper>

@@ -50,7 +50,7 @@ public class StoreItemListServiceImpl implements StoreItemListService{
 
     @Override
     public Map<String, Object> createPurchaseItemList(Long userId, StoreItemRequestDto request){
-        Criteria cri = createCri(request, cardPerPage);
+        Criteria cri = createCri(request, otherCardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
                 new Pagination(cri, listMapper.countStorePurchasedItem(userId), pageSize));

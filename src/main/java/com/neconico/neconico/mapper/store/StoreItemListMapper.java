@@ -1,5 +1,6 @@
 package com.neconico.neconico.mapper.store;
 
+import com.neconico.neconico.dto.item.card.ItemPurchasedCardDto;
 import com.neconico.neconico.dto.store.StoreItemSortingDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
 import com.neconico.neconico.dto.store.card.StoreQuestionCardDto;
@@ -26,7 +27,7 @@ public interface StoreItemListMapper {
 
     Long countStoreSoldItem(@Param("userId") Long userId);
 
-    List<ItemCardDto> selectStorePurchasedItemList(StoreItemSortingDto storeItemPagingDto);
+    List<ItemPurchasedCardDto> selectStorePurchasedItemList(StoreItemSortingDto storeItemPagingDto);
 
     Long countStorePurchasedItem(@Param("userId") Long userId);
 

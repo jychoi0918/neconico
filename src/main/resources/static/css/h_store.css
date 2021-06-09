@@ -542,3 +542,16 @@
 /* SCH RESULT CSS ------------------------------------------------*/
 .sch_result_wrap h2 span { color: #7429ff; }
 .sch_result_wrap .pagination { margin-top: 30px; }
+
+/* STORE REVIEW CSS */
+.store_review_text {
+    font-weight: bold;
+    color: lightgrey;
+}
+.store_review_button button{    width: 60px;
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin: 5px;
+}

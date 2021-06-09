@@ -158,9 +158,9 @@ function createItemCard(itemList) {
         let col4 = document.createElement("col");
         col4.setAttribute("width", "12%");
         let col5 = document.createElement("col");
-        col4.setAttribute("width", "33%");
+        col5.setAttribute("width", "33%");
         let col6 = document.createElement("col");
-        col4.setAttribute("width", "10%");
+        col6.setAttribute("width", "10%");
         colgroup.append(col1, col2, col3, col4, col5, col6);
 
         let tr = document.createElement("tr");
@@ -188,14 +188,17 @@ function createItemCard(itemList) {
             img.setAttribute("alt", "");
             itd1.append(img);
             let itd2 = document.createElement("td");
-            let a = document.createElement("a");
-            a.setAttribute("href", "/item/" + item.itemId);
-            a.innerText = item.title;
-            itd2.append(a);
+            let a1 = document.createElement("a");
+            a1.setAttribute("href", "/item/" + item.itemId);
+            a1.innerText = item.title;
+            itd2.append(a1);
             let itd3 = document.createElement("td");
             itd3.innerText = transPrice(item.price);
             let itd4 = document.createElement("td");
-            itd4.innerText = item.writerName;
+            let a2 = document.createElement("a");
+            a2.setAttribute("href", "/store/" + item.accountId);
+            a2.innerText = item.writerName;
+            itd4.append(a2);
             let itd5 = document.createElement("td");
             itd5.innerText = item.content;
             let itd6 = document.createElement("td");
