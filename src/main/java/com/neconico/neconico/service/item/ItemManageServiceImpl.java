@@ -17,10 +17,10 @@ public class ItemManageServiceImpl implements ItemManageService{
 
     private final StoreItemListMapper storeItemListMapper;
 
-    private final int pageSize = 10;
+    private final long pageSize = 10;
 
     @Override
-    public Criteria setCriteria(int currentPage, String sortingColumn, String requestOrder) {
+    public Criteria setCriteria(Long currentPage, String sortingColumn, String requestOrder) {
         Criteria cri = new Criteria();
         cri.setCurrentPage(currentPage);
         cri.setContentPerPage(pageSize);
@@ -31,7 +31,7 @@ public class ItemManageServiceImpl implements ItemManageService{
 
     @Override
     public Pagination setPagiantion(Long userId, Criteria cri) {
-        Pagination pagination = new Pagination(cri, storeItemListMapper.countStoreMyItem(userId).intValue(), pageSize);
+        Pagination pagination = new Pagination(cri, storeItemListMapper.countStoreMyItem(userId), pageSize);
         return pagination;
     }
 

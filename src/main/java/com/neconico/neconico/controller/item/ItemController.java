@@ -76,11 +76,11 @@ public class ItemController {
                                @ModelAttribute("currentPage") Criteria criteria,
                                Model model) {
         List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemService.searchItems(criteria, searchInfoDto);
-        int totalContent = itemService.countTotalItems(searchInfoDto).intValue();
+        Long totalContent = itemService.countTotalItems(searchInfoDto);
 
         model.addAttribute("search", searchInfoDto.getSearchText());
         model.addAttribute("itemCardList", itemCardSearchViewDtoList);
-        model.addAttribute("pagination", new Pagination(criteria, totalContent,5));
+        model.addAttribute("pagination", new Pagination(criteria, totalContent,5L));
         return "item/sch_result";
     }
 
@@ -91,12 +91,12 @@ public class ItemController {
                                           Model model) {
 
         List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemService.searchItemsBySubCategoryId(criteria, subId);
-        int totalContent = itemService.countTotalItemsBySubCategoryId(subId).intValue();
+        Long totalContent = itemService.countTotalItemsBySubCategoryId(subId);
 
         model.addAttribute("subId", subId);
         model.addAttribute("subName", subName);
         model.addAttribute("itemCardList", itemCardSearchViewDtoList);
-        model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
+        model.addAttribute("pagination", new Pagination(criteria, totalContent, 5L));
         return "item/sch_category_result";
     }
 
@@ -109,12 +109,12 @@ public class ItemController {
         List<CategorySubInfoDto> targetSubCategory = categoryService.findCategorySubAllByMainName(mainName);
 
         List<ItemCardSearchViewDto> itemCardSearchViewDtoList = itemService.searchItemsByMainCategory(criteria, targetSubCategory);
-        int totalContent = itemService.countTotalItemsBySubCategoryList(targetSubCategory).intValue();
+        Long totalContent = itemService.countTotalItemsBySubCategoryList(targetSubCategory);
 
 
         model.addAttribute("mainName", mainName);
         model.addAttribute("itemCardList", itemCardSearchViewDtoList);
-        model.addAttribute("pagination", new Pagination(criteria, totalContent, 5));
+        model.addAttribute("pagination", new Pagination(criteria, totalContent, 5L));
         return "item/sch_main_category_result";
     }
 
@@ -180,7 +180,7 @@ public class ItemController {
 
         //해당 아이템과 동일한 카테고리 items 조회
         Criteria criteria = new Criteria();
-        criteria.setCurrentPage(0);
+        criteria.setCurrentPage(0L);
 
         List<ItemCardSearchViewDto> sameCategoryItems = itemService
                 .searchItemsBySubCategoryId(criteria, findItemInfoDto.getCategorySubInfoDto().getCategorySubId());

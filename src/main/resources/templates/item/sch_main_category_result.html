@@ -10,10 +10,10 @@
                 <h2 class="h_fs_26">'<span th:text="${mainName}">이솝향수</span>' 검색결과</h2>
             </div>
             <ul class="main_list_wrap">
-                <li th:each="itemCard : ${itemCardList}" >
+                <li th:each="itemCard : ${itemCardList}">
                     <a th:href="@{/item/{id}(id=${itemCard.itemId})}">
                         <div class="list_img">
-                            <img th:src="${itemCard.itemImg.split('>')[0]}" alt="" />
+                            <img th:src="${itemCard.itemImg.split('>')[0]}" alt=""/>
 
                             <div class="list_img_sold_out out" th:if="${itemCard.saleStatus.equals('거래 완료')}">
                                 <p>판매완료</p>
@@ -28,10 +28,19 @@
                 </li>
             </ul>
 
-            <div class="pagination" th:each="idx : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-                <a th:if="${pagination.hasPrev}" th:href="@{/item/search/categoryMain(name=${mainName}, currentPage=${pagination.criteria.currentPage} - 1)}" class="page_prev" ></a>
-                <a th:unless="${idx == 0}" th:href="@{/item/search/categoryMain(name=${mainName}, currentPage=${idx})}" th:classappend="${idx == pagination.criteria.currentPage} ? active : ''" th:text="${idx}"></a>
-                <a th:if="${pagination.hasNext}" th:href="@{/item/search/categoryMain(name=${mainName}, currentPage=${pagination.criteria.currentPage} + 1)}" class="page_next"></a>
+            <div class="pagination" >
+                <ul>
+                    <li>
+                    <a th:if="${pagination.hasPrev}"
+                       th:href="@{/item/search/categoryMain(name=${mainName}, currentPage=${pagination.criteria.currentPage} - 1)}"
+                       class="page_prev"></a></li>
+                   <li th:each="idx : ${#numbers.sequence(pagination.startPage, pagination.endPage)}" th:unless="${idx == 0}"> <a
+                       th:href="@{/item/search/categoryMain(name=${mainName}, currentPage=${idx})}"
+                       th:classappend="${idx == pagination.criteria.currentPage} ? active : ''" th:text="${idx}"></a></li>
+                   <li th:if="${pagination.hasNext}"> <a
+                       th:href="@{/item/search/categoryMain(name=${mainName}, currentPage=${pagination.criteria.currentPage} + 1)}"
+                       class="page_next"></a></li>
+                </ul>
             </div>
         </section>
     </div>

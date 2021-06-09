@@ -220,7 +220,7 @@ class ItemServiceTest {
 
     private Criteria getCriteria() {
         Criteria criteria = new Criteria();
-        criteria.setCurrentPage(1);
+        criteria.setCurrentPage(1L);
 
         return criteria;
     }

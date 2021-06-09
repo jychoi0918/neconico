@@ -50,7 +50,7 @@
 						<li th:each="idx : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}">
 							<a class="" th:href="@{/notice(currentPage=${idx})}" th:text="${idx}" th:classappend="${idx == pageMaker.criteria.currentPage} ? active : ''">1</a>
 						</li>
-						<li th:if="${pageMaker.hasNext}">
+						<li th:if="${pageMaker.criteria.currentPage < pageMaker.totalPage}">
 							<a class="page_next" th:href="@{/notice(currentPage=${pageMaker.criteria.currentPage}+1)}"></a>
 						</li>
 					</ul>

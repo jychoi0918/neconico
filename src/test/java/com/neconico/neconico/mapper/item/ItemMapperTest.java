@@ -239,9 +239,9 @@ class ItemMapperTest {
 
     private Criteria getCriteria() {
         Criteria criteria = new Criteria();
-        criteria.setContentPerPage(10);
+        criteria.setContentPerPage(10L);
         criteria.setRequestOrder("DESC");
-        criteria.setCurrentPage(1);
+        criteria.setCurrentPage(1L);
         criteria.setSortingColumn("created_date");
 
         return criteria;

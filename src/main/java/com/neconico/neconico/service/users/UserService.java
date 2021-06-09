@@ -3,8 +3,6 @@ package com.neconico.neconico.service.users;
 import com.neconico.neconico.dto.users.*;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public interface UserService {
 

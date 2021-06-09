@@ -49,10 +49,10 @@ public class UsersAdminServiceImpl implements UsersAdminService {
     private Criteria setCriteria(Criteria cri){
         cri.setSortingColumn("USERID");
         cri.setRequestOrder("ASC");
-        cri.setContentPerPage(10);
+        cri.setContentPerPage(10L);
 
         if(cri.getCurrentPage()<=0)
-            cri.setCurrentPage(1);
+            cri.setCurrentPage(1L);
 
         return cri;
     }

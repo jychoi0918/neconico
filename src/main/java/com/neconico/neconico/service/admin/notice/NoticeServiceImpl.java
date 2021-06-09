@@ -98,10 +98,10 @@ public class NoticeServiceImpl implements NoticeService {
     private Criteria setCriteria(Criteria cri) {
         cri.setSortingColumn("noticeId");
         cri.setRequestOrder("desc");
-        cri.setContentPerPage(10);
+        cri.setContentPerPage(10l);
 
         if (cri.getCurrentPage() <= 0)
-            cri.setCurrentPage(1);
+            cri.setCurrentPage(1l);
 
         return cri;
     }

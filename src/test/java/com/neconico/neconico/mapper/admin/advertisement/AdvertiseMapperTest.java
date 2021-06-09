@@ -32,8 +32,8 @@ class AdvertiseMapperTest {
         List<AdvertReturnDto> adList = new ArrayList<>();
         Criteria cri = new Criteria();
         cri.setSortingColumn("advertisementId");
-        cri.setContentPerPage(10);
-        cri.setCurrentPage(1);
+        cri.setContentPerPage(10L);
+        cri.setCurrentPage(1L);
         cri.setRequestOrder("desc");
 
         //when
@@ -50,8 +50,8 @@ class AdvertiseMapperTest {
 
           //given
         Criteria cri = new Criteria();
-        cri.setCurrentPage(1);
-        cri.setContentPerPage(10000);
+        cri.setCurrentPage(1L);
+        cri.setContentPerPage(10000L);
         cri.setSortingColumn("advertisementId");
         cri.setRequestOrder("desc");
 
@@ -155,7 +155,7 @@ class AdvertiseMapperTest {
 
           //given
         AdvertStatusDto adStatus = new AdvertStatusDto();
-        adStatus.setAdvertisementId(4l);
+        adStatus.setAdvertisementId(4L);
         adStatus.setAdStatus("공개");
 
 
@@ -163,7 +163,7 @@ class AdvertiseMapperTest {
         advertiseMapper.updateStatus(adStatus);
 
           //then
-        assertThat(advertiseMapper.selectAdvertByAdvertId(4l).getAdStatus()).isEqualTo("공개");
+        assertThat(advertiseMapper.selectAdvertByAdvertId(4L).getAdStatus()).isEqualTo("공개");
 
 
     }

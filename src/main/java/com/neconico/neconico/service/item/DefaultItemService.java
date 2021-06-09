@@ -153,12 +153,12 @@ public class DefaultItemService implements ItemService{
     }
 
     private Criteria setCriteria(Criteria criteria) {
-        int currentPage = criteria.getCurrentPage();
-        currentPage = currentPage == 0 ? currentPage + 1 : currentPage;
+        Long currentPage = criteria.getCurrentPage();
+        currentPage = currentPage == 0L ? currentPage+1L : currentPage;
         criteria.setCurrentPage(currentPage);
 
         //item page 설정
-        criteria.setContentPerPage(20);
+        criteria.setContentPerPage(20L);
         criteria.setRequestOrder("desc");
         criteria.setSortingColumn("created_date");
 

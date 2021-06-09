@@ -9,7 +9,7 @@ import java.util.List;
 public interface ItemManageService{
 
     List<ItemCardDto> getStoreMyItemList(Long userId, Criteria cri);
-    Criteria setCriteria(int currentPage, String sortingColumn, String requestOrder);
+    Criteria setCriteria(Long currentPage, String sortingColumn, String requestOrder);
     Pagination setPagiantion(Long userId, Criteria cri);
 
 }

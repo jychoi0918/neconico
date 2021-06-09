@@ -15,18 +15,18 @@ class PaginationTest {
 
     @Test
     @DisplayName("Pagination Test")
-    void test(){
+    void pagingTest(){
 
           //given
         Criteria cri = new Criteria();
-        cri.setCurrentPage(14);
-        cri.setContentPerPage(10);
+        cri.setCurrentPage(14L);
+        cri.setContentPerPage(10L);
         cri.setSortingColumn("noticeId");
         cri.setRequestOrder("desc");
 
 
         //when
-        Pagination pagination = new Pagination(cri,300,10);
+        Pagination pagination = new Pagination(cri,301L,10L);
 
         //then
         log.info("info log={}",pagination);

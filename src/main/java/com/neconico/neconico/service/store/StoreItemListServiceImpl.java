@@ -20,11 +20,11 @@ public class StoreItemListServiceImpl implements StoreItemListService{
     private final StoreItemListMapper listMapper;
 
     //Paging 크기
-    private final int pageSize = 10;
+    private final Long pageSize = 10l;
     //아이템 카드 20개 나열
-    private final int cardPerPage = 20;
+    private final Long cardPerPage = 20l;
     //아이템 카드 외 10개 나열
-    private final int otherCardPerPage = 10;
+    private final Long otherCardPerPage = 10l;
 
     @Override
     public Map<String, Long> createItemListCount(Long userId){
@@ -43,7 +43,7 @@ public class StoreItemListServiceImpl implements StoreItemListService{
         Criteria cri = createCri(request, cardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
-                new Pagination(cri, listMapper.countStoreMyItem(userId).intValue(), pageSize));
+                new Pagination(cri, listMapper.countStoreMyItem(userId), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreMyItemList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
@@ -53,7 +53,7 @@ public class StoreItemListServiceImpl implements StoreItemListService{
         Criteria cri = createCri(request, cardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
-                new Pagination(cri, listMapper.countStorePurchasedItem(userId).intValue(), pageSize));
+                new Pagination(cri, listMapper.countStorePurchasedItem(userId), pageSize));
         itemListMap.put("itemList", listMapper.selectStorePurchasedItemList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
@@ -63,7 +63,7 @@ public class StoreItemListServiceImpl implements StoreItemListService{
         Criteria cri = createCri(request, cardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
-                new Pagination(cri, listMapper.countStoreFavoriteItem(userId).intValue(), pageSize));
+                new Pagination(cri, listMapper.countStoreFavoriteItem(userId), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreFavoriteList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
@@ -73,7 +73,7 @@ public class StoreItemListServiceImpl implements StoreItemListService{
         Criteria cri = createCri(request, otherCardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
-                new Pagination(cri, listMapper.countStoreTrade(userId).intValue(), pageSize));
+                new Pagination(cri, listMapper.countStoreTrade(userId), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreTradeList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
@@ -83,7 +83,7 @@ public class StoreItemListServiceImpl implements StoreItemListService{
         Criteria cri = createCri(request, otherCardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
-                new Pagination(cri, listMapper.countStoreQuestion(userId).intValue(), pageSize));
+                new Pagination(cri, listMapper.countStoreQuestion(userId), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreQuestionList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
@@ -93,12 +93,12 @@ public class StoreItemListServiceImpl implements StoreItemListService{
         Criteria cri = createCri(request, otherCardPerPage);
         HashMap<String, Object> itemListMap = new HashMap<>();
         itemListMap.put("pagination",
-                new Pagination(cri, listMapper.countStoreReview(userId).intValue(), pageSize));
+                new Pagination(cri, listMapper.countStoreReview(userId), pageSize));
         itemListMap.put("itemList", listMapper.selectStoreReviewList(adaptSortingDto(userId, cri)));
         return itemListMap;
     }
 
-    private Criteria createCri(StoreItemRequestDto request, int contentPerPage) {
+    private Criteria createCri(StoreItemRequestDto request, Long contentPerPage) {
         Criteria cri = new Criteria();
         cri.setCurrentPage(request.getCurrentPage());
         cri.setContentPerPage(contentPerPage);
