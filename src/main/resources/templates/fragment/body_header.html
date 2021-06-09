@@ -32,6 +32,7 @@
                 id="header_search"
                 name="searchText"
                 placeholder="상품명,지역명 검색"
+                onkeyup="enterkey()"
         />
         <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
@@ -93,6 +94,7 @@
                 id="mo_schbox_btn"
                 name="searchText"
                 placeholder="상품명,지역명 검색"
+                onkeyup="enterkey()"
         />
         <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
@@ -114,6 +116,12 @@
       form.setAttribute('method', 'get');
       document.body.appendChild(form);
       form.submit();
+    }
+    function enterkey() {
+      if (window.event.keyCode == 13) {
+
+        submitSearch();
+      }
     }
   </script>
   <div class="mo_menu_back">
