@@ -14,6 +14,18 @@
         <result column="views" property="views"/>
     </resultMap>
 
+    <resultMap id="itempurchasedcard" type="itempurchasedcarddto">
+        <id column="itemid" property="itemId"/>
+        <result column="title" property="title"/>
+        <result column="price" property="price"/>
+        <result column="img" property="itemImg"/>
+        <result column="created" property="createdTime"/>
+        <result column="status" property="status"/>
+        <result column="views" property="views"/>
+        <result column="purchaseId" property="purchaseId"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
     <resultMap id="questioncard" type="storequestioncarddto">
         <id column="questionid" property="questionId"/>
         <result column="writername" property="writerName"/>
@@ -28,19 +40,20 @@
         <result column="views" property="views"/>
     </resultMap>
 
-    
+
     <resultMap id="reviewcard" type="storereviewcarddto">
         <id column="reviewid" property="reviewId"/>
+        <result column="accountid" property="accountId"/>
         <result column="writername" property="writerName"/>
         <result column="content" property="content"/>
         <result column="reviewcreated" property="replyCreatedTime"/>
-            <result column="itemid" property="itemId"/>
-            <result column="title" property="title"/>
-            <result column="price" property="price"/>
-            <result column="img" property="itemImg"/>
-            <result column="created" property="createdTime"/>
-            <result column="status" property="status"/>
-            <result column="views" property="views"/>
+        <result column="itemid" property="itemId"/>
+        <result column="title" property="title"/>
+        <result column="price" property="price"/>
+        <result column="img" property="itemImg"/>
+        <result column="created" property="createdTime"/>
+        <result column="status" property="status"/>
+        <result column="views" property="views"/>
     </resultMap>
 
     <resultMap id="tradecard" type="storetradecarddto">
@@ -69,7 +82,8 @@
     </sql>
 
     <sql id="sorting">
-        order by ${sortKind}
+        order by
+                ${sortKind}
                 ${sortOrder}
                 LIMIT
                 ${startRow}
@@ -120,10 +134,21 @@
         where user_id = #{userId}
     </select>
 
-    <select id="selectStorePurchasedItemList" parameterType="storeitemsortingdto" resultMap="itemcard">
-        <include refid="selectItem"/>
+    <select id="selectStorePurchasedItemList" parameterType="storeitemsortingdto" resultMap="itempurchasedcard">
+        select i.item_id itemid,
+        i.title title,
+        i.price price,
+        i.item_img_urls img,
+        p.purchase_date created,
+        p.purchase_item_id purchaseId,
+        i.sale_status status,
+        i.hits views,
+        s.content content
+        from item i
         inner join purchase_item p
         on p.item_id = i.item_id
+        left join store_review s
+        on p.purchase_item_id = s.purchase_item_id
         where p.user_id = #{userId}
         <include refid="sorting"/>
     </select>
@@ -154,16 +179,17 @@
     <select id="countStoreQuestion" resultType="Long">
         select count(*)
         from item i
-            inner join item_question q
-            on i.item_id = q.item_id
+                     inner join item_question q
+                on i.item_id = q.item_id
         where i.user_id = #{userId}
     </select>
 
     <select id="selectStoreReviewList" parameterType="storeitemsortingdto" resultMap="reviewcard">
         select sr.store_review_id reviewid,
         sr.content content,
-        u.account_name writername,
+        s.store_name writername,
         sr.created_date reviewcreated,
+        u.account_id accountid,
         i.*
         from (
         <include refid="selectItem"/>
@@ -174,16 +200,18 @@
         on p.user_id = u.user_id
         inner join store_review sr
         on sr.purchase_item_id = p.purchase_item_id
+        inner join store s
+        on p.user_id = s.user_id
         <include refid="sorting"/>
     </select>
 
     <select id="countStoreReview" resultType="Long">
         select count(*)
         from item i
-            inner join purchase_item p
-            on i.item_id = p.item_id
-            inner join store_review sr
-            on sr.purchase_item_id = p.purchase_item_id
+                     inner join purchase_item p
+                on i.item_id = p.item_id
+                     inner join store_review sr
+                on sr.purchase_item_id = p.purchase_item_id
         where i.user_id = #{userId}
     </select>
 

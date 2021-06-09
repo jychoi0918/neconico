@@ -96,6 +96,9 @@ function createItemCard(itemList) {
         case "storeReview":
             createStoreReviewList(parent, itemList);
             break;
+        case "purchasedItem":
+            createPurchasedItemList(parent, itemList);
+            break;
         default :
             createItemCardList(parent, itemList);
             break;
@@ -277,7 +280,7 @@ function createItemCard(itemList) {
 
             let fig = document.createElement("figure");
             let div1 = document.createElement("div");
-            div1.setAttribute("class","list_img");
+            div1.setAttribute("class", "list_img");
             let img = document.createElement("img");
             img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
@@ -286,7 +289,7 @@ function createItemCard(itemList) {
                 let statusDiv = document.createElement("div");
                 statusDiv.setAttribute("class", "list_img_sold_out out");
                 let p = document.createElement("p");
-                p.setAttribute("align","center")
+                p.setAttribute("align", "center")
                 p.innerText = '판매완료';
                 statusDiv.append(p);
                 div1.append(statusDiv);
@@ -309,6 +312,92 @@ function createItemCard(itemList) {
         parent.append(ul);
     }
 
+    function createPurchasedItemList(parent, itemList) {
+        let table = document.createElement("table");
+
+        let colgroup = document.createElement("colgroup");
+
+        let col1 = document.createElement("col");
+        col1.setAttribute("width", "15%");
+        let col2 = document.createElement("col");
+        col2.setAttribute("width", "15%");
+        let col3 = document.createElement("col");
+        col3.setAttribute("width", "10%");
+        let col4 = document.createElement("col");
+        col4.setAttribute("width", "10%");
+        let col5 = document.createElement("col");
+        col5.setAttribute("width", "40%");
+        let col6 = document.createElement("col");
+        col6.setAttribute("width", "10%");
+        colgroup.append(col1, col2, col3, col4, col5, col6);
+
+        let tr = document.createElement("tr");
+        let th1 = document.createElement("th");
+        th1.innerText = '상품 이미지';
+        let th2 = document.createElement("th");
+        th2.innerText = '상품 이름';
+        let th3 = document.createElement("th");
+        th3.innerText = '상품 가격';
+        let th4 = document.createElement("th");
+        th4.innerText = '구매 시간';
+        let th5 = document.createElement("th");
+        th5.innerText = '상점 후기';
+        let th6 = document.createElement("th");
+        th6.innerText = '';
+        tr.append(th1, th2, th3, th4, th5, th6);
+        table.append(colgroup, tr);
+
+        itemList.forEach(function (item) {
+            let itr = document.createElement("tr");
+            itr.setAttribute("id","p"+item.purchaseId);
+            table.append(itr);
+            let itd1 = document.createElement("td");
+            let img = document.createElement("img");
+            img.setAttribute("src", item.itemImg.split('>')[0]);
+            img.setAttribute("alt", "");
+            itd1.append(img);
+
+            let itd2 = document.createElement("td");
+            let a = document.createElement("a");
+            a.setAttribute("href", "/item/" + item.itemId);
+            a.innerText = item.title;
+            itd2.append(a);
+            let itd3 = document.createElement("td");
+            itd3.innerText = transPrice(item.price);
+            let itd4 = document.createElement("td");
+            itd4.innerText = calculateDay(item.createdTime);
+            let itd5 = document.createElement("td");
+            if (item.content == null) {
+                itd5.setAttribute("class","store_review_text")
+                itd5.innerText = "후기가 작성되지 않았습니다.";
+            } else {
+                itd5.innerText = item.content;
+            }
+            let itd6 = document.createElement("td");
+            itd6.setAttribute("class","store_review_button");
+            if (item.content == null) {
+                let btn = document.createElement("button");
+                btn.innerText = "작성";
+                btn.setAttribute("onclick","storeReviewCreate("+item.purchaseId+")")
+                itd6.append(btn);
+            } else {
+                let btn1 = document.createElement("button");
+                btn1.innerText = "수정";
+                btn1.setAttribute("onclick","storeReviewModify("+item.purchaseId+")")
+                let btn2 = document.createElement("button");
+                btn2.innerText = "삭제";
+                btn2.setAttribute("onclick","storeReviewDelete("+item.purchaseId+")")
+                itd6.append(btn1, btn2)
+            }
+
+            itr.append(itd1, itd2, itd3, itd4, itd5, itd6);
+
+            table.append(itr);
+        });
+
+        parent.append(table);
+    }
+
     function createStoreReviewList(parent, itemList) {
         let table = document.createElement("table");
         parent.append(table);
@@ -324,9 +413,9 @@ function createItemCard(itemList) {
         let col4 = document.createElement("col");
         col4.setAttribute("width", "12%");
         let col5 = document.createElement("col");
-        col4.setAttribute("width", "33%");
+        col5.setAttribute("width", "33%");
         let col6 = document.createElement("col");
-        col4.setAttribute("width", "10%");
+        col6.setAttribute("width", "10%");
         colgroup.append(col1, col2, col3, col4, col5, col6);
 
         let tr = document.createElement("tr");
@@ -354,14 +443,17 @@ function createItemCard(itemList) {
             img.setAttribute("alt", "");
             itd1.append(img);
             let itd2 = document.createElement("td");
-            let a = document.createElement("a");
-            a.setAttribute("href", "/item/" + item.itemId);
-            a.innerText = item.title;
-            itd2.append(a);
+            let a1 = document.createElement("a");
+            a1.setAttribute("href", "/item/" + item.itemId);
+            a1.innerText = item.title;
+            itd2.append(a1);
             let itd3 = document.createElement("td");
             itd3.innerText = transPrice(item.price);
             let itd4 = document.createElement("td");
-            itd4.innerText = item.writerName;
+            let a2 = document.createElement("a");
+            a2.setAttribute("href", "/store/" + item.accountId);
+            a2.innerText = item.writerName;
+            itd4.append(a2);
             let itd5 = document.createElement("td");
             itd5.innerText = item.content;
             let itd6 = document.createElement("td");
@@ -487,30 +579,30 @@ function clickStoreName(kind) {
     } else if (kind == 1) {
         let storeName = parent.firstChild.value;
 
-        if(storeName.length > 10){
+        if (storeName.length > 10) {
             alert("상점명은 최대 10자까지 지원합니다.")
-        }else{
-        <!-- 요청 추가 -->
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', "/mystore/name/edit");
-        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        httpRequest.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                alert('상점명이 변경 되었습니다.')
-                removeChildNode('storeName');
-                let span = document.createElement("span");
-                span.innerText = storeName;
-                let a = document.createElement("a");
-                a.innerText = '상점명 변경';
-                a.setAttribute("href", "javascript:clickStoreName(0)")
-                span.append(a);
-                parent.append(span);
-            } else if(this.readyState === 4 && this.status === 400) {
-                alert('상점명이 중복입니다.')
-            }
+        } else {
+            <!-- 요청 추가 -->
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.open('POST', "/mystore/name/edit");
+            httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            httpRequest.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    alert('상점명이 변경 되었습니다.')
+                    removeChildNode('storeName');
+                    let span = document.createElement("span");
+                    span.innerText = storeName;
+                    let a = document.createElement("a");
+                    a.innerText = '상점명 변경';
+                    a.setAttribute("href", "javascript:clickStoreName(0)")
+                    span.append(a);
+                    parent.append(span);
+                } else if (this.readyState === 4 && this.status === 400) {
+                    alert('상점명이 중복입니다.')
+                }
 
-        }
-        httpRequest.send('name=' + storeName);
+            }
+            httpRequest.send('name=' + storeName);
         }
     }
 }
@@ -534,7 +626,7 @@ function clickStoreContent(kind) {
     } else if (kind == 1) {
         let storeContent = div.firstChild.value;
 
-        if(storeContent.length <= 200) {
+        if (storeContent.length <= 200) {
             <!-- 요청 추가 -->
             let httpRequest = new XMLHttpRequest();
             httpRequest.open('POST', "/mystore/content/edit");
@@ -596,4 +688,76 @@ function storeImgUpload() {
         }
     };
     httpRequest.send(form);
+}
+
+function storeReviewCreate(purchaseId) {
+    let content = prompt('상점 후기를 20자 이내로 입력하세요');
+    if(content.length <= 20 & content.length != 0){
+
+        let httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', "/mystore/review/"+purchaseId+"/new");
+        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        httpRequest.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                alert('상점 후기가 등록 되었습니다.')
+                let parent = document.getElementById('p'+purchaseId);
+                parent.lastChild.removeChild(parent.lastChild.firstChild);
+                parent.childNodes[4].innerText = content;
+                parent.childNodes[4].setAttribute("class","");
+                let btn1 = document.createElement("button");
+                btn1.innerText = "수정";
+                btn1.setAttribute("onclick","storeReviewModify("+purchaseId+")")
+                let btn2 = document.createElement("button");
+                btn2.innerText = "삭제";
+                btn2.setAttribute("onclick","storeReviewDelete("+purchaseId+")")
+                parent.lastChild.append(btn1, btn2);
+            }
+        }
+        httpRequest.send('content=' + content);
+    }
+    else{
+        alert("다시 입력하세요")
+    }
+}
+function storeReviewModify(purchaseId) {
+    let content = prompt('상점 후기를 20자 이내로 입력하세요');
+    if(content.length <= 20 & content.length != 0){
+
+        let httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', "/mystore/review/"+purchaseId+"/edit");
+        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        httpRequest.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                let parent = document.getElementById('p'+purchaseId);
+                parent.childNodes[4].innerText = content;
+                alert('상점 후기가 수정 되었습니다.')
+            }
+        }
+        httpRequest.send('content=' + content);
+    }
+    else{
+        alert("다시 입력하세요")
+    }
+
+}
+function storeReviewDelete(purchaseId){
+
+    let httpRequest = new XMLHttpRequest();
+    httpRequest.open('POST', "/mystore/review/"+purchaseId+"/delete");
+    httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    httpRequest.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+            alert('상점 후기가 삭제 되었습니다.')
+            let parent = document.getElementById('p'+purchaseId);
+            parent.childNodes[4].setAttribute("class","store_review_text")
+            parent.childNodes[4].innerText = "후기가 작성되지 않았습니다.";
+            parent.lastChild.removeChild(parent.lastChild.firstChild);
+            parent.lastChild.removeChild(parent.lastChild.firstChild);
+            let btn = document.createElement("button");
+            btn.innerText = "작성";
+            btn.setAttribute("onclick","storeReviewCreate("+purchaseId+")")
+            parent.lastChild.append(btn);
+        }
+    }
+    httpRequest.send();
 }
