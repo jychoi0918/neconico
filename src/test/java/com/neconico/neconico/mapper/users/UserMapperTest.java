@@ -119,7 +119,7 @@ class UserMapperTest {
             "user6", "user7", "user8", "user9", "user10"})
     void update_authority_when_user_withdrawal(String accountId) {
 
-        userMapper.updateUserAuthority(accountId);
+        userMapper.updateUserAuthorityToDrop(accountId);
         UserInfoDto userInfoDto = userMapper.selectUserByAccountId(accountId);
 
         assertThat(userInfoDto)

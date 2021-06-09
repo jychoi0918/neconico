@@ -1,5 +1,6 @@
 package com.neconico.neconico.service.admin.user;
 
+import com.neconico.neconico.dto.admin.user.SearchConditionDto;
 import com.neconico.neconico.dto.admin.user.UserListDto;
 import com.neconico.neconico.mapper.admin.user.UsersAdminMapper;
 import com.neconico.neconico.paging.Criteria;
@@ -19,13 +20,14 @@ public class UsersAdminServiceImpl implements UsersAdminService {
     private final UsersAdminMapper usersAdminMapper;
 
     @Override
-    public long countUserList(String authority) { return usersAdminMapper.countUserList(authority); }
+    public long countUserList(String authority, SearchConditionDto searchConditionDto) {
+        return usersAdminMapper.countUserList(authority, searchConditionDto);
+    }
 
     @Override
-    public List<UserListDto> selectUserList(Criteria cri) { return usersAdminMapper.selectUserList(setCriteria(cri)); }
-
-    @Override
-    public List<UserListDto> selectAdminList(Criteria cri) { return usersAdminMapper.selectAdminList(setCriteria(cri)); }
+    public List<UserListDto> selectUserList(Criteria cri, String authority, SearchConditionDto searchConditionDto) {
+        return usersAdminMapper.selectUserList(setCriteria(cri), authority, searchConditionDto);
+    }
 
     @Override
     public Map<String, Long> selectUserListByAge() { return usersAdminMapper.selectUserListByAge(); }

@@ -41,28 +41,28 @@
                     </table>
 
                     <div class="sch_box">
-                        <select name="" id="">
-                            <option value="">아이디</option>
-                            <option value="">이름</option>
-                            <option value="">이메일</option>
+                        <select name="searchCondition" id="searchCondition">
+                            <option value="id">아이디</option>
+                            <option value="name">이름</option>
+                            <option value="email">이메일</option>
                         </select>
-                        <input type="text" placeholder="검색어를 입력하세요.">
-                        <input type="button" value="검색">
+                        <input type="text" name="searchText" id="searchText" placeholder="검색어를 입력하세요.">
+                        <input type="button" value="검색" onclick="submitSearch()">
                     </div>
 
                     <div class="pagination" th:if="${paging.totalContent}!=0">
                         <ul>
                             <li th:unless="${paging.criteria.currentPage}==1">
                                 <a class="page_prev"
-                                   th:href="@{/admin/users/administrator(currentPage=${paging.criteria.currentPage}-1)}"></a>
+                                   th:href="@{/admin/users/administrator(searchCondition=${searchCondition.searchCondition}, searchText=${searchCondition.searchText}, currentPage=${paging.criteria.currentPage}-1)}"></a>
                             </li>
                             <li th:each="idx : ${#numbers.sequence(paging.startPage, paging.endPage)}">
-                                <a class="" th:href="@{/admin/users/administrator(currentPage=${idx})}" th:text="${idx}"
+                                <a class="" th:href="@{/admin/users/administrator(searchCondition=${searchCondition.searchCondition}, searchText=${searchCondition.searchText}, currentPage=${idx})}" th:text="${idx}"
                                    th:classappend="${idx == paging.criteria.currentPage} ? active : ''">1</a>
                             </li>
                             <li th:if="${paging.hasNext}">
                                 <a class="page_next"
-                                   th:href="@{/admin/users/administrator(currentPage=${paging.criteria.currentPage}+1)}"></a>
+                                   th:href="@{/admin/users/administrator(searchCondition=${searchCondition.searchCondition}, searchText=${searchCondition.searchText}, currentPage=${paging.criteria.currentPage}+1)}"></a>
                             </li>
                         </ul>
                     </div>
@@ -70,5 +70,34 @@
             </div>
         </div>
     </div>
+    <script>
+        const submitSearch = () => {
+            const selectElement = document.getElementById('searchCondition');
+            let optionValue;
+
+            for(let i=0; i<selectElement.options.length; i++) {
+                if(selectElement.options[i].selected == true) {
+                    optionValue = selectElement.options[i].value;
+                    break;
+                }
+            }
+
+            const formElement = document.createElement('form');
+            const inputSelectElement = document.createElement('input');
+            inputSelectElement.setAttribute('value', optionValue);
+            inputSelectElement.setAttribute('name', 'searchCondition');
+
+            const searchTextInput = document.createElement('input');
+            searchTextInput.setAttribute('value', document.getElementById('searchText').value);
+            searchTextInput.setAttribute('name', 'searchText');
+            formElement.append(inputSelectElement, searchTextInput);
+
+            formElement.setAttribute('action', "/admin/users/administrator");
+            formElement.setAttribute('method', 'get');
+            document.body.appendChild(formElement);
+
+            formElement.submit();
+        }
+    </script>
 </body>
 </html>

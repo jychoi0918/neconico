@@ -161,7 +161,7 @@
 .user_wrap li { display: inline-block;  width: 150px; height: 40px; line-height: 40px; border: 1px solid #eee; text-align: center; font-size: 0.875rem; margin-right: 10px; transition: all 0.5s; font-weight: 500; color: #666; }
 .user_wrap li:last-child { margin-right: 0; }
 .user_wrap li a { display: block; }
-.user_wrap li:hover { border-color:#7429ff; color: #7429ff; font-weight: 500; }
+.user_wrap li:hover { border-color: #7429ff; color: #7429ff; font-weight: 500; }
 /* header end --------*/
 
 .find_id_wrap { width: 460px; margin: 80px auto 50px; }
@@ -171,17 +171,24 @@
 .find_id_form input { width: 100%; height: 50px; box-sizing: border-box; border-radius: 0; border: 1px solid #eaeaea; margin-bottom: 20px; font-size: 0.875rem; }
 .find_id_form input[type=text] { padding-left: 50px; }
 .find_id_form input[type=email] { padding-left: 50px; }
+/* .find_email { width: calc(70% - 15px) !important; margin-right: 5px; } */
 .find_id_form input[type=button] { background: #7429ff; color: #fff; font-weight: bold; cursor: pointer; border: 1px solid #7429ff; }
 .find_id_form input[type=button]:focus { outline: 0; border: none; box-sizing: border-box; }
 .find_id_form input[type=button]:hover { background: #601edb; }
+.find_id_form .find_email { margin-bottom: 5px; }
+.find_id_form .find_id_email { width: 30%; margin-bottom: 5px; }
 .find_id_form p { color: #f00; font-size: 12px; margin-bottom: 10px; }
-.find_id_form p { color: #f00; font-size: 12px; margin-bottom: 10px; }
+.find_id_form .find_email_btn { padding-left: 20px !important; }
 
 .find_id_label { position: relative; }
+.find_id_label2 { top: 68px; left: -100%; position: relative; }
 .find_id_label i { display: inline-block; width: 15px; height: 15px; position: absolute; top: -68px; left: 20px; }
 .find_id_label i img { width: 100%; }
 
 .find_id_form input:focus { border: 1px solid #7429ff; outline: #7429ff; }
+
+.find_id_btn { margin-top: 30px; }
+
 
 
 
@@ -202,8 +209,12 @@
     .user_wrap li { width: 100px; height: 40px; line-height: 40px; margin-right: 5px; }
 
     .find_id_wrap { width: 400px; }
-    
-    .find_id_label2 { left: -273px; }
+
+    .find_id_form input { height: 45px; line-height: 45px; margin-bottom: 10px; }
+    .find_id_label i { top: -53px; }
+    .find_id_label:nth-child(4) i { top: -65px; }
+
+    .find_id_form p { font-size: 12px; }
 
 }
 
@@ -217,7 +228,11 @@
 
     .find_id_wrap { width: 300px; }
 
-    .find_id_label2 { left: -203px; }
+    .find_id_form input { height: 40px; line-height: 40px; margin-bottom: 10px; }
+    .find_id_label i { top: -48px; }
+    .find_id_label:nth-child(4) i { top: -65px; }
+
+    .find_id_form p { font-size: 10px; }
 
 }
 

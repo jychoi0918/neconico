@@ -60,11 +60,10 @@ public class HomeController {
         return "footer/ad_inquiry";
     }
 
-    @GetMapping("/question")
+    @GetMapping("/request/question")
     public String question() {
         return "footer/question";
     }
-
 
     @GetMapping("/policy")
     public String operationPolicy() {

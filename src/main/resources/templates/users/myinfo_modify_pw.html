@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+
+<body>
+<div class="wrap">
+    <header class="header header_border">
+        <div class="sub_header h_con">
+            <h1 class="logo">
+                <a th:href="@{/}"><img src="/img/logo.png" alt=""></a>
+            </h1>
+        </div>
+    </header>
+
+        <div class="section_wrap h_con">
+            <section class="modify_pw_wrap">
+                <h3 class="h_fs_26">비밀번호 변경</h3>
+                <form th:action="@{/user/modify/myinfo/password}" method="post" name="modify_pw" class="modify_pw_form">
+                    <!-- ###########hidden############### -->
+                    <input type="hidden" id="password_check" value="false">
+
+                    <!-- #############form input############## -->
+                    <input type="hidden" name="accountId" th:value="${accountId}">
+                    <input type="password" id="accountPw" name="accountPw" class="find_pw_id" placeholder="비밀번호" required onkeyup="checkPassWord()">
+                    <p>* 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.</p>
+
+                    <input type="password" id="password_confirm" class="find_pw_phone" placeholder="비밀번호 확인" required onkeyup="checkPassWord()">
+                    <p id="password_confirm_message"></p>
+
+
+                    <input type="button" value="변경하기" class="modify_pw_confirm" onclick="submitForm()">
+
+                </form>
+            </section>
+        </div>
+    </div>
+    <script src="/js/users/modify_myinfo_pw.js"></script>
+</body>
+</html>

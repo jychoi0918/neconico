@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,11 +39,6 @@ public class DefaultPolicyUserService implements UserService{
     }
 
     @Override
-    public List<UserInfoDto> findUsers() {
-        return userMapper.selectUserAll();
-    }
-
-    @Override
     public UserAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto) {
         return userMapper.selectUserByNameAndEmail(userFindAccountIdDto);
     }
@@ -57,12 +51,21 @@ public class DefaultPolicyUserService implements UserService{
     @Override
     @Transactional
     public void changeDropUserAuthority(String accountId) {
-        userMapper.updateUserAuthority(accountId);
+        userMapper.updateUserAuthorityToDrop(accountId);
+    }
+
+    @Override
+    @Transactional
+    public void changeUserAuthorityToAdmin(String accountId) {
+        userMapper.updateUserAuthorityToAdmin(accountId);
     }
 
     @Override
     @Transactional
     public void changeUserInfo(UserInfoDto userInfoDto) {
+        setBlankToOauth(userInfoDto);
+        //변경시간 등록
+        userInfoDto.setModifiedDate(LocalDateTime.now());
         userMapper.updateUserInfo(userInfoDto);
     }
 
@@ -75,5 +78,21 @@ public class DefaultPolicyUserService implements UserService{
     @Override
     public UserInfoDto findUserByEmail(String email) {
         return userMapper.selectUserByEmail(email);
+    }
+
+    private void setBlankToOauth(UserInfoDto userInfoDto) {
+        String defaultOauthInfo = "OAUTH";
+
+        if(userInfoDto.getZipNo().equals("")) {
+            userInfoDto.setZipNo(defaultOauthInfo);
+        }
+
+        if(userInfoDto.getAddress().equals("")) {
+            userInfoDto.setAddress(defaultOauthInfo);
+        }
+
+        if(userInfoDto.getPhoneNumber().equals("")) {
+            userInfoDto.setPhoneNumber(defaultOauthInfo);
+        }
     }
 }

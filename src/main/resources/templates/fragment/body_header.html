@@ -16,6 +16,9 @@
         <li class="h_fs_12 h_fw_5">
           <a th:href="@{/store/mystore}">내상점</a>
         </li>
+        <li class="h_fs_12 h_fw_5" th:unless="${session.sessionUser == null}">
+          <a th:href="@{/user/modify/myinfo}">내정보</a>
+        </li>
       </ul>
     </div>
     <div class="header_middle h_con">
@@ -29,6 +32,7 @@
                 id="header_search"
                 name="searchText"
                 placeholder="상품명,지역명 검색"
+                onkeyup="enterkey()"
         />
         <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
@@ -90,6 +94,7 @@
                 id="mo_schbox_btn"
                 name="searchText"
                 placeholder="상품명,지역명 검색"
+                onkeyup="enterkey()"
         />
         <a href="javascript:submitSearch()"><img src="/img/search_p.png" alt="" /></a>
       </div>
@@ -111,6 +116,12 @@
       form.setAttribute('method', 'get');
       document.body.appendChild(form);
       form.submit();
+    }
+    function enterkey() {
+      if (window.event.keyCode == 13) {
+
+        submitSearch();
+      }
     }
   </script>
   <div class="mo_menu_back">

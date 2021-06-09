@@ -242,8 +242,6 @@ const submitFormDataToAjax = (formData) => {
     const httpRequest = new XMLHttpRequest();
 
     formData.enctype = 'multipart/form-data';
-    formData.method = 'post';
-    formData.action = '/item/new';
 
     httpRequest.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 201) {

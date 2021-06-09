@@ -37,7 +37,7 @@
 
                     <input type="email" th:field="*{email}" class="find_pw_email mg_btm_5" placeholder="이메일" required>
                     <label th:for="*{email}" class="find_pw_label find_pw_label2"><i><img src="/img/find_id_email.png" alt=""></i></label>
-                    <input type="button" class="find_pw_btn mg_btm_5" value="인증코드 발송" onclick="sendAuthorNum()">
+                    <input type="button" class="find_pw_btn mg_btm_5" value="인증코드 발송" onclick="sendAuthorNumForFindPw()">
                     <p style="color: #7429ff">* 회원 가입때 기입한 이메일번호를 적어주세요</p>
                     <p th:if="${#fields.hasErrors('accountId') || #fields.hasErrors('phoneNumber') || #fields.hasErrors('email')}">
                         아이디, 핸드폰, 이메일이 정확한지 확인해주세요.</p>

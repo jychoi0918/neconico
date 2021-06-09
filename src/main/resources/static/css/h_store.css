@@ -431,6 +431,7 @@
 .new04 { border-bottom: 1px solid #ccc; margin-bottom: 30px; padding-bottom: 30px; }
 .new04 > span { vertical-align: top; }
 .new04 > .new04_right { display: inline-block; }
+.new04 > p { font-size: 14px; color: #7429ff; margin: 5px 0 20px 100px; }
 
 .new04_right_img { display: flex; }
 .new04_right_img figure { position: relative; }

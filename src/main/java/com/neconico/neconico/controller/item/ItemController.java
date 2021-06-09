@@ -181,12 +181,21 @@ public class ItemController {
         //해당 아이템과 동일한 카테고리 items 조회
         Criteria criteria = new Criteria();
         criteria.setCurrentPage(0);
-        List<ItemCardSearchViewDto> relatedProducts = itemService
-                .searchItemsBySubCategoryId(criteria, findItemInfoDto.getCategorySubInfoDto().getCategorySubId())
-                .stream()
-                .filter(i -> !i.getItemId().equals(findItemInfoDto.getItemId()))
-                .limit(6)
-                .collect(Collectors.toList());
+
+        List<ItemCardSearchViewDto> sameCategoryItems = itemService
+                .searchItemsBySubCategoryId(criteria, findItemInfoDto.getCategorySubInfoDto().getCategorySubId());
+
+
+        //관련상품
+        if(sameCategoryItems != null) { // 관련상품이 있을경우
+            model.addAttribute(
+                    "relatedProducts",
+                    createRelatedProductList(sameCategoryItems, findItemInfoDto.getItemId()));
+        }else { // 관련상품이 없을 경우
+            model.addAttribute(
+                    "relatedProducts",
+                    null);
+        }
 
         //해당 아이템 찜 개수
         String countFavorite = itemFavoriteService.countItemFavorite(itemId);
@@ -201,7 +210,6 @@ public class ItemController {
         model.addAttribute("countFavorite",countFavorite);
         model.addAttribute("betweenTime", betweenTime);
         model.addAttribute("findItemInfo", findItemInfoDto);
-        model.addAttribute("relatedProducts", relatedProducts);
 
         return "item/inquire_item";
     }
@@ -211,5 +219,12 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public void incrementHits(@PathVariable("itemId") Long itemId) {
         itemService.incrementItemHits(itemId);
+    }
+
+    private List<ItemCardSearchViewDto> createRelatedProductList(List<ItemCardSearchViewDto> sameCategoryItems, Long targetItemId) {
+        return sameCategoryItems.stream()
+                .filter(i -> !i.getItemId().equals(targetItemId))
+                .limit(6)
+                .collect(Collectors.toList());
     }
 }

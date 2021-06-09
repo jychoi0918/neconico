@@ -56,9 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user/modify/myinfo", "/user/modify/myinfo/password",
+                        "/user/modify/myinfo/drop", "/change/admin/authority/user/158325").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/store/mystore", "/item/manage").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/item/new", "/item/**/edit", "/item/**/delete", "/question/**", "/trade/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/", "/login*", "/user/**", "/item/**", "/notice/**", "/store/**").permitAll()
+                .antMatchers("/notice", "/notice/**", "/adinquiry", "/request/question", "/policy").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 //로그인
@@ -85,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //oauth 로그인
                 .oauth2Login()
                 .loginPage("/login")
-                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/", true)
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
 
