@@ -14,7 +14,7 @@ public class StoreInfoMaker {
     }
 
     private static String createStoreName(Long userId) {
-        return userId + "사용자" + UUID.randomUUID();
+        return userId + "사용자" + UUID.randomUUID().toString().substring(0, 6);
     }
 
 
