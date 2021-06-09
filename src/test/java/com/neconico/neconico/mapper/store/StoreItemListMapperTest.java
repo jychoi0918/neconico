@@ -1,6 +1,7 @@
 package com.neconico.neconico.mapper.store;
 
 
+import com.neconico.neconico.dto.item.card.ItemPurchasedCardDto;
 import com.neconico.neconico.dto.store.StoreItemSortingDto;
 import com.neconico.neconico.dto.item.card.ItemCardDto;
 import com.neconico.neconico.dto.store.card.StoreQuestionCardDto;
@@ -80,10 +81,9 @@ class StoreItemListMapperTest {
         //given
         StoreItemSortingDto input = new StoreItemSortingDto(userId, sortKind, sortOrder, startRow, countRow);
         //when
-        List<ItemCardDto> result = storeItemListMapper.selectStorePurchasedItemList(input);
+        List<ItemPurchasedCardDto> result = storeItemListMapper.selectStorePurchasedItemList(input);
         //then
         assertThat(result.size()).isEqualTo(countRow.intValue());
-        assertThat(sortingTest(result, sortKind, sortOrder)).isTrue();
     }
 
     @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}, db에 존재하는 질문 갯수 {5} ")
@@ -97,10 +97,6 @@ class StoreItemListMapperTest {
         //then
 
         assertThat(result.size()).isEqualTo(count);
-//
-//        List<ItemCardDto> cardResult = new ArrayList<>();
-//        result.forEach(o -> cardResult.add(o));
-//        assertThat(sortingTest(cardResult, sortKind, sortOrder)).isTrue();
     }
 
     @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}, 데이터 갯수 {5} ")
@@ -113,10 +109,6 @@ class StoreItemListMapperTest {
         List<StoreReviewCardDto> result = storeItemListMapper.selectStoreReviewList(input);
         //then
         assertThat(result.size()).isEqualTo(count);
-//
-//        List<ItemCardDto> cardResult = new ArrayList<>();
-//        result.forEach(o -> cardResult.add(o));
-//        assertThat(sortingTest(cardResult, sortKind, sortOrder)).isTrue();
     }
 
     @ParameterizedTest(name = "유저아이디 {0}, 정렬종류 {1}, 정렬순서 {2}, 시작위치 {3}, 가져올갯수 {4}, 데이터 갯수 {5} ")
@@ -129,10 +121,6 @@ class StoreItemListMapperTest {
         List<StoreTradeCardDto> result = storeItemListMapper.selectStoreTradeList(input);
         //then
         assertThat(result.size()).isEqualTo(count);
-//
-//        List<ItemCardDto> cardResult = new ArrayList<>();
-//        result.forEach(o -> cardResult.add(o));
-//        assertThat(sortingTest(cardResult, sortKind, sortOrder)).isTrue();
     }
 
 
