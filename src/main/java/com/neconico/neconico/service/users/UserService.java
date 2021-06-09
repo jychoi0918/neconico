@@ -12,13 +12,13 @@ public interface UserService {
 
     UserInfoDto findUserByAccountId(String accountId);
 
-    List<UserInfoDto> findUsers();
-
     UserAccountIdDto findAccountIdByNameAndEmail(UserFindAccountIdDto userFindAccountIdDto);
 
     UserAccountIdDto findAccountPwByAccountIdAndPhoneNumAndEmail(UserFindAccountPwDto userFindAccountPwDto);
 
     void changeDropUserAuthority(String accountId);
+
+    void changeUserAuthorityToAdmin(String accountId);
 
     void changeUserInfo(UserInfoDto userInfoDto);
 

@@ -21,7 +21,9 @@ public interface UserMapper {
 
     void insertUser(UserJoinDto userJoinDto);
 
-    void updateUserAuthority(String accountId);
+    void updateUserAuthorityToDrop(String accountId);
+
+    void updateUserAuthorityToAdmin(String accountId);
 
     void updateUserInfo(UserInfoDto userInfoDto);
 

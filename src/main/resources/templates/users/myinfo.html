@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header"/>
+<body>
+    <div class="wrap">
+
+        <div class="section_wrap h_con">
+            <section class="join_wrap">
+                <h1 class="join_logo">
+                    <a th:href="@{/}">
+                        <img src="/img/logo.png" alt="">
+                    </a>
+                </h1>
+                <form th:action="@{/user/modify/myinfo}" th:object="${userInfo}" method="post" class="join_form">
+
+                    <!-- #############form input############## -->
+                    <input type="text" th:field="*{accountId}" th:value="*{accountId}" class="join_id" placeholder="아이디" readonly>
+                    <label th:for="*{accountId}" class="join_label"></label>
+                    <input type="button" id="join_id_conf" class="join_id_conf" value="비밀번호 변경" th:onclick="changePw([[${userInfo.birthdate}]])">
+
+                    <input type="text" th:field="*{accountName}" class="join_name" placeholder="이름" readonly>
+                    <label th:for="*{accountName}" class="join_label"></label>
+
+                    <input type="radio" th:field="*{gender}" class="join_m" name="join_sex" value="M" th:checked="${userInfo.gender.equals('M')}">
+                    <label th:for="*{gender}">남</label>
+                    <input type="radio" th:field="*{gender}" class="join_fm" name="join_sex" value="F" th:checked="${userInfo.gender.equals('F')}">
+                    <label th:for="*{gender}">여</label>
+                    <p th:if="${userInfo.gender.equals('U')}">*성별을 선택해 주세요</p>
+
+                    <input type="text" name="phoneNumber" th:id="*{phoneNumber}" th:if="${userInfo.phoneNumber.contains('OAUTH')}" value="" class="join_phone" placeholder="핸드폰번호" maxlength="13" onkeyup="inputBarToPhoneNumber(this)">
+                    <input type="text" name="phoneNumber" th:id="*{phoneNumber}" th:unless="${userInfo.phoneNumber.contains('OAUTH')}" th:value="*{phoneNumber}" class="join_phone" placeholder="핸드폰번호" maxlength="13" onkeyup="inputBarToPhoneNumber(this)">
+                    <label th:for="*{phoneNumber}" class="join_label"></label>
+
+                    <input type="text" th:field="*{email}" class="join_phone" placeholder="이메일" readonly>
+                    <label th:for="*{email}" class="join_label"></label>
+
+                    <input type="text" readonly name="zipNo" th:id="*{zipNo}" class="join_add" th:unless="${#strings.equals(userInfo.zipNo, 'OAUTH')}" th:value="${userInfo.zipNo}" placeholder="우편번호">
+                    <input type="text" readonly name="zipNo" th:id="*{zipNo}" class="join_add" th:if="${#strings.equals(userInfo.zipNo, 'OAUTH')}"  value="" placeholder="우편번호">
+                    <label th:for="*{zipNo}" class="join_label"></label>
+
+                    <input type="button" value="주소변경" id="join_add_sch" class="join_add_sch" onclick="executePostCode()">
+                    <input type="text" readonly name="address" th:id="*{address}" th:unless="${#strings.equals(userInfo.address, 'OAUTH')}" th:value="${userInfo.address}" class="join_add_detail" placeholder="상세주소">
+                    <input type="text" readonly name="address" th:id="*{address}" th:if="${#strings.equals(userInfo.address, 'OAUTH')}" value="" class="join_add_detail" placeholder="상세주소">
+                    <label th:for="*{address}" class="join_label"></label>
+
+                    <input type="button" value="정보수정" onclick="submitForm()">
+                    <input style="background-color: #c02034; border-color: #c02034;" type="button" value="회원탈퇴" onclick="submitUserDrop()">
+                </form>
+                
+            </section>
+        </div>
+    </div>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/users/change_myinfo_form.js"></script>
+</body>
+</html>
