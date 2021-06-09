@@ -186,10 +186,10 @@
 
     <select id="selectStoreReviewList" parameterType="storeitemsortingdto" resultMap="reviewcard">
         select sr.store_review_id reviewid,
-        sr.content content,
         s.store_name writername,
-        sr.created_date reviewcreated,
         u.account_id accountid,
+        sr.content content,
+        sr.created_date reviewcreated,
         i.*
         from (
         <include refid="selectItem"/>
