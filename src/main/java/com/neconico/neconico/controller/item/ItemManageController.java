@@ -19,7 +19,7 @@ public class ItemManageController {
 
     @GetMapping("/item/manage")
     public String itemManage(Model model,
-                             @RequestParam(value = "currentPage", defaultValue = "1") int currentPage,
+                             @RequestParam(value = "currentPage", defaultValue = "1") Long currentPage,
                              @RequestParam(value = "sortingColumn", defaultValue = "created") String sortingColumn,
                              @RequestParam(value = "requestOrder", defaultValue = "DESC") String requestOrder,
                              @LoginUser SessionUser user) {

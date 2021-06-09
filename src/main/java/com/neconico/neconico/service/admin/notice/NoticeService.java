@@ -1,7 +1,6 @@
 package com.neconico.neconico.service.admin.notice;
 
 import com.neconico.neconico.dto.admin.notice.NoticeDto;
-import com.neconico.neconico.dto.admin.notice.NoticeReturnDto;
 import com.neconico.neconico.dto.admin.notice.NoticeStatusDto;
 import com.neconico.neconico.dto.admin.notice.NoticeViewDto;
 import com.neconico.neconico.paging.Criteria;

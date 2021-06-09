@@ -36,8 +36,8 @@ class NoticeMapperTest {
         //given
         List<NoticeReturnDto> notices = new ArrayList<>();
         Criteria cri = new Criteria();
-        cri.setCurrentPage(2);
-        cri.setContentPerPage(10);
+        cri.setCurrentPage(2L);
+        cri.setContentPerPage(10L);
         cri.setSortingColumn("noticeId");
         cri.setRequestOrder("desc");
         //when

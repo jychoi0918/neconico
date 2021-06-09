@@ -85,10 +85,10 @@ public class AdvertiseServiceImpl implements AdvertiseService {
     private Criteria setCriteria(Criteria cri) {
         cri.setSortingColumn("advertisementId");
         cri.setRequestOrder("desc");
-        cri.setContentPerPage(10);
+        cri.setContentPerPage(10L);
 
-        if (cri.getCurrentPage() <= 0)
-            cri.setCurrentPage(1);
+        if ( cri.getCurrentPage() <= 0L)
+            cri.setCurrentPage(1L);
 
         return cri;
     }

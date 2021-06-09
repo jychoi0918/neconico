@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class StoreItemRequestDto {
-    private int currentPage;
+    private long currentPage;
     private String sortingColumn;
     private String requestOrder;
 }

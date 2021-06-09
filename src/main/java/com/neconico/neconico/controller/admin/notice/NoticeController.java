@@ -26,7 +26,7 @@ public class NoticeController {
     public String list(Model model, Criteria cri) {
 
         model.addAttribute("notices", noticeService.selectAllNotices(cri));
-        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countAllNotices().intValue(), 5));
+        model.addAttribute("pageMaker", new Pagination(cri, noticeService.countAllNotices(), 5l));
 
         return "admin/notice/notice_list";
 

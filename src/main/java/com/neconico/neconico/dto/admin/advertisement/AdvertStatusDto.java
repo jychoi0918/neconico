@@ -10,6 +10,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("AdvertStatusDto")
 public class
 AdvertStatusDto {
-    private long advertisementId;
+    private Long advertisementId;
     private String adStatus;
 }

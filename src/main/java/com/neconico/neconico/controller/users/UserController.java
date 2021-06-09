@@ -1,14 +1,11 @@
 package com.neconico.neconico.controller.users;
 
+import com.neconico.neconico.Maker.StoreInfoMaker;
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.users.*;
 import com.neconico.neconico.service.store.StoreInfoService;
-import com.neconico.neconico.Maker.StoreInfoMaker;
 import com.neconico.neconico.service.users.UserService;
-import com.nimbusds.jose.proc.SecurityContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +40,8 @@ public class UserController {
     }
 
     /**
-     * 회원가입
+     * 회원가입e
+     *
      */
     @GetMapping("/user/new")
     public String joinPage(Model model){

@@ -29,7 +29,7 @@ public class UserAdminController {
 
         model.addAttribute("searchCondition", searchConditionDto);
         model.addAttribute("userList", usersAdminService.selectUserList(cri, "ROLE_USER", searchConditionDto));
-        model.addAttribute("paging", new Pagination(cri, Math.toIntExact(usersAdminService.countUserList("ROLE_USER", searchConditionDto)), 10));
+        model.addAttribute("paging", new Pagination(cri, (usersAdminService.countUserList("ROLE_USER", searchConditionDto)), 10l));
         return "admin/users/users_list";
     }
 
@@ -44,7 +44,7 @@ public class UserAdminController {
 
         model.addAttribute("searchCondition", searchConditionDto);
         model.addAttribute("userList", usersAdminService.selectUserList(cri, "ROLE_ADMIN", searchConditionDto));
-        model.addAttribute("paging", new Pagination(cri, Math.toIntExact(usersAdminService.countUserList("ROLE_ADMIN", searchConditionDto)), 10));
+        model.addAttribute("paging", new Pagination(cri, (usersAdminService.countUserList("ROLE_ADMIN", searchConditionDto)), 10l));
 
         return "admin/users/users_administrator";
     }
