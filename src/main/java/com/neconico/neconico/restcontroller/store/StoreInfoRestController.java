@@ -9,6 +9,8 @@ import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.service.file.FileService;
 import com.neconico.neconico.service.store.StoreInfoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,9 +25,15 @@ public class StoreInfoRestController {
     private final StoreInfoService storeInfoService;
     private final FileService fileService;
 
+
     @PostMapping("/mystore/name/edit")
-    public void modifyStoreName(@RequestParam(name = "name") String name, @LoginUser SessionUser user) {
-        storeInfoService.updateStoreInfo(new StoreInfoDto(user.getUserId(), name, null, null, null));
+    public ResponseEntity<String> modifyStoreName(@RequestParam(name = "name") String name, @LoginUser SessionUser user) {
+        try {
+            storeInfoService.updateStoreInfo(new StoreInfoDto(user.getUserId(), name, null, null, null));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/mystore/content/edit")

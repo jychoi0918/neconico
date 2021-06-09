@@ -116,6 +116,15 @@ function createItemCard(itemList) {
             img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             div1.append(img);
+            if (item.status == '거래 완료') {
+                let statusDiv = document.createElement("div");
+                statusDiv.setAttribute("class", "list_img_sold_out out");
+                let p = document.createElement("p");
+                p.setAttribute("align","center")
+                p.innerText = '판매완료';
+                statusDiv.append(p);
+                div1.append(statusDiv);
+            }
             fig.append(div1);
 
             let div = document.createElement("div");

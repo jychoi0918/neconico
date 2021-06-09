@@ -14,7 +14,7 @@
 # 사용 기술
 ***
 ### BACK-END
-  * JAVA 8
+  * JAVA 11
   * GRADLE
   * SPRING
     * SPRING-BOOT

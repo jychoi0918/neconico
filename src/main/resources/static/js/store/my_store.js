@@ -127,7 +127,7 @@ function createItemCard(itemList) {
         let th3 = document.createElement("th");
         th3.innerText = '상품 가격';
         let th4 = document.createElement("th");
-        th4.innerText = '상품 정보';
+        th4.innerText = '요청 정보';
         let th5 = document.createElement("th");
         th5.innerText = '거래 상태';
         tr.append(th1, th2, th3, th4, th5);
@@ -145,6 +145,7 @@ function createItemCard(itemList) {
             let item_td2 = document.createElement("td");
             let a = document.createElement("a");
             a.setAttribute("href", "/item/" + item.itemId);
+            a.innerText = item.title;
             item_td2.append(a);
 
             let item_td3 = document.createElement("td");
@@ -281,6 +282,15 @@ function createItemCard(itemList) {
             img.setAttribute("src", item.itemImg.split('>')[0]);
             img.setAttribute("alt", "");
             div1.append(img);
+            if (item.status == '거래 완료') {
+                let statusDiv = document.createElement("div");
+                statusDiv.setAttribute("class", "list_img_sold_out out");
+                let p = document.createElement("p");
+                p.setAttribute("align","center")
+                p.innerText = '판매완료';
+                statusDiv.append(p);
+                div1.append(statusDiv);
+            }
             fig.append(div1);
 
             let div = document.createElement("div");
@@ -445,7 +455,6 @@ function tradeSubmit(tradeId) {
     let select = document.getElementById(tradeId);
     let status = select.options[select.selectedIndex].value;
 
-
     if (status == 'success' || status == 'cancel') {
         let httpRequest = new XMLHttpRequest();
         console.log(status);
@@ -478,6 +487,9 @@ function clickStoreName(kind) {
     } else if (kind == 1) {
         let storeName = parent.firstChild.value;
 
+        if(storeName.length > 10){
+            alert("상점명은 최대 10자까지 지원합니다.")
+        }else{
         <!-- 요청 추가 -->
         let httpRequest = new XMLHttpRequest();
         httpRequest.open('POST', "/mystore/name/edit");
@@ -485,7 +497,6 @@ function clickStoreName(kind) {
         httpRequest.onreadystatechange = function () {
             if (this.readyState === 4 && this.status === 200) {
                 alert('상점명이 변경 되었습니다.')
-
                 removeChildNode('storeName');
                 let span = document.createElement("span");
                 span.innerText = storeName;
@@ -494,10 +505,13 @@ function clickStoreName(kind) {
                 a.setAttribute("href", "javascript:clickStoreName(0)")
                 span.append(a);
                 parent.append(span);
+            } else if(this.readyState === 4 && this.status === 400) {
+                alert('상점명이 중복입니다.')
             }
+
         }
         httpRequest.send('name=' + storeName);
-
+        }
     }
 }
 
@@ -508,6 +522,7 @@ function clickStoreContent(kind) {
 
     if (kind == 0) {
         let storeContent = div.innerText;
+
         removeChildNode('storeContentBox');
 
         let textarea = document.createElement("textarea");
@@ -518,23 +533,27 @@ function clickStoreContent(kind) {
 
     } else if (kind == 1) {
         let storeContent = div.firstChild.value;
-        <!-- 요청 추가 -->
-        let httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', "/mystore/content/edit");
-        httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-        httpRequest.onreadystatechange = function () {
-            if (this.readyState === 4 && this.status === 200) {
-                alert('상점 소개글이 변경 되었습니다.')
-                removeChildNode('storeContentBox');
 
-                let p = document.createElement("p");
-                p.innerText = storeContent;
-                div.append(p);
+        if(storeContent.length <= 200) {
+            <!-- 요청 추가 -->
+            let httpRequest = new XMLHttpRequest();
+            httpRequest.open('POST', "/mystore/content/edit");
+            httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            httpRequest.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    alert('상점 소개글이 변경 되었습니다.')
+                    removeChildNode('storeContentBox');
 
-                a.setAttribute("href", "javascript:clickStoreContent(0)");
+                    let p = document.createElement("p");
+                    p.innerText = storeContent;
+                    div.append(p);
+                    a.setAttribute("href", "javascript:clickStoreContent(0)");
+                }
             }
+            httpRequest.send('content=' + storeContent);
+        } else {
+            alert("글자수가 200자를 초과했습니다.");
         }
-        httpRequest.send('content=' + storeContent);
 
 
     }

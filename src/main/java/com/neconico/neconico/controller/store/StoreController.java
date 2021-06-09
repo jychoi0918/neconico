@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class StoreController {
         SessionUser user = infoService.getSessionUserInfoByAccountId(accountId);
         model.addAttribute("storeInfo", infoService.findStoreInfo(user));
 
-        HashMap<String, Long> itemCountMap = listService.createItemListCount(user.getUserId());
+        Map<String, Long> itemCountMap = listService.createItemListCount(user.getUserId());
         itemCountMap.forEach((key, value) -> model.addAttribute(key, value));
 
         model.addAttribute("accountId", accountId);
@@ -40,7 +40,7 @@ public class StoreController {
 
         model.addAttribute("storeInfo", infoService.findStoreInfo(user));
 
-        HashMap<String, Long> itemCountMap = listService.createItemListCount(user.getUserId());
+        Map<String, Long> itemCountMap = listService.createItemListCount(user.getUserId());
         itemCountMap.forEach((key, value) -> model.addAttribute(key, value));
 
         return "store/my_store";
