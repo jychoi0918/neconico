@@ -487,6 +487,9 @@ function clickStoreName(kind) {
     } else if (kind == 1) {
         let storeName = parent.firstChild.value;
 
+        if(storeName.length > 10){
+            alert("상점명은 최대 10자까지 지원합니다.")
+        }else{
         <!-- 요청 추가 -->
         let httpRequest = new XMLHttpRequest();
         httpRequest.open('POST', "/mystore/name/edit");
@@ -508,7 +511,7 @@ function clickStoreName(kind) {
 
         }
         httpRequest.send('name=' + storeName);
-
+        }
     }
 }
 
