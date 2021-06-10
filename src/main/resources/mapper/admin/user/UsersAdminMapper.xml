@@ -54,7 +54,7 @@
                 count(case when age > 60 then 1 end) as "ageOver60s",
                 count(age) as "ageTotal"
         from
-                (select date_format(now(), '%Y' )-date_format(birthdate, '%Y')+1 as age from users) T
+                (select date_format(now(),'%Y')-1899-substr(birthdate,1,2) as age from users) T
     </select>
 
     <select id="selectUserListByGender" resultType="map">
