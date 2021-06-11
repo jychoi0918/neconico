@@ -29,6 +29,7 @@ public class DefaultEmailService implements EmailService {
 
     @Override
     @Transactional
+    @Deprecated
     public Long sendAuthorNumberMail(String emailAddress, int length) throws Exception {
         generateCertCharacter.setNumberLength(length);
         String authNumber = generateCertCharacter.executeGenerate();
@@ -45,16 +46,23 @@ public class DefaultEmailService implements EmailService {
     }
 
     @Override
-    public void sendMailTemplate(Map<String, Object> content,
-                                 String eventName, String templatePath) throws Exception {
+    @Transactional
+    public Long sendAuthorMailTemplate(String emailAddress, String templatePath, int length) throws Exception {
+        generateCertCharacter.setNumberLength(length);
+        String authNumber = generateCertCharacter.executeGenerate();
+
         Context context = new Context();
-        context.setVariable("content", content);
+        context.setVariable("content", authNumber);
 
         String process = templateEngine.process(templatePath, context);
 
-        mailHandler.setSubject(eventName);
+        mailHandler.setForm(fromAddress);
+        mailHandler.setTo(emailAddress);
+        mailHandler.setSubject("내꼬니꼬 인증확인 메일입니다.");
         mailHandler.setText(process, true);
         mailHandler.send();
+
+        return insertAuthorNumber(authNumber);
     }
 
     @Override
