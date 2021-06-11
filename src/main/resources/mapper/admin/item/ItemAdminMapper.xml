@@ -32,13 +32,14 @@
     </select>
 
     <select id="countItemByMainCategory" resultType="CategoryMainCountDto">
-        select mc.name as maincategoryname, count(mc.name)/3 as num
+        select mc.name as maincategoryname, count(mc.name) as num
         from item i
                      inner join category_sub sc
-                on i.category_sub_id = sc.category_main_id
+                on i.category_sub_id = sc.category_sub_id
                      inner join category_main mc
                 on sc.category_main_id = mc.category_main_id
         group by mc.name
+        order by mc.category_main_id
     </select>
 
     <select id="countItemBySubCategory" resultType="CategorySubCountDto">
