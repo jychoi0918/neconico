@@ -52,7 +52,7 @@
                 <!--    페이징      -->
                 <div class="pagination" th:if="${pageMaker.totalContent}!=0">
                     <ul>
-                        <li th:unless="${pageMaker.criteria.currentPage}==1">
+                        <li th:if="${pageMaker.hasPrev}">
                             <a class="page_prev"
                                th:href="@{/admin/advert/list(currentPage=${pageMaker.criteria.currentPage}-1)}"></a>
                         </li>

@@ -32,17 +32,19 @@ public class Pagination {
         //첫 페이지
         this.startPage = endPage - (pageSize - 1);
 
-        //다음 페이지 존재 여부
-        this.hasPrev = this.startPage > 1;
-
-        /*여기 고쳐줘야 할 듯!*/
         //전체 페이지 (전체 페이지의 끝)
         this.totalPage = (long)(Math.ceil((totalContent * 1.0) / criteria.getContentPerPage()));
 
         //진짜 끝 페이지<현재 보이는 페이지 끝 일 때
         this.endPage = totalPage <= endPage ? totalPage : endPage;
 
-        this.hasNext = this.endPage < totalPage;
+        //이전 페이지 존재 여부
+        this.hasPrev = criteria.getCurrentPage() > 1;
+
+        //다음 페이지 존재 여부
+        this.hasNext = criteria.getCurrentPage() < this.totalPage;
+
+
 
 
     }
