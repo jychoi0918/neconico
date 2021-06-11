@@ -4,6 +4,7 @@ import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.dto.users.UserInfoDto;
 import com.neconico.neconico.service.email.EmailService;
+import com.neconico.neconico.service.email.template.EmailTemplate;
 import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class UsersRestController {
     @PostMapping("/user/email/send")
     public ResponseEntity<Long> sendEmail(@RequestParam("emailAddress") String emailAddress) {
         try {
-            Long emailId = emailService.sendAuthorMailTemplate(emailAddress,"/email/email_form.html", 6);
+            Long emailId = emailService.sendAuthorMailTemplate(emailAddress, EmailTemplate.DEFAULT, 6);
             return new ResponseEntity<>(emailId, HttpStatus.OK);
 
         }catch (Exception e) {
