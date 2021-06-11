@@ -4,15 +4,15 @@ import com.neconico.neconico.dto.email.AuthorNumberDto;
 import com.neconico.neconico.mapper.email.EmailMapper;
 import com.neconico.neconico.service.email.certgenerator.GenerateCertCharacter;
 import com.neconico.neconico.service.email.handler.MailHandler;
+import com.neconico.neconico.service.email.template.EmailTemplate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Service("defaultEmailService")
 @Transactional(readOnly = true)
@@ -22,7 +22,7 @@ public class DefaultEmailService implements EmailService {
     private final EmailMapper emailMapper;
     private final MailHandler mailHandler;
     private final GenerateCertCharacter generateCertCharacter;
-    private final TemplateEngine templateEngine;
+    private final SpringTemplateEngine templateEngine;
 
     @Value("${spring.mail.username}")
     private String fromAddress;
@@ -47,14 +47,14 @@ public class DefaultEmailService implements EmailService {
 
     @Override
     @Transactional
-    public Long sendAuthorMailTemplate(String emailAddress, String templatePath, int length) throws Exception {
+    public Long sendAuthorMailTemplate(String emailAddress, EmailTemplate emailTemplate, int length) throws Exception {
         generateCertCharacter.setNumberLength(length);
         String authNumber = generateCertCharacter.executeGenerate();
 
         Context context = new Context();
         context.setVariable("content", authNumber);
 
-        String process = templateEngine.process(templatePath, context);
+        String process = templateEngine.process(emailTemplate.getTemplatePath(), context);
 
         mailHandler.setForm(fromAddress);
         mailHandler.setTo(emailAddress);

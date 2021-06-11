@@ -40,7 +40,7 @@ public class UserController {
     }
 
     /**
-     * 회원가입e
+     * 회원가입
      *
      */
     @GetMapping("/user/new")
