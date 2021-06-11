@@ -26,8 +26,9 @@ public class UsersRestController {
     @PostMapping("/user/email/send")
     public ResponseEntity<Long> sendEmail(@RequestParam("emailAddress") String emailAddress) {
         try {
-            Long emailId = emailService.sendAuthorNumberMail(emailAddress, 6);
+            Long emailId = emailService.sendAuthorMailTemplate(emailAddress,"/email/email_form.html", 6);
             return new ResponseEntity<>(emailId, HttpStatus.OK);
+
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
