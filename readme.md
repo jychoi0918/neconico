@@ -161,3 +161,123 @@
 </details>
 
 ### 관리자
+
+![admin](./img/page/admin/admin_main.png)
+
+<details>
+<summary>구현 기능 보기</summary>
+<div markdown="1">
+<br></br>
+<details>
+<summary>회원관리</summary>
+<div markdown="1">
+
+* 회원관리
+
+    * 회원 목록 조회
+      <br></br>
+      ![usersList](./img/page/admin/users/admin_user_list.gif)
+      <br></br>
+
+    * 회원 목록 그룹별 조회 (나이 / 성별 / 지역)
+      <br></br>
+      ![usersGroup](./img/page/admin/users/admin_user_group.gif)
+      <br></br>
+
+    * 회원 가입 추이 조회
+      <br></br>
+      ![usersRegistered](img/page/admin/users/admin_user_registered.gif)
+      <br></br>
+      <br></br>
+
+</div>
+</details>
+
+<details>
+<summary>상품관리</summary>
+<div markdown="1">
+
+* 상품관리
+  <br></br>
+
+    * 상품 카테고리별 등록 수 조회 (대분류 / 중분류)
+      <br></br>
+      ![itemsList](./img/page/admin/item/admin_item_static.gif)
+      <br></br>
+
+    * 상품 거래 완료 비율 조회
+      <br></br>
+      ![tradeRate](./img/page/admin/item/admin_item_tradestatus.gif)
+      <br></br>
+
+    * 카테고리 등록 및 수정 (대분류)
+      <br></br>
+      ![categoryCRUD](./img/page/admin/item/admin_item_categorymain.gif)
+      <br></br>
+
+    * 카테고리 등록 및 수정 (중분류)
+      <br></br>
+      ![subCategoryCRUD](./img/page/admin/item/admin_item_categorysub.gif)
+      <br></br>
+
+</div>
+</details>
+
+<details>
+<summary>광고관리</summary>
+<div markdown="1">
+
+
+* 광고 조회/수정/삭제
+  ![advertList](./img/page/admin/advert/advert_ud.gif)
+
+<br>
+
+* 광고 등록
+
+![advertCRUD](./img/page/admin/advert/submit_advert.gif)
+
+<br>
+
+* 광고 숨김
+
+![advertCRUD](./img/page/admin/advert/advert_hidden.gif)
+
+<br>
+
+
+
+</div>
+</details>
+
+<details>
+<summary>공지사항</summary>
+<div markdown="1">
+
+<br>
+
+* 공지사항 조회
+
+![noticeList](./img/page/admin/notice/noticelist.PNG)
+
+<br>
+
+* 공지 등록, 수정, 삭제
+
+![noticeCRUD](./img/page/admin/notice/submit_notice.gif)
+
+<br>
+
+* 공지사항 페이지 처리
+
+![noticePaging](./img/page/admin/notice/notice_paging.gif)
+
+
+</details>
+<br>
+
+* 관리자 권한 부여
+  <br></br>
+  ![adminAuthority](./img/page/admin/admin_changeauthority.gif)
+</div>
+</details>
