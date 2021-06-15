@@ -20,10 +20,9 @@
     * SPRING-BOOT
     * SPRING-SECURITY
   * MYBATIS
-  * JUNIT5
+  * JUNIT5 AssertJ
     
 ### FRONT-END  
-  * BOOTSTRAP
   * JAVASCRIPT
     * AJAX
     * JQUERY
