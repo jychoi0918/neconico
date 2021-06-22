@@ -1,5 +1,5 @@
 ![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=내꼬니꼬&fontAlign=70&fontAlignY=35&color=random)
-![findId](./src/main/resources/static/img/logo/neconico_logo.png)
+[![findId](./src/main/resources/static/img/logo/neconico_logo.png)](http://www.neconico.com)
 ***
 　중고나라, 번개장터, 당근마켓 등 중고거래 플랫폼에서 착안해, 중고 상품을 거래 할 수 있는 웹서비스를 기획 했습니다.  
  　판매자, 구매자, 관리자 관점에서 요구사항을 분석하고, 분석한 내용을 분담하여 서비스 구현을 진행했습니다.   
