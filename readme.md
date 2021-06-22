@@ -1,15 +1,13 @@
+![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=내꼬니꼬&fontAlign=70&fontAlignY=35&color=random)
 ![findId](./src/main/resources/static/img/logo/neconico_logo.png)
 ***
 　중고나라, 번개장터, 당근마켓 등 중고거래 플랫폼에서 착안해, 중고 상품을 거래 할 수 있는 웹서비스를 기획 했습니다.  
  　판매자, 구매자, 관리자 관점에서 요구사항을 분석하고, 분석한 내용을 분담하여 서비스 구현을 진행했습니다.   
 
 ### 팀원
-|이름|이메일주소|핸드폰번호|
-|:---:|---|---|
-|김대희|dae4414805@gmail.com|010-9929-4805|
-|김원겸|slzltb@gmail.com|010-9347-8573|
-|이택민|xorals9448@gmail.com|010-4233-8519|
-|최정연|jychoi091808@gmail.com|010-9428-9953|
+<a href="https://github.com/NecoNicoUsedTradeProject/neconico">
+  <img src="https://contrib.rocks/image?repo=NecoNicoUsedTradeProject/neconico" />
+</a>
 
 # 사용 기술
 ***

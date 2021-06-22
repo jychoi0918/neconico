@@ -1,6 +1,6 @@
 package com.neconico.neconico.controller.item;
 
-import com.neconico.neconico.Maker.ItemDateDifferenceMaker;
+import com.neconico.neconico.maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.category.CategoryInfoDto;
 import com.neconico.neconico.dto.category.CategorySubInfoDto;

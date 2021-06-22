@@ -1,4 +1,4 @@
-package com.neconico.neconico.Maker;
+package com.neconico.neconico.maker;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

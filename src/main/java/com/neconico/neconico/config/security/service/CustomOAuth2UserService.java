@@ -9,7 +9,7 @@ import com.neconico.neconico.dto.users.UserJoinDto;
 import com.neconico.neconico.mapper.store.StoreInfoMapper;
 import com.neconico.neconico.mapper.users.UserMapper;
 import com.neconico.neconico.service.email.certgenerator.GenerateCertCharacter;
-import com.neconico.neconico.Maker.StoreInfoMaker;
+import com.neconico.neconico.maker.StoreInfoMaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,6 +1,6 @@
 package com.neconico.neconico.service.item;
 
-import com.neconico.neconico.Maker.ItemDateDifferenceMaker;
+import com.neconico.neconico.maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.dto.category.CategorySubInfoDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.item.ItemInfoDto;
@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)

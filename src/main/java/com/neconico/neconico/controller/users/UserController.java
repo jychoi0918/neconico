@@ -1,8 +1,7 @@
 package com.neconico.neconico.controller.users;
 
-import com.neconico.neconico.Maker.StoreInfoMaker;
+import com.neconico.neconico.maker.StoreInfoMaker;
 import com.neconico.neconico.config.web.LoginUser;
-import com.neconico.neconico.dto.users.*;
 import com.neconico.neconico.service.store.StoreInfoService;
 import com.neconico.neconico.service.users.UserService;
 import lombok.RequiredArgsConstructor;
