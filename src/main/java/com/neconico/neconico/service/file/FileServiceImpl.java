@@ -1,6 +1,8 @@
 package com.neconico.neconico.service.file;
 
+import com.neconico.neconico.file.policy.FilePolicy;
 import com.neconico.neconico.file.process.FileProcess;
+import com.neconico.neconico.file.process.FileProcessFactory;
 import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.file.s3provider.S3Deleter;
 import com.neconico.neconico.file.s3provider.S3Uploader;
@@ -16,28 +18,38 @@ import java.io.IOException;
 public class FileServiceImpl implements FileService{
 
     private final S3Uploader s3Uploader;
-
     private final S3Deleter s3Deleter;
 
-    private FileProcess fileProcess;
-
     @Override
-    public void setFileProcess(FileProcess fileProcess) {
+    public FileResultInfoDto uploadFiles(FilePolicy filePolicy, MultipartFile... files)
+            throws IOException, IllegalStateException, IllegalArgumentException {
 
-        if(fileProcess instanceof S3FileProcess) {
-            ((S3FileProcess) fileProcess).setUploaderAndDeleter(s3Uploader, s3Deleter);
+        FileProcess fileProcess = FileProcessFactory.getFileProcess(filePolicy);
+
+        if(isS3FileProcess(fileProcess)) {
+            setS3UploaderAndS3Deleter(fileProcess);
         }
-        this.fileProcess = fileProcess;
-    }
 
-    @Override
-    public FileResultInfoDto uploadFiles(MultipartFile... files) throws IOException, IllegalStateException, IllegalArgumentException {
         return fileProcess.uploadFile(files);
     }
 
     @Override
-    public void deleteFiles(String fileNames) throws IllegalArgumentException {
+    public void deleteFiles(FilePolicy filePolicy, String fileNames) throws IllegalArgumentException {
+        FileProcess fileProcess = FileProcessFactory.getFileProcess(filePolicy);
+
+        if(isS3FileProcess(fileProcess)) {
+            setS3UploaderAndS3Deleter(fileProcess);
+        }
+
         fileProcess.deleteFiles(fileNames);
+    }
+
+    private boolean isS3FileProcess(FileProcess fileProcess) {
+        return fileProcess instanceof S3FileProcess;
+    }
+
+    private void setS3UploaderAndS3Deleter(FileProcess fileProcess) {
+        ((S3FileProcess) fileProcess).setUploaderAndDeleter(s3Uploader, s3Deleter);
     }
 
 }

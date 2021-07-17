@@ -8,12 +8,12 @@ import com.neconico.neconico.dto.admin.advertisement.AdvertStatusDto;
 import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.file.policy.FilePolicy;
-import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.paging.Pagination;
 import com.neconico.neconico.service.admin.advertisement.AdvertiseService;
 import com.neconico.neconico.service.file.FileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -32,13 +33,12 @@ public class AdvertiseController {
     private final FileService fileService;
 
 
-
     //광고 리스트 출력
     @GetMapping("/advert/list")
     public String adList(@ModelAttribute("cri") Criteria cri, Model model) {
 
         List<AdvertReturnDto> advertList = advertService.selectAllAdverts(cri);
-        Pagination page = new Pagination(cri, advertService.countAllAdverts(), 10l);
+        Pagination page = new Pagination(cri, advertService.countAllAdverts(), 10L);
         model.addAttribute("adList", advertList);
         model.addAttribute("pageMaker", page);
 
@@ -82,15 +82,15 @@ public class AdvertiseController {
     @PostMapping("/advert/new")
     public String addAd(@RequestParam("imgFile") MultipartFile multipartFile,
                         @ModelAttribute AdvertInfoDto advertInfoDto,
-                        @LoginUser SessionUser sessionUser) throws Exception {
+                        @LoginUser SessionUser sessionUser) throws Exception{
 
         advertInfoDto.setUserId(sessionUser.getUserId());
 
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
-        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFile);
-        advertService.insertAdvert(fileResultInfoDto, advertInfoDto);
+        FileResultInfoDto fileResultInfoDto = fileService
+                .uploadFiles(FilePolicy.ADVERTISEMENT, multipartFile);
 
+        advertService.insertAdvert(fileResultInfoDto, advertInfoDto);
 
         return "redirect:/admin/advert/list";
     }
@@ -102,14 +102,12 @@ public class AdvertiseController {
                            @RequestParam(value = "imgFileName") String imgFileName) throws IllegalArgumentException {
 
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
-        fileService.deleteFiles(imgFileName);
+        fileService.deleteFiles(FilePolicy.ADVERTISEMENT, imgFileName);
         advertService.deleteAdvert(Long.parseLong(advertisementId));
 
         return "redirect:/admin/advert/list";
 
     }
-
 
 
     //수정하기 폼 출력
@@ -128,15 +126,17 @@ public class AdvertiseController {
     public String editAdvert(@RequestParam("imgFile") MultipartFile multipartFile,
                              @ModelAttribute("advertiseReturnDto") AdvertReturnDto advertReturnDto) throws Exception {
 
-        if(multipartFile.isEmpty()) {
+        if (multipartFile.isEmpty()) {
             advertService.updateAdvert(new FileResultInfoDto(null, null), advertReturnDto);
 
             return "redirect:/admin/advert/{advertisementId}";
         }
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.ADVERTISEMENT));
-        fileService.deleteFiles(advertReturnDto.getImgFileName());
-        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFile);
+        fileService.deleteFiles(FilePolicy.ADVERTISEMENT, advertReturnDto.getImgFileName());
+
+        FileResultInfoDto fileResultInfoDto = fileService
+                .uploadFiles(FilePolicy.ADVERTISEMENT, multipartFile);
+
 
         advertService.updateAdvert(fileResultInfoDto, advertReturnDto);
 

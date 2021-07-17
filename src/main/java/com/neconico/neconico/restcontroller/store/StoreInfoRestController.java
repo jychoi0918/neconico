@@ -5,7 +5,6 @@ import com.neconico.neconico.dto.file.FileResultInfoDto;
 import com.neconico.neconico.dto.store.StoreInfoDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.file.policy.FilePolicy;
-import com.neconico.neconico.file.process.S3FileProcess;
 import com.neconico.neconico.service.file.FileService;
 import com.neconico.neconico.service.store.StoreInfoService;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +44,11 @@ public class StoreInfoRestController {
     public void modifyStoreImg(@RequestParam("storeImg") MultipartFile multipartFiles, @LoginUser SessionUser user) throws IOException {
         StoreInfoDto currentStoreInfo = storeInfoService.findStoreInfoByUserId(user.getUserId());
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.STORE));
-        FileResultInfoDto result = fileService.uploadFiles(multipartFiles);
+
+        FileResultInfoDto result = fileService.uploadFiles(FilePolicy.STORE, multipartFiles);
 
         if(!currentStoreInfo.getStoreImgName().equals("")) {
-            fileService.deleteFiles(currentStoreInfo.getStoreImgName());
+            fileService.deleteFiles(FilePolicy.STORE, currentStoreInfo.getStoreImgName());
         }
 
         storeInfoService.updateStoreImg(result, currentStoreInfo);

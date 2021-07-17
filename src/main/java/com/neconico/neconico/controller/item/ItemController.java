@@ -1,6 +1,5 @@
 package com.neconico.neconico.controller.item;
 
-import com.neconico.neconico.maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.config.web.LoginUser;
 import com.neconico.neconico.dto.category.CategoryInfoDto;
 import com.neconico.neconico.dto.category.CategorySubInfoDto;
@@ -11,7 +10,7 @@ import com.neconico.neconico.dto.item.SearchInfoDto;
 import com.neconico.neconico.dto.item.card.ItemCardSearchViewDto;
 import com.neconico.neconico.dto.users.SessionUser;
 import com.neconico.neconico.file.policy.FilePolicy;
-import com.neconico.neconico.file.process.S3FileProcess;
+import com.neconico.neconico.maker.ItemDateDifferenceMaker;
 import com.neconico.neconico.paging.Criteria;
 import com.neconico.neconico.paging.Pagination;
 import com.neconico.neconico.service.category.CategoryService;
@@ -58,8 +57,7 @@ public class ItemController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.ITEM));
-        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFiles);
+        FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(FilePolicy.ITEM, multipartFiles);
 
         itemInfoDto.setUserId(sessionUser.getUserId()); //작성자 userId 등록
         itemService.insertItem(fileResultInfoDto, subId, itemInfoDto);
@@ -139,22 +137,23 @@ public class ItemController {
                                  @RequestParam("subId") Long categorySubId,
                                  @RequestParam("currentFiles") String[] currentFiles) throws Exception {
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.ITEM));
 
         itemInfoDto.setCategorySubId(categorySubId); // 카테고리 변경사항 적용
 
         //새로 등록한 파일이 있을경우
         if(multipartFiles != null) {
-            FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(multipartFiles);
+            FileResultInfoDto fileResultInfoDto = fileService.uploadFiles(FilePolicy.ITEM, multipartFiles);
+
             String deleteFileNames = itemService.changeItemInfo(fileResultInfoDto, currentFiles, itemInfoDto);
+
             if(!deleteFileNames.isEmpty()) {
-                fileService.deleteFiles(deleteFileNames);
+                fileService.deleteFiles(FilePolicy.ITEM, deleteFileNames);
             }
         }else { // 새로 등록한 파일이 없을경우
             String deleteFileNames = itemService.changeItemInfo(null, currentFiles, itemInfoDto);
 
             if(!deleteFileNames.isEmpty()) {
-                fileService.deleteFiles(deleteFileNames);
+                fileService.deleteFiles(FilePolicy.ITEM, deleteFileNames);
             }
         }
     }
@@ -165,8 +164,8 @@ public class ItemController {
     public void deleteItem(@PathVariable("itemId") Long itemId) {
         ItemInfoDto itemInfoDto = itemService.findItemByItemIdForUpdate(itemId);
 
-        fileService.setFileProcess(new S3FileProcess(FilePolicy.ITEM));
-        fileService.deleteFiles(itemInfoDto.getImgFileNames());
+        fileService.deleteFiles(FilePolicy.ITEM, itemInfoDto.getImgFileNames());
+
         itemService.removeItem(itemId);
     }
 
