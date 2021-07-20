@@ -18,13 +18,13 @@ public class S3FileProcess implements FileProcess{
 
     private S3Deleter s3Deleter;
 
-    private String dirName;
+    private final String dirName;
 
-    private int fileCount;
+    private final int fileCount;
 
-    private StringBuffer fileNames = new StringBuffer();
+    private final StringBuffer fileNames = new StringBuffer();
 
-    private StringBuffer fileUrls = new StringBuffer();
+    private final StringBuffer fileUrls = new StringBuffer();
 
     public S3FileProcess(FilePolicy filePolicy) throws IllegalArgumentException {
         this.dirName = filePolicy.getDirName();
@@ -43,7 +43,8 @@ public class S3FileProcess implements FileProcess{
         }
 
         for(MultipartFile file : files) {
-            fileUrls.append(s3Uploader.upload(file, convertUniqueFileName(file), dirName) + ">");
+            fileUrls.append(s3Uploader.upload(file, convertUniqueFileName(file), dirName))
+                    .append(">");
         }
 
         deleteLastGt();
@@ -69,7 +70,8 @@ public class S3FileProcess implements FileProcess{
     private String convertUniqueFileName(MultipartFile file) {
         String fileName = UUID.randomUUID() + file.getOriginalFilename();
 
-        fileNames.append(fileName + ">");
+        fileNames.append(fileName)
+                .append(">");
 
         return fileName;
     }

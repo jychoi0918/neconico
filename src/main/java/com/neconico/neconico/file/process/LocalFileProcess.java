@@ -12,13 +12,13 @@ public class LocalFileProcess implements FileProcess {
 
     private static final String LOCAL_DIR = "/localdir/";
 
-    private String dirName;
+    private final String dirName;
 
-    private int fileCount;
+    private final int fileCount;
 
-    private StringBuffer fileUrls = new StringBuffer();
+    private final StringBuffer fileUrls = new StringBuffer();
 
-    private StringBuffer fileNames = new StringBuffer();
+    private final StringBuffer fileNames = new StringBuffer();
 
     public LocalFileProcess(FilePolicy filePolicy) {
         dirName = filePolicy.getDirName();
@@ -73,8 +73,11 @@ public class LocalFileProcess implements FileProcess {
     }
 
     private void insertFileNamesAndURLs(File dest) throws IOException {
-        fileNames.append(dest + ":");
-        fileUrls.append(dest.toURI().toURL() + ":");
+        fileNames.append(dest)
+                .append(":");
+        fileUrls.append(dest.toURI()
+                .toURL())
+                .append(":");
     }
 
     private FileResultInfoDto createFileResultInfo() {
