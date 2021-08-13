@@ -1,5 +1,4 @@
-![waving](https://capsule-render.vercel.app/api?type=waving&height=200&text=내꼬니꼬&fontAlign=70&fontAlignY=35&color=random)
-[![findId](./src/main/resources/static/img/logo/neconico_logo.png)](http://www.neconico.com)  <-- 클릭 시 사이트 접속
+[![findId](./src/main/resources/static/img/logo/neconico_logo.png)](http://www.neconico.com)  <= 사이트 접속을 원하시면 클릭!
 ***
 　중고나라, 번개장터, 당근마켓 등 중고거래 플랫폼에서 착안해, 중고 상품을 거래 할 수 있는 웹서비스를 기획 했습니다.  
  　판매자, 구매자, 관리자 관점에서 요구사항을 분석하고, 분석한 내용을 분담하여 서비스 구현을 진행했습니다.   
@@ -62,13 +61,9 @@
 
 # 페이지 구현
 ***
-### 메인
-
-![main](./img/page/main/main.jpg)
 
 ## 로그인
 
-![login](./img/page/login/login.JPG)
 
 <details>
 <summary>구현 기능 보기</summary>
@@ -94,7 +89,7 @@
 
 ### 회원가입
 
-![store](./img/page/join/join.JPG)
+
 <details>
 <summary>구현 기능 보기</summary>
 <div markdown="1">
@@ -119,20 +114,25 @@
 </div>
 </details>
 
-### 상품등록
-
-![item](./img/page/item/item.JPG)
-
-### 상품관리
-
-![itemmanage](./img/page/itemmanage/itemmanage.JPG)
 
 ### 상점
 
-![store](./img/page/store/mystore_all.JPG)
+
 <details>
 <summary>구현 기능 보기</summary>
 <div markdown="1">
+
+*상품등록
+
+![item](./img/page/item/item.JPG)
+
+
+*상점
+![store](./img/page/store/mystore_all.JPG)
+
+*상품관리
+  ![itemmanage](./img/page/itemmanage/itemmanage.JPG)
+
 
 * 상점 정보 수정 기능
   ![storeInfo](./img/page/store/storeinfo.JPG)
@@ -159,12 +159,7 @@
 
 ### 관리자
 
-![admin](./img/page/admin/admin_main.png)
 
-<details>
-<summary>구현 기능 보기</summary>
-<div markdown="1">
-<br></br>
 <details>
 <summary>회원관리</summary>
 <div markdown="1">
@@ -271,8 +266,10 @@
 
 
 </details>
-<br>
 
+<details>
+<summary>광고관리</summary>
+<div markdown="1">
 * 관리자 권한 부여
   <br></br>
   ![adminAuthority](./img/page/admin/admin_changeauthority.gif)
